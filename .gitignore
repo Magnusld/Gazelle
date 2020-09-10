@@ -1,3 +1,7 @@
 .idea/
 gazelle.iml
 target/
+.classpath
+bin/
+.project
+.settings/
