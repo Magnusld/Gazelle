@@ -58,22 +58,41 @@ Dette vil si at alle buntmeldinger er på formen
 feat(grensesnitt): legge til statuslinje for nettverksoprasjoner
 
 Beskrivelse av forandringen, dersom det trengs.
-Merk at øverste linje er i presens, har liten forbokstav og er uten tegnsetting.
+Merk at øverste linje er i infinitiv, har liten forbokstav og er uten tegnsetting.
+Linjen skal passe inn i setningen:
+  Hvis dette bunten flettes inn i kodebasen vil den <melding>.
 ```
 Vi holder oss til de definerte engelske nøkkelordene for maskinlesbarheten sin del.
 
 ### Kontrollering
 
-Etter utvikling lages en fletteforespørsel (Merge request) fra utviklingsgrenen til hovedgrenen.
+Etter utvikling lages en fletteforespørsel (GitLab Merge request) fra utviklingsgrenen til hovedgrenen.
+Fletteforespørselen skal ha en fornuftig tittel, og beskrivelen skal beskrive *hvorfor* forandringen er blitt gjort.
+Hva som er blitt gjort skal være beskrevet i buntmeldingene. Fletteforespørselen skal også
+referere til oppgaven den løser med `Fixes #58`, som GitLab forstår.
+
+Oppgaven på sprint-tavlen flyttes til "Kontroll"-kolonnen, og et annet gruppemedlem
+skal bli bedt om å vurdere fletteforespørselen. Vidre forbedringer og forandringer skal
+legges på utviklingsgrenen, og når forandringene er klare skal grenen flettes inn i hovedgrenen.
+
 Dersom forandringer har skjedd på hovedgrenen i mellomtiden må utviklingsgrenen enten sammeflettes
-eller lempes om. Oppgaven på sprint-tavlen flyttes til "Kontroll"-kolonnen, og et annet gruppemedlem
-blir bedt om å vurdere fletteforespørselen.
+eller lempes om.
+
+#### CI/CD
+
+Prosjektet skal bruke en GitLab-pipeline for å automatisk kjøre testene i utviklingsgrener,
+og andre verktøy, f.eks. sjekk av kodekvalitet, skal vurderes fortløpende.
+
+I enhver utviklingsgren skal det være mulig å åpne prosjektet i GitLab,
+både for utvikling og testing. En GitLab-pipeline lager en lenke i enhver fletteforespørsel.
 
 ## Sprintretrospektiv
 
 Når sprinten er ferdig skal gruppen samles for å vise det de har gjort, se på burndown-grafen,
-og diskutere hvordan sprinten gikk. De skal skrive ned hva de vil ha mer av / ta med vidre,
-og hva de vil ha mindre av. Ønskene tas opp i plenum.
+og diskutere hvordan sprinten gikk. Uavhengig av hvordan sprinten går skal hovedgrenen til prosjektet til enhver
+tid være i en kjørbar tilstand, selv om det ikke nødvendigvis tilfredsstiller alle krav enda.
+Dersom prosjektet krever mer jobbing, skal en ny sprint planlegges. Før det skal alle skrive ned
+hva de vil ha mer av / ta med vidre, og hva de vil ha mindre av. Ønskene tas opp i plenum.
 
 # Språk
 
