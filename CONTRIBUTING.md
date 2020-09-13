@@ -11,7 +11,7 @@ Som en ___ trenger jeg ___ sånn at jeg ___.
 ```
 Brukerhistoriene har en assosiert prioritet, og om de er ferdig implementert eller ikke.
 Det er et poeng å ikke planlegge for mye før man begynner å implementere ting, for å
-slippe å bruke mye ressursjer på å forutse alle tenkelige situasjoner, og lettere kunne
+slippe å bruke mye ressurser på å forutse alle tenkelige situasjoner, og lettere kunne
 endre plan underveis, for eksempel hvis mål endrer seg, eller hvis svakheter oppdages underveis.
 
 ## Sprintplanlegging
