@@ -28,14 +28,14 @@ kan når som helst legge til nye oppgaver på etterslep-lista.
 
 Alle oppgaver i en sprint får tildelt poeng som et estimat på arbeidsmengde. Vi bruker GitLab sin `/estimate`-kommando.
 Når sprintplanleggingen er ferdig kan man se alle oppgaver i sprinten ved å gå til GitLab-tavla
-[Utviktling](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2010/gr2010/-/boards/2107)
+[Utvikling](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2010/gr2010/-/boards/2107)
 og søke etter `milestone=<navn på sprint>`. Dette er da sprintens smidig-tavle.
 I tillegg lager GitLab burndown-diagrammer for hver milepæl.
 
 ## Underveis i sprinten
 
 Minst to ganger i uka skal gruppen ha samlingsmøte, der medlemmene deler hva de har gjort siden sist,
-og hva de skal jobbe med vidre. Man ser på sprint-tavla og blir enige om hvem som skal tildeles
+og hva de skal jobbe med videre. Man ser på sprint-tavla og blir enige om hvem som skal tildeles
 hvilke oppgaver. Tavla er delt inn i kolonner. Til å begynne med er alle oppgaver kun "åpne",
 og krever mer eller mindre diskusjon i gruppa før et gruppemedlem kan begynne implementasjon.
 Alle trenger ikke være med på all diskusjon, men alle kan komme med innspill på oppgavens GitLab-side.
@@ -105,5 +105,5 @@ der det ikke er enighet om norske utgaver. Forslag:
  - label -> **GitLab-merkelapp**
  - commit -> **bunt**
  - merge request -> **fletteforespørsel**
- - merge -> **sammeflette**
+ - merge -> **sammenflette**
  - rebase -> **lempe om**
