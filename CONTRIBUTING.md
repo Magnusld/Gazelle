@@ -57,12 +57,20 @@ Dette vil si at alle buntmeldinger er på formen
 ```
 feat(grensesnitt): legge til statuslinje for nettverksoprasjoner
 
-Beskrivelse av forandringen, dersom det trengs.
-Merk at øverste linje er i infinitiv, har liten forbokstav og er uten tegnsetting.
+Beskrivelse av forandringen, kun dersom det trengs.
+Parantesene brukes dersom forandringen kan sies å tilhøre en bestemt del av prosjektet.
+Merk at resten av linjen er i infinitiv, har liten forbokstav og er uten tegnsetting.
 Linjen skal passe inn i setningen:
-  Hvis dette bunten flettes inn i kodebasen vil den <melding>.
+  
+  Hvis denne bunten flettes inn i kodebasen vil den <melding>.
+  
+BREAKING CHANGES: ødelegger funksjonalitet og må derfor ha denne linjen
 ```
-Vi holder oss til de definerte engelske nøkkelordene for maskinlesbarheten sin del.
+Vi holder oss til de definerte engelske nøkkelordene for maskinlesbarheten sin del:
+
+`feat`, `fix`, `chore`, `build`, `test`, `ci`, `style`, `docs`.
+
+Bunter med automatiske meldinger (`revert `) trenger ikke følge reglene.
 
 ### Kontrollering
 
