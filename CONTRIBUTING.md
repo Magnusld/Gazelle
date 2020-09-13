@@ -30,7 +30,6 @@ Alle oppgaver i en sprint får tildelt poeng som et estimat på arbeidsmengde. V
 Når sprintplanleggingen er ferdig kan man se alle oppgaver i sprinten ved å gå til GitLab-tavla
 [Utvikling](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2010/gr2010/-/boards/2107)
 og søke etter `milestone=<navn på sprint>`. Dette er da sprintens smidig-tavle.
-I tillegg lager GitLab burndown-diagrammer for hver milepæl.
 
 ## Underveis i sprinten
 
@@ -79,24 +78,25 @@ Fletteforespørselen skal ha en fornuftig tittel, og beskrivelen skal beskrive *
 Hva som er blitt gjort skal være beskrevet i buntmeldingene. Fletteforespørselen skal også
 referere til oppgaven den løser med `Fixes #58`, som GitLab forstår.
 
-Oppgaven på sprint-tavlen flyttes til "Kontroll"-kolonnen, og et annet gruppemedlem
-skal bli bedt om å vurdere fletteforespørselen. Vidre forbedringer og forandringer skal
-legges på utviklingsgrenen, og når forandringene er klare skal grenen flettes inn i hovedgrenen.
+Oppgaven på sprint-tavlen flyttes til "Til vurdering"-kolonnen, og et annet gruppemedlem
+skal bli bedt om å vurdere fletteforespørselen, gjennom å få den tilegnet. Vidre forbedringer og forandringer skal
+legges på utviklingsgrenen, og når grenen er klar skal den flettes inn i hovedgrenen.
 
 Dersom forandringer har skjedd på hovedgrenen i mellomtiden må utviklingsgrenen enten sammeflettes
-eller lempes om.
+eller lempes om (rebase) med hovedgrenens nye innhold før fletteforespørselen kan flettes.
 
 #### CI/CD
 
 Prosjektet skal bruke en GitLab-pipeline for å automatisk kjøre testene i utviklingsgrener,
-og andre verktøy, f.eks. sjekk av kodekvalitet, skal vurderes fortløpende.
+og raportere testdekning. Denne statistikken skal vises på README-siden.
+Andre verktøy, f.eks. sjekk av kodekvalitet, skal vurderes fortløpende.
 
-I enhver utviklingsgren skal det være mulig å åpne prosjektet i GitLab,
+I enhver utviklingsgren skal det være mulig å åpne prosjektet i GitPod,
 både for utvikling og testing. En GitLab-pipeline lager en lenke i enhver fletteforespørsel.
 
 ## Sprintretrospektiv
 
-Når sprinten er ferdig skal gruppen samles for å vise det de har gjort, se på burndown-grafen,
+Når sprinten er ferdig skal gruppen samles for å vise det de har gjort
 og diskutere hvordan sprinten gikk. Uavhengig av hvordan sprinten går skal hovedgrenen til prosjektet til enhver
 tid være i en kjørbar tilstand, selv om det ikke nødvendigvis tilfredsstiller alle krav enda.
 Dersom prosjektet krever mer jobbing, skal en ny sprint planlegges. Før det skal alle skrive ned
