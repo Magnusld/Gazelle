@@ -67,7 +67,7 @@ BREAKING CHANGES: ødelegger funksjonalitet og må derfor ha denne linjen
 ```
 Vi holder oss til de definerte engelske nøkkelordene for maskinlesbarheten sin del:
 
-`feat`, `fix`, `chore`, `build`, `test`, `ci`, `style`, `docs`.
+`feat`, `fix`, `chore`, `build`, `test`, `refactor`, `perf`, `style`, `ci`, `docs`.
 
 Bunter med automatiske meldinger (`revert `) trenger ikke følge reglene.
 
