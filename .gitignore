@@ -1,7 +1,17 @@
+
+# Tmp files
+*~
+\#*
+
+# Maven
+**/target/
+
+# IntelliJ
 .idea/
-gazelle.iml
-gazelleFX/target/
+*.iml
+
+# eclipse
 .classpath
-bin/
+**/bin/
 .project
 .settings/
