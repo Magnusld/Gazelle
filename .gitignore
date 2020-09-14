@@ -1,6 +1,6 @@
 .idea/
 gazelle.iml
-target/
+gazelleFX/target/
 .classpath
 bin/
 .project
