@@ -12,9 +12,10 @@ Prosjketet er konfigurert med maven som byggesystem, og alle lagene vil bli test
 
 ## Organisering av koden
 
-Koden for projektet vil ligge inne i GazelleFX mappen.
-- Kontrollere og .FXML filer vil ligge sammen i **GazelleFX/src/gazelle/ui**
-- 
+Koden for projektet vil ligge inne i gazelleFX mappen.
+- **gazelleFX/src/gazelle/ui** Kontrollere og .FXML filer vil ligge sammen i denne mappen
+- **??** for koden til applikasjonen
+- **??** for testkoden 
 
 
 
