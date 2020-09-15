@@ -1,0 +1,55 @@
+/* Palette color codes */
+
+/* As hex codes */
+
+.color-primary-0 { color: #32C777 }	/* Main Primary color */
+.color-primary-1 { color: #83E6B1 }
+.color-primary-2 { color: #54D690 }
+.color-primary-3 { color: #10BB60 }
+.color-primary-4 { color: #009645 }
+
+.color-secondary-1-0 { color: #368BB9 }	/* Main Secondary color (1) */
+.color-secondary-1-1 { color: #84C0DF }
+.color-secondary-1-2 { color: #57A3CB }
+.color-secondary-1-3 { color: #1777AA }
+.color-secondary-1-4 { color: #075A86 }
+
+.color-secondary-2-0 { color: #FFA840 }	/* Main Secondary color (2) */
+.color-secondary-2-1 { color: #FFCD91 }
+.color-secondary-2-2 { color: #FFB965 }
+.color-secondary-2-3 { color: #FF9516 }
+.color-secondary-2-4 { color: #D47300 }
+
+.color-complement-0 { color: #FF6B40 }	/* Main Complement color */
+.color-complement-1 { color: #FFAA91 }
+.color-complement-2 { color: #FF8765 }
+.color-complement-3 { color: #FF4B16 }
+.color-complement-4 { color: #D43000 }
+
+
+
+/* As RGBa codes */
+
+.rgba-primary-0 { color: rgba( 50,199,119,1) }	/* Main Primary color */
+.rgba-primary-1 { color: rgba(131,230,177,1) }
+.rgba-primary-2 { color: rgba( 84,214,144,1) }
+.rgba-primary-3 { color: rgba( 16,187, 96,1) }
+.rgba-primary-4 { color: rgba(  0,150, 69,1) }
+
+.rgba-secondary-1-0 { color: rgba( 54,139,185,1) }	/* Main Secondary color (1) */
+.rgba-secondary-1-1 { color: rgba(132,192,223,1) }
+.rgba-secondary-1-2 { color: rgba( 87,163,203,1) }
+.rgba-secondary-1-3 { color: rgba( 23,119,170,1) }
+.rgba-secondary-1-4 { color: rgba(  7, 90,134,1) }
+
+.rgba-secondary-2-0 { color: rgba(255,168, 64,1) }	/* Main Secondary color (2) */
+.rgba-secondary-2-1 { color: rgba(255,205,145,1) }
+.rgba-secondary-2-2 { color: rgba(255,185,101,1) }
+.rgba-secondary-2-3 { color: rgba(255,149, 22,1) }
+.rgba-secondary-2-4 { color: rgba(212,115,  0,1) }
+
+.rgba-complement-0 { color: rgba(255,107, 64,1) }	/* Main Complement color */
+.rgba-complement-1 { color: rgba(255,170,145,1) }
+.rgba-complement-2 { color: rgba(255,135,101,1) }
+.rgba-complement-3 { color: rgba(255, 75, 22,1) }
+.rgba-complement-4 { color: rgba(212, 48,  0,1) }
