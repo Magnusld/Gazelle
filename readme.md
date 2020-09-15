@@ -1,8 +1,11 @@
-# Group gr2010 repository
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.idi.ntnu.no/#https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2010/gr2010) 
 
-Welcome to IT1901 course fall 2020
+# Gazelle-Prosjekt (Gruppe 10 IT1901 høsten 2020)
 
-Good luck!
+Dette er prosjektet til gruppe 10 i faget IT1901 høsten 2020.
 
-Takk takk, det var snilt.
+### Organisering
+
+Hvordan koden er organisert og mer konkret om de forskjellige filene kan man finne [Her]()
+
 
