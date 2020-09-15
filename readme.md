@@ -6,6 +6,6 @@ Dette er prosjektet til gruppe 10 i faget IT1901 høsten 2020.
 
 ### Organisering
 
-Hvordan koden er organisert og mer konkret om de forskjellige filene kan man finne [Her]()
+Hvordan koden er organisert og mer konkret om de forskjellige filene kan man finne [Her](gazelleFX/README.md)
 
 
