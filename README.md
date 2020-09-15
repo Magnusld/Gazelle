@@ -5,6 +5,17 @@
 Dette er prosjektet til gruppe 10 i faget IT1901 høsten 2020.
 For en komplett beskrivelse av prosjektet se [her](gazelleFX/README.md).
 
-## Organisering
+# Organisering
+
+Prosjektet er en trelagsapplikasjon med et domenelag, brukergrensesnitt (UI) og persistens (lagring).
+Prosjketet er konfigurert med maven som byggesystem, og alle lagene vil bli testet med maven tester.
+
+## Organisering av koden
+
+Koden for projektet vil ligge inne i GazelleFX mappen.
+- Kontrollere og .FXML filer vil ligge sammen i **GazelleFX/src/gazelle/ui**
+- 
+
+
 
 
