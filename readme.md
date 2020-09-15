@@ -3,9 +3,8 @@
 # Gazelle-Prosjekt (Gruppe 10 IT1901 høsten 2020)
 
 Dette er prosjektet til gruppe 10 i faget IT1901 høsten 2020.
+For en komplett beskrivelse av prosjektet se [her](gazelleFX/README.md).
 
-### Organisering
-
-Hvordan koden er organisert og mer konkret om de forskjellige filene kan man finne [Her](gazelleFX/README.md)
+## Organisering
 
 
