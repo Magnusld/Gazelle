@@ -36,25 +36,32 @@ public class Course {
     }
 
     public void addPost(Post post) {
+        if(this.posts.contains(post))
+            return;
         this.posts.add(post);
         post.setCourse(this);
     }
 
-    public void removeOwner(User owner){
-        if(owner.removeCourse(this))
-            this.owners.remove(owner);
+    public void removeOwner(User owner) {
+        if(!this.followers.contains(owner))
+            return;
+        this.followers.remove(owner);
+        owner.removeCourse(this);
     }
 
-    public void removeFollower(User follower){
-        if(follower.removeCourse(this))
-            this.followers.remove(follower);
+    public void removeFollower(User follower) {
+        if(!this.followers.contains(follower))
+            return;
+        this.followers.remove(follower);
+        follower.removeCourse(this);
     }
 
-    public void removePost(Post post){
-        this.posts.remove(post);
+    public void removePost(Post post) {
+        if(this.posts.remove(post))
+            post.setCourse(null);
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 

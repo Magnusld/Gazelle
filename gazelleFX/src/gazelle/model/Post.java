@@ -13,7 +13,14 @@ public class Post {
     }
 
     public void setCourse(Course course) {
-        if(this.course != null)
+        if(this.course == course)
+            return;
+        if(this.course != null) {
+            Course oldCourse = this.course;
+            this.course = null;
+            oldCourse.removePost(this);
+        }
         this.course = course;
+        course.addPost(this);
     }
 }

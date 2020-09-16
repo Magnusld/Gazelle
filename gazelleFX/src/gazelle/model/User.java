@@ -21,8 +21,8 @@ public class User {
         course.addOwner(this);
     }
 
-    public boolean removeCourse(Course course){
-        return this.courses.remove(course);
+    public void removeCourse(Course course){
+        if(this.courses.remove(course))
+            course.removeOwner(this);
     }
-
 }
