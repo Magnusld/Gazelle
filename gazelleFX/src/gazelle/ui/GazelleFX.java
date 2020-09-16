@@ -10,8 +10,9 @@ public class GazelleFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(new VBox(new Button("Hei"))));
-        stage.setTitle("Halla");
+        GazelleController main = GazelleController.load();
+        stage.setScene(new Scene(main.getNode()));
+        stage.setTitle("GazelleFX");
         stage.show();
     }
 

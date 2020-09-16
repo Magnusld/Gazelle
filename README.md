@@ -16,7 +16,3 @@ Koden for projektet vil ligge inne i gazelleFX mappen.
 - **gazelleFX/src/gazelle/ui** Kontrollere og .FXML filer vil ligge sammen i denne mappen
 - **??** for koden til applikasjonen
 - **??** for testkoden 
-
-
-
-

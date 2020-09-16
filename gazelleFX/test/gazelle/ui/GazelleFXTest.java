@@ -25,10 +25,10 @@ public class GazelleFXTest extends ApplicationTest {
         stage.show();
     }
 
-    @Test
-    public void testController() {
+    //@Test
+    //public void testController() {
         /*Button button = (Button) parent.lookup("#button");
         clickOn(button);
         assertEquals("Hei", button.getText());*/
-    }
+    //}
 }
