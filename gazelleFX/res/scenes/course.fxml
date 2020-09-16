@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="115.0" prefWidth="456.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.Course">
+   <children>
+      <Text layoutX="14.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TDT4120 – Algdat">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text fill="#ff4a17" layoutX="344.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Neste Frist: i dag">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text fill="#0fbb5f" layoutX="14.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gjort: 11/16">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Line endX="325.0" layoutX="115.0" layoutY="85.0" startX="-100.0" stroke="#0fbb5f" strokeWidth="5.0" />
+      <Text layoutX="14.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Forrige: Problemer og alroritmer">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
