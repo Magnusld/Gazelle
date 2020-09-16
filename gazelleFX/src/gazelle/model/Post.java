@@ -4,8 +4,8 @@ public class Post {
 
     private Course course;
 
-    public Post(Course course){
-        this.course = course;
+    public Post(Course course) {
+        setCourse(course);
     }
 
     public Course getCourse() {
@@ -13,14 +13,15 @@ public class Post {
     }
 
     public void setCourse(Course course) {
-        if(this.course == course)
-            return;
-        if(this.course != null) {
-            Course oldCourse = this.course;
+        Course oldCourse = this.course;
+
+        if(oldCourse != null) {
             this.course = null;
             oldCourse.removePost(this);
         }
+
         this.course = course;
-        course.addPost(this);
+        if(course != null)
+            course.addPost(this);
     }
 }
