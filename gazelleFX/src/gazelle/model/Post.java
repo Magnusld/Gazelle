@@ -13,6 +13,9 @@ public class Post {
     }
 
     public void setCourse(Course course) {
+        if(this.course == course)
+            return;
+
         Course oldCourse = this.course;
 
         if (oldCourse != null) {
