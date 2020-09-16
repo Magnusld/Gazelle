@@ -9,4 +9,4 @@ default:
       - .m2/repository
 
 test:
-  script: mvn clean test
+  script: mvn verify
