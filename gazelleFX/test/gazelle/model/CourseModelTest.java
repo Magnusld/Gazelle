@@ -24,15 +24,27 @@ public class CourseModelTest {
         assertTrue(u1.getFollowedCourses().contains(c1));
 
         c1.addOwner(u1);
+        assertTrue(c1.getOwners().contains(u1));
+        assertTrue(u1.getOwnedCourses().contains(c1));
         assertFalse(c1.getFollowers().contains(u1));
         assertFalse(u1.getFollowedCourses().contains(c1));
 
         assertFalse(u1.removeFollowedCourse(c1));
         assertTrue(u1.removeOwnedCourse(c1));
 
-        assertTrue(u1.getFollowedCourses().isEmpty());
-        assertTrue(c1.getFollowers().isEmpty());
-        assertTrue(u1.getOwnedCourses().isEmpty());
-        assertTrue(c1.getOwners().isEmpty());
+        assertTrue(c1.getFollowers().isEmpty() && c1.getOwners().isEmpty());
+        assertTrue(u1.getFollowedCourses().isEmpty() && u1.getOwnedCourses().isEmpty());
+
+        c1.addOwner(u1);
+        assertTrue(c1.getOwners().contains(u1));
+        assertTrue(u1.getOwnedCourses().contains(c1));
+        assertFalse(c1.getFollowers().contains(u1));
+        assertFalse(u1.getFollowedCourses().contains(c1));
+
+        c1.addFollower(u1);
+        assertFalse(c1.getOwners().contains(u1));
+        assertFalse(u1.getOwnedCourses().contains(c1));
+        assertTrue(c1.getFollowers().contains(u1));
+        assertTrue(u1.getFollowedCourses().contains(c1));
     }
 }

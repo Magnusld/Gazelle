@@ -18,14 +18,14 @@ public class User {
 
     public void addOwnedCourse(Course course) {
         removeFollowedCourse(course);
-        if(this.ownedCourses.contains(course))
+        if (this.ownedCourses.contains(course))
             return;
         this.ownedCourses.add(course);
         course.addOwner(this);
     }
 
     public boolean removeOwnedCourse(Course course) {
-        if(this.ownedCourses.remove(course)) {
+        if (this.ownedCourses.remove(course)) {
             course.removeOwner(this);
             return true;
         }
@@ -38,14 +38,14 @@ public class User {
 
     public void addFollowedCourse(Course course) {
         removeOwnedCourse(course);
-        if(this.followedCourses.contains(course))
+        if (this.followedCourses.contains(course))
             return;
         this.followedCourses.add(course);
-        course.addOwner(this);
+        course.addFollower(this);
     }
 
     public boolean removeFollowedCourse(Course course) {
-        if(this.followedCourses.remove(course)) {
+        if (this.followedCourses.remove(course)) {
             course.removeFollower(this);
             return true;
         }

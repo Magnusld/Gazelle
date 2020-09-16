@@ -15,13 +15,13 @@ public class Post {
     public void setCourse(Course course) {
         Course oldCourse = this.course;
 
-        if(oldCourse != null) {
+        if (oldCourse != null) {
             this.course = null;
             oldCourse.removePost(this);
         }
 
         this.course = course;
-        if(course != null)
+        if (course != null)
             course.addPost(this);
     }
 }
