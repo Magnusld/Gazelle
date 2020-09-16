@@ -8,9 +8,9 @@ public class CourseModelTest {
 
 	@Test
     public void testCourseAddUser() {
-        Course c1 = new Course("TestCource TTC 1000");
-        Course c2 = new Course("TestCource TTC 2000");
-        Course c3 = new Course("TestCource TTC 3000");
+        Course c1 = new Course("TestCourse TTC 1000");
+        Course c2 = new Course("TestCourse TTC 2000");
+        Course c3 = new Course("TestCourse TTC 3000");
 
         User u1 = new User();
         User u2 = new User();
