@@ -12,7 +12,6 @@ public class BaseController {
     }
 
     public static <T extends BaseController> T loadFromFXML(String fxmlPath) throws IOException {
-        System.out.println("DEBUGGGGGGG ====================== " + BaseController.class.getResource(fxmlPath));
         final FXMLLoader fxmlLoader = new FXMLLoader(BaseController.class.getResource(fxmlPath));
         Parent parent = fxmlLoader.load();
         T controller = fxmlLoader.getController();
