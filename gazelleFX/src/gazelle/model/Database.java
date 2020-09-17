@@ -1,8 +1,6 @@
 package gazelle.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Database {
     public final class Id {
@@ -25,6 +23,8 @@ public class Database {
         private HashMap<Long, List<T>> PtoT = new HashMap<>();
 
         public void add(T t, P p) {
+            Objects.requireNonNull(t);
+            Objects.requireNonNull(p);
             assert(t.getDatabase() == Database.this);
             assert(p.getDatabase() == Database.this);
             long tId = t.getId();
@@ -45,6 +45,8 @@ public class Database {
         }
 
         public boolean remove(T t, P p) {
+            Objects.requireNonNull(t);
+            Objects.requireNonNull(p);
             assert(t.getDatabase() == Database.this);
             assert(p.getDatabase() == Database.this);
             long tId = t.getId();
@@ -62,6 +64,8 @@ public class Database {
         }
 
         public boolean isRelated(T t, P p) {
+            Objects.requireNonNull(t);
+            Objects.requireNonNull(p);
             assert(t.getDatabase() == Database.this);
             assert(p.getDatabase() == Database.this);
             long tId = t.getId();
@@ -77,19 +81,21 @@ public class Database {
         }
 
         public List<P> getFromT(T t) {
+            Objects.requireNonNull(t);
             assert(t.getDatabase() == Database.this);
             long tId = t.getId();
             if(!TtoP.containsKey(tId))
                 TtoP.put(tId, new ArrayList<>());
-            return TtoP.get(tId);
+            return Collections.unmodifiableList(TtoP.get(tId));
         }
 
         public List<T> getFromP(P p) {
+            Objects.requireNonNull(p);
             assert(p.getDatabase() == Database.this);
             long pId = p.getId();
             if(!PtoT.containsKey(pId))
                 PtoT.put(pId, new ArrayList<>());
-            return PtoT.get(pId);
+            return Collections.unmodifiableList(PtoT.get(pId));
         }
     }
 
@@ -102,6 +108,7 @@ public class Database {
         }
 
         public boolean remove(long id) {
+            //TODO: tell relationships about removed item
             return rows.remove(id) != null;
         }
 
@@ -132,8 +139,18 @@ public class Database {
         return course;
     }
 
+    public User newUser() {
+        User user = new User(getNextId());
+        users.add(user);
+        return user;
+    }
+
     public void addOwnerToCourse(User user, Course course) {
         owners.add(course, user);
+    }
+
+    public boolean removeOwnerOfCourse(User user, Course course) {
+        return owners.remove(course, user);
     }
 
     public List<Course> getCoursesOwned(User owner) {
