@@ -38,4 +38,7 @@ mvn javafx:run
 Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
 
 ## Bidrag og utvikling
-Se [CONTRIBUTING.md](/CONTRIBUTING.md).
+
+Brukerhistorier ligger [her](/brukerhistorier/brukerhistorier.md).
+
+For prosess og system for bruk av GitLab til smidig utvikling se [CONTRIBUTING.md](/CONTRIBUTING.md).
