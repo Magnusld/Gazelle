@@ -31,6 +31,10 @@ For å kompilere, teste og sjekke kodekvalitet skriv:
 ```
 mvn verify
 ```
+For å se test dekningsgrad gå til:
+`gazelleFX/target/site/jacoco/index.html` etter at man har kjørt ```mvn verify```.
+
+
 For å kjøre, gå inn i `gazelleFX/` og skriv:
 ```
 mvn javafx:run
