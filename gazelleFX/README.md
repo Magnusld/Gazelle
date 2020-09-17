@@ -14,7 +14,11 @@ hvor langt de burde ha lest i faget til et hvert tidspunkt og ha en samlet overs
 over løpene de er registrert i slik at de kan se alle gjøremålene sine på en 
 oversiktlig måte.
 
-Illustrerende skjermbilder ligger i brukerhistorie dokumentet, som er lenket til under.
+Illustrerende skjermbilder ligger i brukerhistoriedokumentet, som er lenket til under.
+Skjermbildeskissene som ligger i brukerhistoriene er ikke endelige, og representerer dermed ikke
+hvordan det endelige produktet kommer til å se ut. De brukes hovedsaklig som et
+ utgangspunkt for utviklingen av appens funksjonalitet.
+
 
 ## Brukerhistorie 
 
