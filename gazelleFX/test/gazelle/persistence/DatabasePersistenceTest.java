@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,5 +65,14 @@ public class DatabasePersistenceTest {
         assertFalse(C1.getOwners().contains(U3));
         assertTrue(U3.getOwnedCourses().contains(C2));
         assertFalse(U3.getOwnedCourses().contains(C1));
+
+        // Illegal to load into a database that already has data
+        assertThrows(IllegalStateException.class, ()-> {
+            try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
+                db2.load(ois);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

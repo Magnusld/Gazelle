@@ -286,7 +286,7 @@ public class Database {
 
     public void load(ObjectInputStream ois) throws IOException {
         if(nextId != START_ID)
-            throw new IOException("Can't load into non-empty database");
+            throw new IllegalStateException("Can't load into non-empty database");
         users.load(ois);
         courses.load(ois);
         followers.load(ois);
