@@ -14,6 +14,8 @@ hvor langt de burde ha lest i faget til et hvert tidspunkt og ha en samlet overs
 over løpene de er registrert i slik at de kan se alle gjøremålene sine på en 
 oversiktlig måte.
 
+Illustrerende skjermbilder ligger i brukerhistorie mappen, som er lenket til under.
+
 ## Brukerhistorie 
 
 For å se brukerhistoriene klikke [her](brukerhistorier/brukerhistorier.md).
