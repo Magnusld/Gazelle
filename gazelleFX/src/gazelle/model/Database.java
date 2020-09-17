@@ -41,7 +41,7 @@ public class Database {
         }
 
         public Collection<T> getAll() {
-            return rows.values();
+            return Collections.unmodifiableCollection(rows.values());
         }
 
         private static final int DATA_VERSION = 1;
@@ -55,7 +55,8 @@ public class Database {
         }
 
         public void load(ObjectInputStream ois) throws IOException {
-            rows.clear();
+            assert(rows.isEmpty());
+
             String check = ois.readUTF();
             if (!check.equals(getCheckString()))
                 throw new IOException("File not correct version or format");
@@ -186,8 +187,7 @@ public class Database {
         }
 
         public void load(ObjectInputStream ois) throws IOException {
-            TtoP.clear();
-            PtoT.clear();
+            assert(TtoP.isEmpty() && PtoT.isEmpty());
 
             String check = ois.readUTF();
             if (!check.equals(getCheckString()))
@@ -211,7 +211,8 @@ public class Database {
     private NtoN<Course, User> followers = new NtoN<>(courses, users);
     private NtoN<Course, User> owners = new NtoN<>(courses, users);
 
-    private long nextId = 1;
+    private static final long START_ID = 1;
+    private long nextId = START_ID;
 
     public Database() {
     }
@@ -222,6 +223,17 @@ public class Database {
         return user;
     }
 
+    /** Gets the User with a specific id, or null if no user has that id
+     * @param id
+     * @return the user or null
+     */
+    public User getUser(long id) {
+        return users.get(id);
+    }
+
+    /** Gets all Users, in no particular order
+     * @return A Collection of all users, unmodifiable
+     */
     public Collection<User> getUsers() {
         return users.getAll();
     }
@@ -232,6 +244,17 @@ public class Database {
         return course;
     }
 
+    /** Gets the Course with a specific id, or null if no course has that id
+     * @param id
+     * @return the course or null
+     */
+    public Course getCourse(long id) {
+        return courses.get(id);
+    }
+
+    /** Gets all Courses, in no particular order
+     * @return A Collection of all courses, unmodifiable
+     */
     public Collection<Course> getCourses() {
         return courses.getAll();
     }
@@ -261,6 +284,8 @@ public class Database {
     }
 
     public void load(ObjectInputStream ois) throws IOException {
+        if(nextId != START_ID)
+            throw new IOException("Can't load into non-empty database");
         users.load(ois);
         courses.load(ois);
         followers.load(ois);
