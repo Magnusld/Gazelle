@@ -37,7 +37,7 @@ public class GazelleController extends BaseController {
         setCurrentScreen(courseListController);
     }
 
-    private static final String DEFAULT_SAVE_LOCATION = "database.txt";
+    private static final String DEFAULT_SAVE_LOCATION = "database.bin";
 
     private void loadDatabase() {
         try (DatabaseLoader loader = new DatabaseLoader(new FileInputStream(DEFAULT_SAVE_LOCATION))) {
