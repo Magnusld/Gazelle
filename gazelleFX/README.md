@@ -2,7 +2,7 @@
 
 # Prosjektbeskrivelse:
 
-Planen for prosjektet er å lage et verktøy for faglærere og studenter. Der man som
+Planen for prosjektet er å lage et verktøy for faglærere og studenter, der man som
 faglærer kan legge ut en framdriftsplan/pensumshefte der studenten kan gå inn å
 krysse av for gjøremål de forstår, eller sliter med. Dette vil gi faglærer en
 bedre oversikt over hva som må gjennomgås bedre og hvor godt studentene følger
@@ -19,7 +19,10 @@ Skjermbildeskissene som ligger i brukerhistoriene er ikke endelige, og represent
 hvordan det endelige produktet kommer til å se ut. De brukes hovedsaklig som et
  utgangspunkt for utviklingen av appens funksjonalitet.
 
+## Prosjektstruktur
 
-## Brukerhistorie 
+Se [toppnivå-README](../README.md).
 
-For å se brukerhistoriene klikke [her](brukerhistorier/brukerhistorier.md).
+## Brukerhistorier
+
+Brukerhistorier ligger [her](/brukerhistorier/brukerhistorier.md).
