@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane fx:id="mainPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.GazelleController">
+<BorderPane fx:id="mainPane" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.GazelleController">
    <top>
-      <HBox alignment="BOTTOM_LEFT" spacing="14.0" BorderPane.alignment="CENTER">
+      <HBox alignment="BOTTOM_LEFT" spacing="20.0" style="-fx-background-color: #344966;" BorderPane.alignment="CENTER">
          <children>
-            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" />
-            <VBox alignment="BOTTOM_CENTER" spacing="3.0" HBox.hgrow="NEVER">
+            <ImageView fitHeight="52.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/logo.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" spacing="3.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mine Løp">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mine Løp">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <Pane prefHeight="5.0" style="-fx-background-color: dodgerblue;" />
+                  <Pane prefHeight="5.0" style="-fx-background-color: #FF8C42;" />
                </children>
             </VBox>
-            <VBox alignment="BOTTOM_CENTER" spacing="3.0">
+            <VBox alignment="CENTER" spacing="3.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fokuslista">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Fokuslista">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -37,7 +41,7 @@
             </VBox>
          </children>
          <padding>
-            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
    </top>
