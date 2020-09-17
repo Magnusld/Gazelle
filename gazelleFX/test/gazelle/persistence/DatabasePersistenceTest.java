@@ -16,8 +16,8 @@ public class DatabasePersistenceTest {
     @Test
     public void testDatabaseSaveLoad() throws IOException {
         Database db = new Database();
-        Course c1 = db.newCourse("Heihei");
-        Course c2 = db.newCourse("hola");
+        Course c1 = db.newCourse("Hello");
+        Course c2 = db.newCourse("Hi");
 
         User u1 = db.newUser();
         User u2 = db.newUser();
@@ -42,6 +42,9 @@ public class DatabasePersistenceTest {
         Database db2 = loader.load();
         loader.close();
 
+        assertEquals(db2.getCourses().size(), 2);
+        assertEquals(db2.getUsers().size(), 3);
+
         Course C1 = db2.getCourse(c1.getId());
         Course C2 = db2.getCourse(c2.getId());
 
@@ -49,8 +52,8 @@ public class DatabasePersistenceTest {
         User U2 = db2.getUser(u2.getId());
         User U3 = db2.getUser(u3.getId());
 
-        assertTrue(C1 != c1 && C2 != c2 && U1 != u1 && U2 != u2 && U3 != u3);
-        assertTrue(C1.getName().equals(c1.getName()));
+        assertFalse(C1 == c1 || C2 == c2 || U1 == u1 || U2 == u2 || U3 == u3);
+        assertEquals(c1.getName(), C1.getName());
 
         assertTrue(C1.getOwners().contains(U1));
         assertTrue(U1.getOwnedCourses().contains(C1));
@@ -58,6 +61,8 @@ public class DatabasePersistenceTest {
         assertFalse(U1.getOwnedCourses().contains(c1));
 
         assertTrue(C1.getOwners().contains(U2));
+        assertFalse(C1.getOwners().contains(U3));
         assertTrue(U3.getOwnedCourses().contains(C2));
+        assertFalse(U3.getOwnedCourses().contains(C1));
     }
 }

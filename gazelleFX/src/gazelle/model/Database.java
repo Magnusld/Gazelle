@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Database {
     public final class Id {
-        private long id;
+        private final long id;
         private Id(long id) {
             this.id = id;
         }
@@ -24,7 +24,7 @@ public class Database {
     }
 
     private class Table<T extends DatabaseRow> {
-        private HashMap<Long, T> rows = new HashMap<>();
+        private final HashMap<Long, T> rows = new HashMap<>();
 
         public void add(T t) {
             assert(t.getDatabase() == Database.this);
@@ -64,6 +64,7 @@ public class Database {
             try {
                 for (long i = 0; i < size; i++) {
                     long id = ois.readLong();
+                    @SuppressWarnings("unchecked")
                     T obj = (T) ois.readObject();
                     obj.respecifyId(new Id(id));
                     rows.put(id, obj);
@@ -80,8 +81,8 @@ public class Database {
     }
 
     private class NtoN<T extends DatabaseRow, P extends  DatabaseRow> {
-        private HashMap<Long, List<P>> TtoP = new HashMap<>();
-        private HashMap<Long, List<T>> PtoT = new HashMap<>();
+        private final HashMap<Long, List<P>> TtoP = new HashMap<>();
+        private final HashMap<Long, List<T>> PtoT = new HashMap<>();
 
         private final Table<T> tTable;
         private final Table<P> pTable;
@@ -172,12 +173,11 @@ public class Database {
         private static final int DATA_VERSION = 1;
         public void dump(ObjectOutputStream oos) throws IOException {
             ArrayList<Pair<Long, Long>> pairs = new ArrayList<>();
-            TtoP.forEach((tId, pList)-> {
+            TtoP.forEach((tId, pList)->
                 pList.forEach(p -> {
                     long pId = p.getId();
                     pairs.add(new Pair<>(tId, pId));
-                });
-            });
+                }));
 
             oos.writeUTF(getCheckString());
             oos.writeLong(pairs.size());
@@ -206,11 +206,11 @@ public class Database {
         }
     }
 
-    private Table<Course> courses = new Table<>();
-    private Table<User> users = new Table<>();
+    private final Table<Course> courses = new Table<>();
+    private final Table<User> users = new Table<>();
 
-    private NtoN<Course, User> followers = new NtoN<>(courses, users);
-    private NtoN<Course, User> owners = new NtoN<>(courses, users);
+    private final NtoN<Course, User> followers = new NtoN<>(courses, users);
+    private final NtoN<Course, User> owners = new NtoN<>(courses, users);
 
     private static final long START_ID = 1;
     private long nextId = START_ID;
@@ -225,7 +225,7 @@ public class Database {
     }
 
     /** Gets the User with a specific id, or null if no user has that id
-     * @param id
+     * @param id the user id
      * @return the user or null
      */
     public User getUser(long id) {
@@ -246,7 +246,7 @@ public class Database {
     }
 
     /** Gets the Course with a specific id, or null if no course has that id
-     * @param id
+     * @param id the course id
      * @return the course or null
      */
     public Course getCourse(long id) {
