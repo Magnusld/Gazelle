@@ -1,37 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="115.0" minHeight="115.0" prefHeight="115.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.Course">
+
+<VBox alignment="CENTER_LEFT" maxHeight="120.0" minHeight="120.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.Course">
    <children>
-      <Text layoutX="14.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TDT4120 – Algdat" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="13.0">
+      <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefWidth="500.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TDT4120 – Algdat">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Text fill="#fe4a49" strokeType="OUTSIDE" strokeWidth="0.0" text="Neste Frist: i dag">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)">
          <font>
-            <Font size="23.0" />
+            <Font size="14.0" />
          </font>
       </Text>
-      <Text layoutX="14.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)" AnchorPane.leftAnchor="14.0">
+      <Text fill="#0fbb5f" strokeType="OUTSIDE" strokeWidth="0.0" text="Gjort: 11/16">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <Text fill="#ff4a17" layoutX="344.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Neste Frist: i dag" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="17.5">
+      <Pane maxHeight="5.0" minHeight="5.0" prefHeight="5.0" style="-fx-background-color: #0fbb5f;">
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Pane>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Forrige: Problemer og alroritmer">
          <font>
             <Font size="14.0" />
          </font>
-      </Text>
-      <Text fill="#0fbb5f" layoutX="14.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gjort: 11/16" AnchorPane.leftAnchor="14.0">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Pane maxHeight="5.0" minHeight="5.0" prefHeight="5.0" style="-fx-background-color: #0fbb5f;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-      <Text layoutX="14.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Forrige: Problemer og alroritmer" AnchorPane.bottomAnchor="6.046875" AnchorPane.leftAnchor="14.0">
-         <font>
-            <Font size="14.0" />
-         </font>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
       </Text>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+   </padding>
+</VBox>
