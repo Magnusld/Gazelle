@@ -21,5 +21,15 @@ public class Course extends DatabaseRow {
         return this.name;
     }
 
+    public void addOwner(User owner) {
+        getDatabase().addOwnerToCourse(owner, this);
+    }
 
+    public boolean removeOwner(User owner) {
+        return getDatabase().removeOwnerOfCourse(owner, this);
+    }
+
+    public List<User> getOwners() {
+        return getDatabase().getCourseOwners(this);
+    }
 }
