@@ -74,7 +74,7 @@ public class Database {
         }
 
         private String getCheckString() {
-            return String.format("Table %s v.%d", rows.getClass().getSimpleName(), DATA_VERSION);
+            return String.format("Table v.%d", DATA_VERSION);
         }
     }
 
@@ -201,7 +201,7 @@ public class Database {
         }
 
         private String getCheckString() {
-            return String.format("NtoN %s <-> %s v.%d", tTable.getClass().getSimpleName(), pTable.getClass().getSimpleName(), DATA_VERSION);
+            return String.format("NtoN v.%d", DATA_VERSION);
         }
     }
 
