@@ -1,6 +1,7 @@
 package gazelle.ui;
 
 import gazelle.model.Course;
+import gazelle.model.Database;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -16,11 +17,15 @@ public class CourseListController extends BaseController {
 
     private List<CourseController> controllers = new ArrayList<>();
 
+    private  CourseController courseController;
+
     @FXML
-    private Button newCourse;
+    public Button newCourse;
 
     @FXML
     private void initialize() throws IOException {
+        courseController = CourseController.load();
+        controllers.stream().forEach(e -> courseList.getChildren().setAll(e.getNode()));
 
     }
 
@@ -37,7 +42,12 @@ public class CourseListController extends BaseController {
 
     @FXML
     public void handleNewCourseClick() {
-        // Blabla
+        Database db = new Database();
+        Course c1 = db.newCourse("TDT6969 - Memes");
+        CourseController courseController = new CourseController();
+
+        courseController.setCourse(c1);
+        controllers.add(courseController);
     }
 
     public static CourseListController load() throws IOException {
