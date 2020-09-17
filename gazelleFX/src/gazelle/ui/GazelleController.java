@@ -22,7 +22,6 @@ public class GazelleController extends BaseController {
     private VBox contentBox;
 
     private CourseListController courseListController;
-    private BaseController currentScreen;
 
     private Database database;
     private User user;
@@ -60,7 +59,6 @@ public class GazelleController extends BaseController {
     }
 
     private void setCurrentScreen(BaseController controller) {
-        this.currentScreen = controller;
         contentBox.getChildren().setAll(controller.getNode());
     }
 

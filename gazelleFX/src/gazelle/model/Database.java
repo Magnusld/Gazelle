@@ -48,9 +48,9 @@ public class Database {
         public void dump(ObjectOutputStream oos) throws IOException {
             oos.writeUTF(getCheckString());
             oos.writeLong(rows.size());
-            for(long id : rows.keySet()) {
-                oos.writeLong(id);
-                oos.writeObject(rows.get(id));
+            for(Map.Entry<Long, T> entry : rows.entrySet()) {
+                oos.writeLong(entry.getKey());
+                oos.writeObject(entry.getValue());
             }
         }
 
@@ -94,8 +94,9 @@ public class Database {
         public void add(T t, P p) {
             Objects.requireNonNull(t);
             Objects.requireNonNull(p);
-            assert(t.getDatabase() == Database.this);
-            assert(p.getDatabase() == Database.this);
+            if(t.getDatabase() != Database.this || p.getDatabase() != Database.this)
+                throw new IllegalArgumentException("Trying to form relationships between rows of different databases");
+
             long tId = t.getId();
             long pId = p.getId();
             assert(tId != pId);

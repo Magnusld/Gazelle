@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseTest {
 
     @Test
-    private void databaseIdTest() {
+    public void databaseIdTest() {
         Database db = new Database();
         Course c1 = db.newCourse("Hei");
         User u1 = db.newUser();
@@ -20,7 +20,7 @@ public class DatabaseTest {
     }
 
     @Test
-    private void databaseCrossTest() {
+    public void databaseCrossTest() {
         Database db = new Database();
         Course c1 = db.newCourse("Hei");
         assertTrue(c1.getDatabase() == db);

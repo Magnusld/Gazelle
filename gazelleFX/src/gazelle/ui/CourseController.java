@@ -8,13 +8,10 @@ import java.io.IOException;
 
 public class CourseController extends BaseController {
 
-    private Course course;
-
     @FXML
     private Text courseTitle;
 
     public void setCourse(Course course) {
-        this.course = course;
         courseTitle.setText(course.getName());
     }
 

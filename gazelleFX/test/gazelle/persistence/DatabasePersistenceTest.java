@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DatabasePersistenceTest {
 
     @Test
-    private void testDatabaseSaveLoad() throws IOException {
+    public void testDatabaseSaveLoad() throws IOException {
         Database db = new Database();
         Course c1 = db.newCourse("Heihei");
         Course c2 = db.newCourse("hola");
@@ -50,14 +50,14 @@ public class DatabasePersistenceTest {
         User U3 = db2.getUser(u3.getId());
 
         assertTrue(C1 != c1 && C2 != c2 && U1 != u1 && U2 != u2 && U3 != u3);
-        assertTrue(C1.getName() == c1.getName());
+        assertTrue(C1.getName().equals(c1.getName()));
 
         assertTrue(C1.getOwners().contains(U1));
         assertTrue(U1.getOwnedCourses().contains(C1));
-        assertTrue(C1.getOwners().contains(u1));
+        assertFalse(C1.getOwners().contains(u1));
         assertFalse(U1.getOwnedCourses().contains(c1));
 
-        assertTrue(C1.getOwners().contains(u2));
+        assertTrue(C1.getOwners().contains(U2));
         assertTrue(U3.getOwnedCourses().contains(C2));
     }
 }
