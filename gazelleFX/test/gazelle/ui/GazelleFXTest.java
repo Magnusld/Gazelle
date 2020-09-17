@@ -21,14 +21,13 @@ public class GazelleFXTest extends ApplicationTest {
         //parent = fxmlLoader.load();
         //controller = fxmlLoader.getController();
         //stage.setScene(new Scene(parent));
-        stage.setScene(new Scene(new VBox(new Button("Hei"))));
-        stage.show();
+        //stage.show();
     }
 
     //@Test
     //public void testController() {
-        /*Button button = (Button) parent.lookup("#button");
-        clickOn(button);
-        assertEquals("Hei", button.getText());*/
+    //    Button button = (Button) parent.lookup("#button");
+    //    clickOn(button);
+    //    assertEquals("Hei", button.getText());
     //}
 }
