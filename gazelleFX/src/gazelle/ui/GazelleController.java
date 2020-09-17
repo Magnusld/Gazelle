@@ -3,12 +3,17 @@ package gazelle.ui;
 import gazelle.model.Course;
 import gazelle.model.Database;
 import gazelle.model.User;
+import gazelle.persistence.DatabaseLoader;
+import gazelle.persistence.DatabaseSaver;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class GazelleController extends BaseController {
@@ -24,7 +29,7 @@ public class GazelleController extends BaseController {
 
     @FXML
     private void initialize() throws IOException {
-        setupDatabase();
+        loadDatabase();
 
         courseListController = CourseListController.load();
         courseListController.setData(database, user);
@@ -32,21 +37,40 @@ public class GazelleController extends BaseController {
         setCurrentScreen(courseListController);
     }
 
-    private void setupDatabase() {
+    private static final String DEFAULT_SAVE_LOCATION = "database.txt";
+
+    private void loadDatabase() {
+        try (DatabaseLoader loader = new DatabaseLoader(new FileInputStream(DEFAULT_SAVE_LOCATION))) {
+            database = loader.load();
+            user = database.getUsers().iterator().next(); //TODO: Don't always log in as random user
+        }
+        catch(FileNotFoundException e) {
+            setupDefaultDatabase();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+            setupDefaultDatabase();
+        }
+    }
+
+    private void setupDefaultDatabase() {
         //default content
         database = new Database();
         user = database.newUser();
-
-        Course c1 = database.newCourse("TDT4101 - Algoritmer");
-        Course c2 = database.newCourse("TDT4101 - Noe annet");
-
-        c1.addOwner(user);
-        c2.addOwner(user);
     }
 
     private void setCurrentScreen(BaseController controller) {
         this.currentScreen = controller;
         contentBox.getChildren().setAll(controller.getNode());
+    }
+
+    public void onClosing() {
+        try (DatabaseSaver saver = new DatabaseSaver(new FileOutputStream(DEFAULT_SAVE_LOCATION))) {
+            saver.save(database);
+        } catch(IOException e) {
+            e.printStackTrace();
+            System.err.println("Saving failed!");
+        }
     }
 
     public static GazelleController load() throws IOException {

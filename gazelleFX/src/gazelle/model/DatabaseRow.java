@@ -1,7 +1,9 @@
 package gazelle.model;
 
-public class DatabaseRow {
-    private Database.Id id;
+import java.io.Serializable;
+
+public abstract class DatabaseRow implements Serializable {
+    private transient Database.Id id;
 
     public DatabaseRow(Database.Id id) {
         this.id = id;
@@ -13,5 +15,9 @@ public class DatabaseRow {
 
     public Database getDatabase() {
         return id.getDatabase();
+    }
+
+    public void respecifyId(Database.Id id) {
+        this.id = id;
     }
 }

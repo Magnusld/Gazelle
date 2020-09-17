@@ -11,6 +11,7 @@ public class GazelleFX extends Application {
         GazelleController main = GazelleController.load();
         stage.setScene(new Scene(main.getNode()));
         stage.setTitle("GazelleFX");
+        stage.setOnCloseRequest(e -> main.onClosing());
         stage.show();
     }
 

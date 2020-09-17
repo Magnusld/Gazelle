@@ -1,5 +1,10 @@
 package gazelle.model;
 
+import javafx.util.Pair;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class Database {
@@ -15,87 +20,6 @@ public class Database {
 
         public Database getDatabase() {
             return Database.this;
-        }
-    }
-
-    private class NtoN<T extends DatabaseRow, P extends  DatabaseRow> {
-        private HashMap<Long, List<P>> TtoP = new HashMap<>();
-        private HashMap<Long, List<T>> PtoT = new HashMap<>();
-
-        public void add(T t, P p) {
-            Objects.requireNonNull(t);
-            Objects.requireNonNull(p);
-            assert(t.getDatabase() == Database.this);
-            assert(p.getDatabase() == Database.this);
-            long tId = t.getId();
-            long pId = p.getId();
-
-            if(!TtoP.containsKey(tId))
-                TtoP.put(tId, new ArrayList<>());
-            if(!PtoT.containsKey(pId))
-                PtoT.put(pId, new ArrayList<>());
-
-            if(TtoP.get(tId).contains(p)) {
-                assert(PtoT.get(pId).contains(t));
-                return;
-            }
-
-            TtoP.get(tId).add(p);
-            PtoT.get(pId).add(t);
-        }
-
-        public boolean remove(T t, P p) {
-            Objects.requireNonNull(t);
-            Objects.requireNonNull(p);
-            assert(t.getDatabase() == Database.this);
-            assert(p.getDatabase() == Database.this);
-            long tId = t.getId();
-            long pId = p.getId();
-
-            if(!TtoP.containsKey(tId))
-                return false;
-            if(!PtoT.containsKey(pId))
-                return false;
-
-            boolean rmd1 = TtoP.get(tId).remove(p);
-            boolean rmd2 = PtoT.get(pId).remove(t);
-            assert(rmd1 == rmd2);
-            return rmd1;
-        }
-
-        public boolean isRelated(T t, P p) {
-            Objects.requireNonNull(t);
-            Objects.requireNonNull(p);
-            assert(t.getDatabase() == Database.this);
-            assert(p.getDatabase() == Database.this);
-            long tId = t.getId();
-            long pId = p.getId();
-            if(!TtoP.containsKey(tId))
-                return false;
-            if(!PtoT.containsKey(pId))
-                return false;
-            boolean rel1 = TtoP.get(tId).contains(p);
-            boolean rel2 = PtoT.get(pId).contains(t);
-            assert(rel1 == rel2);
-            return rel1;
-        }
-
-        public List<P> getFromT(T t) {
-            Objects.requireNonNull(t);
-            assert(t.getDatabase() == Database.this);
-            long tId = t.getId();
-            if(!TtoP.containsKey(tId))
-                TtoP.put(tId, new ArrayList<>());
-            return Collections.unmodifiableList(TtoP.get(tId));
-        }
-
-        public List<T> getFromP(P p) {
-            Objects.requireNonNull(p);
-            assert(p.getDatabase() == Database.this);
-            long pId = p.getId();
-            if(!PtoT.containsKey(pId))
-                PtoT.put(pId, new ArrayList<>());
-            return Collections.unmodifiableList(PtoT.get(pId));
         }
     }
 
@@ -115,17 +39,191 @@ public class Database {
         public T get(long id) {
             return rows.get(id);
         }
+
+        public Collection<T> getAll() {
+            return rows.values();
+        }
+
+        private static final int DATA_VERSION = 1;
+        public void dump(ObjectOutputStream oos) throws IOException {
+            oos.writeUTF(getCheckString());
+            oos.writeLong(rows.size());
+            for(long id : rows.keySet()) {
+                oos.writeLong(id);
+                oos.writeObject(rows.get(id));
+            }
+        }
+
+        public void load(ObjectInputStream ois) throws IOException {
+            rows.clear();
+            String check = ois.readUTF();
+            if (!check.equals(getCheckString()))
+                throw new IOException("File not correct version or format");
+            long size = ois.readLong();
+            try {
+                for (long i = 0; i < size; i++) {
+                    long id = ois.readLong();
+                    T obj = (T) ois.readObject();
+                    obj.respecifyId(new Id(id));
+                    rows.put(id, obj);
+                }
+            }
+            catch(ClassNotFoundException e) {
+                throw new IOException(e);
+            }
+        }
+
+        private String getCheckString() {
+            return String.format("Table %s v.%d", rows.getClass().getSimpleName(), DATA_VERSION);
+        }
+    }
+
+    private class NtoN<T extends DatabaseRow, P extends  DatabaseRow> {
+        private HashMap<Long, List<P>> TtoP = new HashMap<>();
+        private HashMap<Long, List<T>> PtoT = new HashMap<>();
+
+        private final Table<T> tTable;
+        private final Table<P> pTable;
+
+        public NtoN(Table<T> tTable, Table<P> pTable) {
+            this.tTable = tTable;
+            this.pTable = pTable;
+        }
+
+        public void add(T t, P p) {
+            Objects.requireNonNull(t);
+            Objects.requireNonNull(p);
+            assert(t.getDatabase() == Database.this);
+            assert(p.getDatabase() == Database.this);
+            long tId = t.getId();
+            long pId = p.getId();
+            assert(tId != pId);
+
+            if (!TtoP.containsKey(tId))
+                TtoP.put(tId, new ArrayList<>());
+            if (!PtoT.containsKey(pId))
+                PtoT.put(pId, new ArrayList<>());
+
+            if (TtoP.get(tId).contains(p)) {
+                assert(PtoT.get(pId).contains(t));
+                return;
+            }
+
+            TtoP.get(tId).add(p);
+            PtoT.get(pId).add(t);
+        }
+
+        public boolean remove(T t, P p) {
+            Objects.requireNonNull(t);
+            Objects.requireNonNull(p);
+            assert(t.getDatabase() == Database.this);
+            assert(p.getDatabase() == Database.this);
+            long tId = t.getId();
+            long pId = p.getId();
+
+            if (!TtoP.containsKey(tId))
+                return false;
+            if (!PtoT.containsKey(pId))
+                return false;
+
+            boolean rmd1 = TtoP.get(tId).remove(p);
+            boolean rmd2 = PtoT.get(pId).remove(t);
+            assert(rmd1 == rmd2);
+            return rmd1;
+        }
+
+        public boolean isRelated(T t, P p) {
+            Objects.requireNonNull(t);
+            Objects.requireNonNull(p);
+            assert(t.getDatabase() == Database.this);
+            assert(p.getDatabase() == Database.this);
+            long tId = t.getId();
+            long pId = p.getId();
+            if (!TtoP.containsKey(tId))
+                return false;
+            if (!PtoT.containsKey(pId))
+                return false;
+            boolean rel1 = TtoP.get(tId).contains(p);
+            boolean rel2 = PtoT.get(pId).contains(t);
+            assert(rel1 == rel2);
+            return rel1;
+        }
+
+        public List<P> getFromT(T t) {
+            Objects.requireNonNull(t);
+            assert(t.getDatabase() == Database.this);
+            long tId = t.getId();
+            if (!TtoP.containsKey(tId))
+                TtoP.put(tId, new ArrayList<>());
+            return Collections.unmodifiableList(TtoP.get(tId));
+        }
+
+        public List<T> getFromP(P p) {
+            Objects.requireNonNull(p);
+            assert(p.getDatabase() == Database.this);
+            long pId = p.getId();
+            if (!PtoT.containsKey(pId))
+                PtoT.put(pId, new ArrayList<>());
+            return Collections.unmodifiableList(PtoT.get(pId));
+        }
+
+        private static final int DATA_VERSION = 1;
+        public void dump(ObjectOutputStream oos) throws IOException {
+            ArrayList<Pair<Long, Long>> pairs = new ArrayList<>();
+            TtoP.forEach((tId, pList)-> {
+                pList.forEach(p -> {
+                    long pId = p.getId();
+                    pairs.add(new Pair<>(tId, pId));
+                });
+            });
+
+            oos.writeUTF(getCheckString());
+            oos.writeLong(pairs.size());
+            for (Pair<Long, Long> pair : pairs) {
+                oos.writeLong(pair.getKey());
+                oos.writeLong(pair.getValue());
+            }
+        }
+
+        public void load(ObjectInputStream ois) throws IOException {
+            TtoP.clear();
+            PtoT.clear();
+
+            String check = ois.readUTF();
+            if (!check.equals(getCheckString()))
+                throw new IOException("File not correct version or format");
+            long pairs = ois.readLong();
+            for (long i = 0; i < pairs; i++) {
+                long tId = ois.readLong();
+                long pId = ois.readLong();
+                add(tTable.get(tId), pTable.get(pId));
+            }
+        }
+
+        private String getCheckString() {
+            return String.format("NtoN %s <-> %s v.%d", tTable.getClass().getSimpleName(), pTable.getClass().getSimpleName(), DATA_VERSION);
+        }
     }
 
     private Table<Course> courses = new Table<>();
     private Table<User> users = new Table<>();
 
-    private NtoN<Course, User> followers = new NtoN<>();
-    private NtoN<Course, User> owners = new NtoN<>();
+    private NtoN<Course, User> followers = new NtoN<>(courses, users);
+    private NtoN<Course, User> owners = new NtoN<>(courses, users);
 
     private long nextId = 1;
 
     public Database() {
+    }
+
+    public User newUser() {
+        User user = new User(getNextId());
+        users.add(user);
+        return user;
+    }
+
+    public Collection<User> getUsers() {
+        return users.getAll();
     }
 
     public Course newCourse(String name) {
@@ -134,10 +232,8 @@ public class Database {
         return course;
     }
 
-    public User newUser() {
-        User user = new User(getNextId());
-        users.add(user);
-        return user;
+    public Collection<Course> getCourses() {
+        return courses.getAll();
     }
 
     public void addOwnerToCourse(User user, Course course) {
@@ -154,6 +250,22 @@ public class Database {
 
     public List<User> getCourseOwners(Course course) {
         return owners.getFromT(course);
+    }
+
+    public void dump(ObjectOutputStream oos) throws IOException {
+        users.dump(oos);
+        courses.dump(oos);
+        followers.dump(oos);
+        owners.dump(oos);
+        oos.writeLong(nextId);
+    }
+
+    public void load(ObjectInputStream ois) throws IOException {
+        users.load(ois);
+        courses.load(ois);
+        followers.load(ois);
+        owners.load(ois);
+        nextId = ois.readLong();
     }
 
     private Id getNextId() {
