@@ -31,12 +31,12 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Text fill="#0fbb5f" strokeType="OUTSIDE" strokeWidth="0.0" text="Gjort: 11/16">
+      <Text fill="#11ba52" strokeType="OUTSIDE" strokeWidth="0.0" text="Gjort: 11/16">
          <font>
             <Font size="14.0" />
          </font>
       </Text>
-      <Pane maxHeight="5.0" minHeight="5.0" prefHeight="5.0" style="-fx-background-color: #0fbb5f;">
+      <Pane maxHeight="5.0" minHeight="5.0" prefHeight="5.0" style="-fx-background-color: #11BA52;">
          <VBox.margin>
             <Insets top="5.0" />
          </VBox.margin>
