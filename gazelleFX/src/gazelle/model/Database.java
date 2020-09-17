@@ -100,7 +100,7 @@ public class Database {
     }
 
     private class Table<T extends DatabaseRow> {
-        private HashMap<Long, T> rows;
+        private HashMap<Long, T> rows = new HashMap<>();
 
         public void add(T t) {
             assert(t.getDatabase() == Database.this);
@@ -117,20 +117,15 @@ public class Database {
         }
     }
 
-    private Table<Course> courses;
-    private Table<User> users;
+    private Table<Course> courses = new Table<>();
+    private Table<User> users = new Table<>();
 
-    private NtoN<Course, User> followers;
-    private NtoN<Course, User> owners;
+    private NtoN<Course, User> followers = new NtoN<>();
+    private NtoN<Course, User> owners = new NtoN<>();
 
-    private long nextId;
+    private long nextId = 1;
 
     public Database() {
-        courses = new Table<>();
-        users = new Table<>();
-        followers = new NtoN<>();
-        owners = new NtoN<>();
-        nextId = 1;
     }
 
     public Course newCourse(String name) {
@@ -155,6 +150,10 @@ public class Database {
 
     public List<Course> getCoursesOwned(User owner) {
         return owners.getFromP(owner);
+    }
+
+    public List<User> getCourseOwners(Course course) {
+        return owners.getFromT(course);
     }
 
     private Id getNextId() {
