@@ -11,11 +11,16 @@ public class BaseController {
         return node;
     }
 
-    public static <T extends BaseController> T loadFromFXML(String fxmlPath) throws IOException {
-        final FXMLLoader fxmlLoader = new FXMLLoader(BaseController.class.getResource(fxmlPath));
-        Parent parent = fxmlLoader.load();
-        T controller = fxmlLoader.getController();
-        controller.node = parent;
-        return controller;
+    public static <T extends BaseController> T loadFromFXML(String fxmlPath) {
+        try {
+            final FXMLLoader fxmlLoader = new FXMLLoader(BaseController.class.getResource(fxmlPath));
+            Parent parent = fxmlLoader.load();
+            T controller = fxmlLoader.getController();
+            controller.node = parent;
+            return controller;
+        } catch(IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -2,52 +2,65 @@ package gazelle.ui;
 
 import gazelle.model.Course;
 import gazelle.model.Database;
+import gazelle.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CourseListController extends BaseController {
 
     @FXML
-    private VBox courseList;
-
-    private List<CourseController> controllers = new ArrayList<>();
-
-    private  CourseController courseController;
-
-    @FXML
     public Button newCourse;
+    @FXML
+    private VBox courseList;
+    private ArrayList<CourseController> controllers = new ArrayList<>();
+
+    private Database database;
+    private User user;
 
     @FXML
     private void initialize() throws IOException {
-        courseController = CourseController.load();
-        controllers.stream().forEach(e -> courseList.getChildren().setAll(e.getNode()));
 
     }
 
-    public void setCourses(List<Course> courses) throws IOException {
-        courseList.getChildren().clear();
-        for (Course course : courses) {
-            CourseController courseController = CourseController.load();
-            courseController.setCourse(course);
+    public void setData(Database database, User user) {
+        this.database = database;
+        this.user = user;
+        updateCourses();
+    }
 
-            controllers.add(courseController);
-            courseList.getChildren().add(courseController.getNode());
-        }
+    private void updateCourses() {
+        List<Course> courses = database.getCoursesOwned(user);
+        while (controllers.size() < courses.size())
+            controllers.add(CourseController.load());
+        controllers.subList(courses.size(), controllers.size()).clear(); // Remove extra controllers
+        for (int i = 0; i < courses.size(); i++)
+            controllers.get(i).setCourse(courses.get(i));
+        courseList.getChildren().setAll(controllers.stream().map(e -> e.getNode()).collect(Collectors.toList()));
     }
 
     @FXML
     public void handleNewCourseClick() {
-        Database db = new Database();
-        Course c1 = db.newCourse("TDT6969 - Memes");
-        CourseController courseController = new CourseController();
-
-        courseController.setCourse(c1);
-        controllers.add(courseController);
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Nytt løp");
+        dialog.setContentText("Navn");
+        dialog.setHeaderText("Lag et nytt løp");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isEmpty())
+            return;
+        String name = result.get();
+        if(name.isBlank())
+            return;
+        Course newCourse = database.newCourse(name);
+        newCourse.addOwner(user);
+        updateCourses();
     }
 
     public static CourseListController load() throws IOException {

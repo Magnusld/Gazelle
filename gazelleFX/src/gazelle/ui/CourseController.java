@@ -18,7 +18,7 @@ public class CourseController extends BaseController {
         courseTitle.setText(course.getName());
     }
 
-    public static CourseController load() throws IOException {
+    public static CourseController load() {
         return loadFromFXML("/scenes/course.fxml");
     }
 }
