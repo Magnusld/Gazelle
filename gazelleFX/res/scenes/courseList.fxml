@@ -22,7 +22,7 @@
               <Button fx:id="newCourse" mnemonicParsing="false" onAction="#handleNewCourseClick" prefHeight="20.0" prefWidth="95.0" style="-fx-background-color: #8AC4FF;" text="Nytt Løp" />
          </children>
       </HBox>
-      <Pane maxHeight="5.0" minHeight="5.0" prefHeight="5.0" style="-fx-background-color: #344966;">
+      <Pane maxHeight="1.0" minHeight="1.0" prefHeight="1.0" style="-fx-background-color: lightgray;">
          <VBox.margin>
             <Insets bottom="10.0" top="10.0" />
          </VBox.margin>
