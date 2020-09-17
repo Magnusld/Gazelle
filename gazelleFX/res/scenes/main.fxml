@@ -27,7 +27,7 @@
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <Pane prefHeight="5.0" style="-fx-background-color: #FF8C42;" />
+                  <Pane prefHeight="2.0" style="-fx-background-color: #FF8C42;" />
                </children>
             </VBox>
             <VBox alignment="CENTER" spacing="3.0">
@@ -37,7 +37,7 @@
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <Pane prefHeight="5.0" style="-fx-background-color: lightgray;" />
+                  <Pane prefHeight="2.0" />
                </children>
             </VBox>
          </children>

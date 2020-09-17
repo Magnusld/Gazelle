@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER_LEFT" maxHeight="120.0" minHeight="120.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.CourseController">
+<VBox alignment="CENTER_LEFT" maxHeight="120.0" minHeight="120.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.CourseController">
    <children>
       <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefWidth="500.0">
          <children>
