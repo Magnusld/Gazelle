@@ -1,4 +1,7 @@
 
+# Save files
+database.bin
+
 # Tmp files
 *~
 \#*

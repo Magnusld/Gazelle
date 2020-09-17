@@ -9,19 +9,20 @@ For en komplett beskrivelse av prosjektet se [her](gazelleFX/README.md).
 
 ## Organisering
 I mappen `gazelleFX/` ligger en standard trelagsapplikasjon med brukergrensesnitt
-i JavaFX, et modellag og persistens til/fra JSON-filer.
+i JavaFX, et modellag og persistens til og fra filer.
 
 #### Koden ligger i: 
  - `src/gazelle/ui` for app og kontroller klasser.
  - `src/gazelle/model` for datastrukturene i applikasjonen.
- - `src/gazelle/persinstance` for lagring og lesing til og fra fil.
+ - `src/gazelle/persinstence` for lagring og lesing til og fra fil.
  
 #### FXML ligger i:
- - `res/scenes` for FXML scenes. 
+ - `res/scenes` for FXML-scener. 
  
 #### Tester ligger i:
- - `test/gazelle/model` for tester til datastrukturene.
- - `test/gazelle/ui` for tester til kontroller og FXML.
+ - `test/gazelle/model` for enhetstester til datastrukturene.
+ - `test/gazelle/ui` for enhetstester til kontroller og FXML.
+ - `test/gazelle/persistence` for enhetstester av lagring.
 
 ## Bygging og testing
 Vi bruker maven som byggverktøy, med to `pom.xml`-filer.
