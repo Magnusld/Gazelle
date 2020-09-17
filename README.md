@@ -26,5 +26,15 @@ i JavaFX, et modellag og persistens til/fra JSON-filer.
 ## Bygging og testing
 Vi bruker maven som byggverktøy, med to `pom.xml`-filer.
 
+For å kompilere, teste og sjekke kodekvalitet skriv: 
+```
+mvn verify
+```
+For å kjøre, gå inn i `gazelleFX/` og skriv:
+```
+mvn javafx:run
+``` 
+Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
+
 ## Bidrag og utvikling
-Se [CONTRIBUTING.md](/CONTRIBUTING.md)
+Se [CONTRIBUTING.md](/CONTRIBUTING.md).
