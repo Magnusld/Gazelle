@@ -74,9 +74,6 @@
             <!-- Running tests -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>@{argLine} --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</argLine>
-                </configuration>
             </plugin>
 
             <!-- Checkstyle code quality tool -->
@@ -89,7 +86,6 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
             </plugin>
-
 
             <!-- Code coverage -->
             <plugin>
