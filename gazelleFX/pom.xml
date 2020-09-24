@@ -15,10 +15,6 @@
 
     <name>GazelleFX</name>
 
-    <properties>
-        <argLine/> <!-- empty default -->
-    </properties>
-
     <dependencies>
         <!-- JavaFX -->
         <dependency>
