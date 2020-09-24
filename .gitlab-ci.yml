@@ -9,4 +9,7 @@ default:
       - .m2/repository
 
 test:
-  script: true || mvn verify
+  script: |
+    apt-get update
+    apt-get install -y xvfb
+    mvn verify

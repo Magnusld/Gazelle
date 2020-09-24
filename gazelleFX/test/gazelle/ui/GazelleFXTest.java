@@ -2,32 +2,25 @@ package gazelle.ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javafx.scene.Scene;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
+import java.io.IOException;
 
 public class GazelleFXTest extends ApplicationTest {
 
-    private Parent parent;
-    //private AppController controller;
+    private GazelleController controller;
 
     @Override
-    public void start(final Stage stage) throws Exception {
-        //final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("App.fxml"));
-        //parent = fxmlLoader.load();
-        //controller = fxmlLoader.getController();
-        //stage.setScene(new Scene(parent));
-        //stage.show();
+    public void start(final Stage stage) throws IOException {
+        controller = GazelleController.load();
+        stage.setScene(new Scene(controller.getNode()));
+        stage.show();
     }
 
-    //@Test
-    //public void testController() {
-    //    Button button = (Button) parent.lookup("#button");
-    //    clickOn(button);
-    //    assertEquals("Hei", button.getText());
-    //}
+    @Test
+    public void testControllerShow() {
+        assertTrue(controller.getNode().isVisible());
+    }
 }
