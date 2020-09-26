@@ -1,2 +1,9 @@
-package gazelle.model;public class User {
+package gazelle.model;
+
+import javax.persistence.Entity;
+
+@Entity
+public class User {
+
 }
+
