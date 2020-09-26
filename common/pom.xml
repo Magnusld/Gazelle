@@ -10,40 +10,29 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gazelleFX</artifactId>
+    <artifactId>gazelle-common</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>GazelleFX</name>
+    <name>Gazelle Common</name>
 
     <dependencies>
-        <!-- JavaFX -->
+        <!-- Persistence -->
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>14.0.1</version>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
 
-        <!-- JUnit5 -->
+        <!-- Test with JUnit5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>5.4.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <!-- Test with TextFX -->
-        <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>testfx-core</artifactId>
-            <version>4.0.16-alpha</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>testfx-junit5</artifactId>
-            <version>4.0.16-alpha</version>
+            <version>5.4.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -66,16 +55,6 @@
             <!-- Compiling code -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-
-            <!-- Running JavaFX code -->
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.4</version>
-                <configuration>
-                    <mainClass>gazelle.ui.GazelleFX</mainClass>
-                </configuration>
             </plugin>
 
             <!-- Running tests -->
