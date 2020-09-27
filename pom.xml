@@ -7,9 +7,9 @@
     <groupId>it1901</groupId>
     <artifactId>gazelle</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
 
-    <name>gazelle</name>
+    <name>Gazelle</name>
 
     <modules>
         <module>gazelleFX</module>
@@ -25,6 +25,13 @@
     <!-- Not actual dependencies, only configuration for modules -->
     <dependencyManagement>
         <dependencies>
+            <!-- Gazelle Common -->
+            <dependency>
+                <groupId>it1901</groupId>
+                <artifactId>gazelle-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- Test with JUnit5 -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -79,6 +86,16 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.0.0-M5</version>
+                </plugin>
+
+                <!-- Site -->
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.9.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.1.1</version>
                 </plugin>
 
                 <!-- Checkstyle code quality tool -->

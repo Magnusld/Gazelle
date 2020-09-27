@@ -7,15 +7,20 @@
     <parent>
         <groupId>it1901</groupId>
         <artifactId>gazelle</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>gazelleFX</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <name>GazelleFX</name>
 
     <dependencies>
+        <!-- Gazelle Common -->
+        <dependency>
+            <groupId>it1901</groupId>
+            <artifactId>gazelle-common</artifactId>
+        </dependency>
+
         <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -81,6 +86,11 @@
             <!-- Running tests -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+            <!-- Site -->
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
             </plugin>
 
             <!-- Checkstyle code quality tool -->

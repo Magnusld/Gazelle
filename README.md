@@ -23,13 +23,22 @@ For å kompilere, teste og sjekke kodekvalitet på hele prosjektet, skriv:
 ```
 mvn verify
 ```
-
 For å se testdekningsgrad gå til:
 TODO
 
-For å kjøre klienten, gå inn i `gazelleFX/` og skriv:
+Siden modulene bruker hverandre må hele prosjektet installeres til den lokale maven-siloen.
 ```
-mvn javafx:run
+mvn install
+```
+
+For å kjøre tjeneren, skriv:
+```
+mvn spring-boot:run -pl gazelle-server
+```
+
+For å kjøre klienten, skriv:
+```
+mvn javafx:run -pl gazelleFX
 ``` 
 Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
 
