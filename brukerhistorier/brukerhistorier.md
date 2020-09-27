@@ -60,3 +60,24 @@ En post er en tidsavgrenset blokk med fokus på en bit av pensum. Her legger fag
 #### Redigering av poster [Faglærer]
 
 ![Redigering av poster](mockup-us-2-3.png)
+
+## Bruker (us-3) &ndash; Høy prioritet
+
+Som både faglærer og student trenger jeg å kunne lagre min innstillinger og 
+hvilke løp jeg eier eller er en del av. Slik at det er enkelt å bruke appen.
+
+En bruker er en måte å "logge inn" på appen og hvordan man lagrer sin data, slik at man enkelt finner løpene sine.
+
+### Viktig å kunne se
+
+* Hvilken bruker som er logget inn
+
+### Viktig å kunne gjøre
+* Logge inne
+* Logge ut
+* Endre på sine innstillinger
+
+### Illustrerende skjermbilder 
+
+
+
