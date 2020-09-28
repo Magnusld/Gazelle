@@ -33,7 +33,7 @@ mvn install
 
 For å kjøre tjeneren, skriv:
 ```
-mvn spring-boot:run -pl gazelle-server
+mvn spring-boot:run -pl server
 ```
 
 For å kjøre klienten, skriv:
