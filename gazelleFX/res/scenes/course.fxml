@@ -35,7 +35,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Pane maxHeight="5.0" minHeight="5.0" prefHeight="5.0" style="-fx-background-color: #11BA52;">
+      <Pane maxHeight="5.0" minHeight="5.0" prefHeight="5.0" style="-fx-background-color: #11BA52;" stylesheets="@../../../assets/main.css">
          <VBox.margin>
             <Insets top="5.0" />
          </VBox.margin>

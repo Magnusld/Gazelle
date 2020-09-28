@@ -1,0 +1,35 @@
+.body {
+    -fx-background-color: white;
+    -fx-pref-width: 900;
+    -fx-pref-height: 600;
+}
+
+.navbar {
+    -fx-background-color: #344966;
+}
+
+.navBarSelected {
+    -fx-background-color: #FF8C42;
+}
+
+.navBarUnderLine {
+    -fx-pref-height: 2;
+}
+
+Button {
+    -fx-pref-width: 95;
+    -fx-pref-height: 20;
+}
+
+.buttonNew {
+    -fx-background-color: #8AC4FF;
+}
+
+.separator {
+    -fx-background-color: lightgray;
+}
+
+.courseList {
+    -fx-pref-width: 500;
+    -fx-pref-height: 300;
+}
