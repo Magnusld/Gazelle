@@ -43,7 +43,9 @@ public class CourseListController extends BaseController {
         controllers.subList(courses.size(), controllers.size()).clear(); // Remove extra controllers
         for (int i = 0; i < courses.size(); i++)
             controllers.get(i).setCourse(courses.get(i));
-        courseList.getChildren().setAll(controllers.stream().map(e -> e.getNode()).collect(Collectors.toList()));
+        courseList
+                .getChildren()
+                .setAll(controllers.stream().map(e -> e.getNode()).collect(Collectors.toList()));
     }
 
     @FXML
@@ -56,7 +58,7 @@ public class CourseListController extends BaseController {
         if (result.isEmpty())
             return;
         String name = result.get();
-        if(name.isBlank())
+        if (name.isBlank())
             return;
         Course newCourse = database.newCourse(name);
         newCourse.addOwner(user);
