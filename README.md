@@ -39,7 +39,7 @@ mvn spring-boot:run -pl server
 For å kjøre klienten, skriv:
 ```
 mvn javafx:run -pl gazelleFX
-``` 
+```
 Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
 
 ## Bidrag og utvikling

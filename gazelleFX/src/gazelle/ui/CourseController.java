@@ -4,8 +4,6 @@ import gazelle.model.Course;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
-
 public class CourseController extends BaseController {
 
     @FXML
