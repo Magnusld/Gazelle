@@ -53,9 +53,9 @@
       </HBox>
    </top>
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="contentBoxScroll" stylesheets="@../stylesheets/main.css" BorderPane.alignment="CENTER">
          <content>
-            <VBox fx:id="contentBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="contentBox" alignment="TOP_CENTER" styleClass="contentBox" stylesheets="@../stylesheets/main.css">
                <padding>
                   <Insets left="40.0" right="40.0" top="30.0" />
                </padding>

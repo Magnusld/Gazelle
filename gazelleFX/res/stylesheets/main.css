@@ -16,6 +16,16 @@
     -fx-pref-height: 2;
 }
 
+.contentBoxScroll{
+    -fx-pref-width: 200;
+    -fx-pref-height: 200;
+}
+
+.contentBox{
+    -fx-pref-width: 100;
+    -fx-pref-height: 200;
+}
+
 Button {
     -fx-pref-width: 95;
     -fx-pref-height: 20;
@@ -27,9 +37,24 @@ Button {
 
 .separator {
     -fx-background-color: lightgray;
+    -fx-pref-height: 1;
 }
 
 .courseList {
     -fx-pref-width: 500;
     -fx-pref-height: 300;
+}
+
+.courseListContent {
+    -fx-pref-height: 400;
+}
+
+.course {
+    -fx-pref-width: 500;
+    -fx-pref-height: 120;
+}
+
+.progressBar {
+    -fx-pref-height: 5;
+    -fx-background-color:  #11BA52;
 }
