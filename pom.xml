@@ -76,7 +76,7 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>3.1.1</version>
                     <configuration>
-                        <configLocation>config/codestyle.xml</configLocation>
+                        <configLocation>config/checkstyle.xml</configLocation>
                         <encoding>UTF-8</encoding>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>

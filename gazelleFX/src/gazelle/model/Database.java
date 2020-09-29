@@ -224,7 +224,7 @@ public class Database {
         return user;
     }
 
-    /** Gets the User with a specific id, or null if no user has that id
+    /** Gets the User with a specific id, or null if no user has that id.
      * @param id the user id
      * @return the user or null
      */
