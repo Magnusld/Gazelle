@@ -23,7 +23,6 @@ public class GazelleController extends BaseController {
 
     private CourseListController courseListController;
 
-    private Database database;
     private User user;
 
     @FXML
