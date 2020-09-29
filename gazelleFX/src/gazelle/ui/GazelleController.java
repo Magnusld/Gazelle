@@ -38,14 +38,13 @@ public class GazelleController extends BaseController {
     private static final String DEFAULT_SAVE_LOCATION = "database.bin";
 
     private void loadDatabase() {
-        try (DatabaseLoader loader = new DatabaseLoader(new FileInputStream(DEFAULT_SAVE_LOCATION))) {
+        try (DatabaseLoader loader =
+                     new DatabaseLoader(new FileInputStream(DEFAULT_SAVE_LOCATION))) {
             database = loader.load();
             user = database.getUsers().iterator().next(); //TODO: Don't always log in as random user
-        }
-        catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             setupDefaultDatabase();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             setupDefaultDatabase();
         }
@@ -64,7 +63,7 @@ public class GazelleController extends BaseController {
     public void onClosing() {
         try (DatabaseSaver saver = new DatabaseSaver(new FileOutputStream(DEFAULT_SAVE_LOCATION))) {
             saver.save(database);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Saving failed!");
         }
