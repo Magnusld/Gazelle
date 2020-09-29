@@ -22,7 +22,7 @@ public class GazelleException extends RuntimeException {
      * @param message An additional message given to the client, or null
      * @param statusCode The Http status code of the response
      */
-    public GazelleException(String reason,  String message, HttpStatus statusCode) {
+    public GazelleException(String reason, String message, HttpStatus statusCode) {
         super(message);
         this.reason = reason;
         this.statusCode = statusCode;
