@@ -16,19 +16,24 @@
     -fx-pref-height: 2;
 }
 
-.contentBoxScroll{
+.contentBoxScroll {
     -fx-pref-width: 200;
-    -fx-pref-height: 200;
 }
 
-.contentBox{
+.contentBox {
     -fx-pref-width: 100;
-    -fx-pref-height: 200;
+}
+
+TextField {
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-radius: 2;
 }
 
 Button {
     -fx-pref-width: 95;
     -fx-pref-height: 20;
+    -fx-background-color: #8AC4FF;
 }
 
 .buttonNew {
@@ -42,16 +47,10 @@ Button {
 
 .courseList {
     -fx-pref-width: 500;
-    -fx-pref-height: 300;
-}
-
-.courseListContent {
-    -fx-pref-height: 400;
 }
 
 .course {
     -fx-pref-width: 500;
-    -fx-pref-height: 120;
 }
 
 .progressBar {
