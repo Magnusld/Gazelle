@@ -1,6 +1,7 @@
 package gazelle.server.endpoint;
 
 import gazelle.model.User;
+import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
