@@ -23,24 +23,32 @@ For å kompilere, teste og sjekke kodekvalitet på hele prosjektet, skriv:
 ```
 mvn verify
 ```
-For å se testdekningsgrad gå til:
-TODO
+For å se testdekningsgrad gå til ```target/site/jacoco/index.html``` i hver modul.
 
-Siden modulene bruker hverandre må hele prosjektet installeres til den lokale maven-siloen.
+For å kompilere og starte prosjektet med både tjener og klient, skriv på Linux, OSX og GitPod:
 ```
-mvn install
+./start.sh
 ```
+Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
 
-For å kjøre tjeneren, skriv:
+#### Manuell kjøring
+Dersom du vil gjøre det manuelt må du først sørge for at alle dine egne avhengigheter er installert
+i din lokale maven-silo.
 ```
-mvn spring-boot:run -pl server
+mvn install -pl common
 ```
-
-For å kjøre klienten, skriv:
+Deretter må du starte tjeneren
+```
+mvn spring-boot:start -pl server
+```
+Og til slutt starte klienten
 ```
 mvn javafx:run -pl gazelleFX
 ```
-Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
+For å skru av tjeneren, send en POST til `/actuator/shutdown`
+```
+curl -X POST localhost:8080/actuator/shutdown
+```
 
 ## Bidrag og utvikling
 
