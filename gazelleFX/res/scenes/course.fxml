@@ -35,7 +35,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Pane maxHeight="-Infinity" minHeight="-Infinity" styleClass="progressBar" stylesheets="@../../../assets/main.css">
+      <Pane maxHeight="-Infinity" minHeight="-Infinity" styleClass="progressBar" stylesheets="@../stylesheets/main.css">
          <VBox.margin>
             <Insets top="5.0" />
          </VBox.margin>
@@ -49,7 +49,4 @@
          </VBox.margin>
       </Text>
    </children>
-   <padding>
-      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-   </padding>
 </VBox>
