@@ -4,12 +4,14 @@ import gazelle.auth.LogInRequest;
 import gazelle.auth.LogInResponse;
 import gazelle.auth.LogOutRequest;
 import gazelle.auth.UserFromTokenRequest;
+import gazelle.model.Course;
 import gazelle.model.User;
 
-import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.*;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * A class representing the connection with the server.
@@ -34,16 +36,27 @@ public class GazelleSession {
         apiRoot = client.target(url);
     }
 
-    private Invocation.Builder unauthorizedPath(String path) {
-        return apiRoot
-                .path("login")
-                .request(MediaType.APPLICATION_JSON);
+    // Make a path object relative to apiRoot
+    private WebTarget path(String path) {
+        return apiRoot.path(path);
     }
 
-    private Invocation.Builder path(String path) {
+    private Invocation.Builder unauthorizedPath(WebTarget path) {
+        return path.request(MediaType.APPLICATION_JSON);
+    }
+
+    private Invocation.Builder unauthorizedPath(String pathname) {
+        return unauthorizedPath(path(pathname));
+    }
+
+    private Invocation.Builder authorizedPath(WebTarget path) {
         if (token == null)
             throw new IllegalStateException("Not logged in to GazelleSession");
         return unauthorizedPath(path).header("Authorization", "Bearer " + token);
+    }
+
+    private Invocation.Builder authorizedPath(String pathname) {
+        return authorizedPath(path(pathname));
     }
 
     /**
@@ -81,7 +94,7 @@ public class GazelleSession {
         UserFromTokenRequest request = new UserFromTokenRequest(token);
 
         // We always use POST when sending secrets
-        Response response = unauthorizedPath("user/token").post(Entity.json(request));
+        Response response = unauthorizedPath("users/fromToken").post(Entity.json(request));
         if (response.getStatusInfo() != Response.Status.OK)
             return false;
 
@@ -102,7 +115,7 @@ public class GazelleSession {
         LogOutRequest request = new LogOutRequest(token);
 
         // We always use POST when sending secrets
-        Response response = path("logout").post(Entity.json(request));
+        Response response = authorizedPath("logout").post(Entity.json(request));
 
         token = null;
         loggedInUser = null;
@@ -120,5 +133,52 @@ public class GazelleSession {
      */
     public boolean isLoggedIn() {
         return loggedInUser != null && token != null;
+    }
+
+    /**
+     * @return the User object for the currently logged in user, or null
+     */
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    /**
+     * Tries to create a new User on the server.
+     * You do not need to be logged in to call it.
+     *
+     * <p>Will fail e.g. if username is taken.
+     *
+     * @param username the wanted username
+     * @param password the wanted password
+     * @return the newly created User or null if it failed
+     */
+    public User addNewUser(String username, String password) {
+        User newUser = new User(username, password);
+
+        Response response = unauthorizedPath("users").post(Entity.json(newUser));
+        if (response.getStatusInfo() != Response.Status.CREATED)
+            return null; //TODO: Explain why the user wasn't created
+
+        return response.readEntity(User.class);
+    }
+
+    /**
+     * Gets a list of all courses either followed or owned by the user.
+     *
+     * @param user the User object
+     * @return all courses owner or followed by the user
+     * @throws ClientException if request fails
+     */
+    public List<Course> getCoursesForUser(User user) {
+        WebTarget path = path("courses/fromUser").queryParam("userId", user.getId());
+        Response response = authorizedPath(path).get();
+
+        if (response.getStatusInfo() != Response.Status.OK)
+            throw new ClientException("Failed to get courses for user", response);
+
+        // This is how we specify what T is when receiving a List<T>
+        // https://stackoverflow.com/questions/35313767/how-to-get-liststring-as-response-from-jersey2-client
+        List<Course> courses = response.readEntity(new GenericType<List<Course>>() {});
+        return courses;
     }
 }

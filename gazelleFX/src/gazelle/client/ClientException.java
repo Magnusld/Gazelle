@@ -10,7 +10,7 @@ public class ClientException extends RuntimeException {
     }
 
     public ClientException(String message, int statusCode, String content) {
-        this(String.format("%s\nCode: %d\nContent: %s", message, statusCode, content));
+        this(String.format("%s%nCode: %d%nContent: %s", message, statusCode, content));
     }
 
     public ClientException(String message, Response response) {
