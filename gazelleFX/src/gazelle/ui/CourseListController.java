@@ -1,13 +1,18 @@
 package gazelle.ui;
 
+import gazelle.client.GazelleSession;
+import gazelle.model.Course;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CourseListController extends BaseController {
 
@@ -17,21 +22,32 @@ public class CourseListController extends BaseController {
     private VBox courseList;
     private final ArrayList<CourseController> controllers = new ArrayList<>();
 
-    @FXML
-    private void initialize() throws IOException {
+    private GazelleController app;
 
+    @FXML
+    private void initialize() throws IOException {}
+
+    public void clearView() {
+        courseList.setVisible(false); //TODO: Add spinner
     }
 
-    private void updateCourses() {
-        /*List<Course> courses = database.getCoursesOwned(user);
+    public void setCourses(List<Course> courses) {
+        // Make enough controllers
         while (controllers.size() < courses.size())
             controllers.add(CourseController.load());
-        controllers.subList(courses.size(), controllers.size()).clear(); // Remove extra controllers
+
+        // Remove extra controllers
+        controllers.subList(courses.size(), controllers.size()).clear();
+
+        // Assign a course per controller
         for (int i = 0; i < courses.size(); i++)
             controllers.get(i).setCourse(courses.get(i));
+
+        // Set list content to the controllers
         courseList
                 .getChildren()
-                .setAll(controllers.stream().map(e -> e.getNode()).collect(Collectors.toList()));*/
+                .setAll(controllers.stream().map(e -> e.getNode()).collect(Collectors.toList()));
+        courseList.setVisible(true);
     }
 
     @FXML
@@ -48,10 +64,12 @@ public class CourseListController extends BaseController {
             return;
         //Course newCourse = database.newCourse(name);
         //newCourse.addOwner(user);
-        updateCourses();
+        app.showMyCourses();
     }
 
-    public static CourseListController load() {
-        return loadFromFXML("/scenes/courseList.fxml");
+    public static CourseListController load(GazelleController app) {
+        CourseListController controller = loadFromFXML("/scenes/courseList.fxml");
+        controller.app = app;
+        return controller;
     }
 }

@@ -1,5 +1,6 @@
 .body {
-    -fx-background-color: white;
+    background: white;
+    -fx-background-color: background;
     -fx-pref-width: 900;
     -fx-pref-height: 600;
 }
@@ -21,9 +22,14 @@
 
 .contentBox {
     -fx-padding: 30 40 20 40;
+    -fx-background-color: background;
 }
 
-TextField {
+.contentBoxScroll {
+    -fx-background-color: background;
+}
+
+TextField, PasswordField {
     -fx-background-color: white;
     -fx-border-color: lightgray;
     -fx-border-radius: 2;

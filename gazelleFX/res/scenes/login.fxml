@@ -2,8 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -38,20 +38,18 @@
                   <Font size="14.0" />
                </font>
             </Text>
-            <TextField fx:id="password" />
+            <PasswordField fx:id="password" />
          </children>
       </VBox>
-      <HBox alignment="CENTER">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
+      <VBox alignment="CENTER">
          <children>
-            <Button id="login" fx:id="logIn" mnemonicParsing="false" onAction="#onLogInAction" text="Logg inn">
+            <Text fx:id="errorText" fill="#d00c0c" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" />
+            <Button fx:id="logIn" mnemonicParsing="false" onAction="#onLogInAction" text="Logg inn">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </VBox>
