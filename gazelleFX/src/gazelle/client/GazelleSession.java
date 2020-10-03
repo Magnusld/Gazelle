@@ -62,9 +62,10 @@ public class GazelleSession {
     /**
      * Attempts to log in with username and password.
      * If successful, receives a token and user object from the server.
-     * @return true if login was successful
+     * @throws ClientException is status code isn't 200
+     * @throws javax.ws.rs.ProcessingException if the response is missing/malformed
      */
-    public boolean logIn(String username, String password) {
+    public void logIn(String username, String password) {
         if (isLoggedIn())
             logOut();
 
@@ -73,21 +74,21 @@ public class GazelleSession {
         // We always use POST when sending secrets
         Response response = unauthorizedPath("login").post(Entity.json(request));
         if (response.getStatusInfo() != Response.Status.OK)
-            return false; //TODO: Explain why logging in failed
+            throw new ClientException("Failed to log in", response);
 
         LogInResponse logInResponse = response.readEntity(LogInResponse.class);
         this.token = logInResponse.getToken();
         this.loggedInUser  = logInResponse.getUser();
-        return true;
     }
 
     /**
      * Attempts to log in with a previously received token.
      * If successful the object representing the logged in user
      * will be received and stored in the session.
-     * @return true if login was successful
+     * @throws ClientException if status code isn't 200
+     * @throws javax.ws.rs.ProcessingException if the response is missing/malformed
      */
-    public boolean logIn(String token) {
+    public void logIn(String token) {
         if (isLoggedIn())
             logOut();
 
@@ -96,20 +97,19 @@ public class GazelleSession {
         // We always use POST when sending secrets
         Response response = unauthorizedPath("users/fromToken").post(Entity.json(request));
         if (response.getStatusInfo() != Response.Status.OK)
-            return false;
+            throw new ClientException("Failed to get User from token", response);
 
         User user = response.readEntity(User.class);
 
         this.token = token;
         this.loggedInUser = user;
-        return true;
     }
 
     /**
      * Tells the server to invalidate the token and sets
      * the token and logged in user to null.
      * @throws IllegalStateException if client not logged in
-     * @throws ClientException if return code isn't 200
+     * @throws ClientException if status code isn't 200
      */
     public void logOut() {
         LogOutRequest request = new LogOutRequest(token);

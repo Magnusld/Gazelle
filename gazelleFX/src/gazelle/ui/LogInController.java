@@ -29,16 +29,8 @@ public class LogInController extends BaseController {
         logIn.setDisable(true);
         app.sideRun(() -> {
             try {
-                boolean loggedIn = app.getSession().logIn(username, password);
-
-                app.mainRun(()-> {
-                    if (loggedIn)
-                        app.showMyCourses();
-                    else {
-                        errorText.setText("The server said no");
-                        errorText.setVisible(true);
-                    }
-                });
+                app.getSession().logIn(username, password);
+                app.mainRun(app::showMyCourses);
             } catch(Exception e) {
                 app.mainRun(() -> {
                     errorText.setText(e.toString());
@@ -46,7 +38,7 @@ public class LogInController extends BaseController {
                 });
                 throw e;
             } finally {
-                app.mainRun(()->logIn.setDisable(false));
+                app.mainRun(() -> logIn.setDisable(false));
             }
         });
     }
