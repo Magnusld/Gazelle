@@ -11,13 +11,15 @@ public class GazelleController extends BaseController {
     @FXML
     private VBox contentBox;
 
+    private LogInController logInController;
     private CourseListController courseListController;
 
     @FXML
     private void initialize() throws IOException {
+        logInController = LogInController.load();
         courseListController = CourseListController.load();
 
-        setCurrentScreen(courseListController);
+        setCurrentScreen(logInController);
     }
 
     private void setCurrentScreen(BaseController controller) {

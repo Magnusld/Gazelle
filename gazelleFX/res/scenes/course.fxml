@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" styleClass="course" stylesheets="@../stylesheets/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.CourseController">
+<VBox alignment="CENTER_LEFT" prefWidth="500.0" styleClass="course" stylesheets="@../stylesheets/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.CourseController">
    <children>
       <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT">
          <children>
@@ -35,7 +35,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Pane maxHeight="-Infinity" minHeight="-Infinity" styleClass="progressBar" stylesheets="@../stylesheets/main.css">
+      <Pane styleClass="progressBar">
          <VBox.margin>
             <Insets top="5.0" />
          </VBox.margin>

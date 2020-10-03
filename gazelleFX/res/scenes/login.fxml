@@ -9,41 +9,44 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefWidth="450.0" styleClass="login" stylesheets="@../stylesheets/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.LogInController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Innlogging">
          <font>
             <Font size="22.0" />
          </font>
       </Text>
-      <Pane maxHeight="-Infinity" minHeight="-Infinity" styleClass="separator" stylesheets="@../stylesheets/main.css">
+      <Pane styleClass="separator">
          <VBox.margin>
             <Insets />
          </VBox.margin>
       </Pane>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+      <VBox spacing="5.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Brukernavn">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
-            <TextField fx:id="username" stylesheets="@../stylesheets/main.css" />
+            <TextField fx:id="username" />
          </children>
       </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+      <VBox spacing="5.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Passord">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
-            <TextField fx:id="password" stylesheets="@../stylesheets/main.css" />
+            <TextField fx:id="password" />
          </children>
       </VBox>
       <HBox alignment="CENTER">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
          <children>
-            <Button id="login" fx:id="logIn" mnemonicParsing="false" stylesheets="@../stylesheets/main.css" text="Logg inn">
+            <Button id="login" fx:id="logIn" mnemonicParsing="false" onAction="#onLogInAction" text="Logg inn">
                <font>
                   <Font size="14.0" />
                </font>
