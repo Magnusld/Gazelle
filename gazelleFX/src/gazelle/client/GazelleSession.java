@@ -95,7 +95,7 @@ public class GazelleSession {
         UserFromTokenRequest request = new UserFromTokenRequest(token);
 
         // We always use POST when sending secrets
-        Response response = unauthorizedPath("users/fromToken").post(Entity.json(request));
+        Response response = unauthorizedPath("users/token").post(Entity.json(request));
         if (response.getStatusInfo() != Response.Status.OK)
             throw new ClientException("Failed to get User from token", response);
 
@@ -170,7 +170,7 @@ public class GazelleSession {
      * @throws ClientException if request fails
      */
     public List<Course> getCoursesForUser(User user) {
-        WebTarget path = path("courses/fromUser").queryParam("userId", user.getId());
+        WebTarget path = path("courses/user").queryParam("userId", user.getId());
         Response response = authorizedPath(path).get();
 
         if (response.getStatusInfo() != Response.Status.OK)

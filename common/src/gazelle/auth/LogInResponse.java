@@ -9,6 +9,8 @@ public class LogInResponse {
     private String token;
     private User user;
 
+    protected LogInResponse() {}
+
     public LogInResponse(String token, User user) {
         this.token = token;
         this.user = user;

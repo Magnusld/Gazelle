@@ -50,6 +50,14 @@ For å skru av tjeneren, send en POST til `/actuator/shutdown`
 curl -X POST localhost:8080/actuator/shutdown
 ```
 
+#### Manuell bruk av database
+Mens tjeneren kjører, gå til `localhost:8080/h2`. Skriv inn følgende:
+ - JDBC URL: `jdbc:h2:file:./database`
+ - User Name: `sa`
+ - Password: blankt
+
+Her får du tilgang til databasen, og kan legge til og fjerne elementer med SQL.
+ 
 ## Bidrag og utvikling
 
 Brukerhistorier ligger [her](/brukerhistorier/brukerhistorier.md).

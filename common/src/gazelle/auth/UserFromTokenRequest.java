@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 public class UserFromTokenRequest {
     private String token;
 
+    protected UserFromTokenRequest() {}
+
     public UserFromTokenRequest(String token) {
         this.token = token;
     }

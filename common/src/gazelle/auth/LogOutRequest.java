@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 public class LogOutRequest {
     private String token;
 
+    protected LogOutRequest() {}
+
     public LogOutRequest(String token) {
         this.token = token;
     }

@@ -7,6 +7,8 @@ public class LogInRequest {
     private String username;
     private String password;
 
+    protected LogInRequest() {}
+
     public LogInRequest(String username, String password) {
         this.username = username;
         this.password = password;
