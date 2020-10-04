@@ -4,7 +4,6 @@ import gazelle.model.User;
 import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -32,7 +31,6 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody User user) {
         return userRepository.save(user);
     }

@@ -1,6 +1,7 @@
 package gazelle.ui;
 
 import gazelle.client.ClientException;
+import gazelle.client.LogInException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -31,7 +32,12 @@ public class LogInController extends BaseController {
             try {
                 app.getSession().logIn(username, password);
                 app.mainRun(app::showMyCourses);
-            } catch(Exception e) {
+            } catch (LogInException e) {
+                app.mainRun(() -> {
+                    errorText.setText("Brukernavn/passord er feil");
+                    errorText.setVisible(true);
+                });
+            } catch (Exception e) {
                 app.mainRun(() -> {
                     errorText.setText(e.toString());
                     errorText.setVisible(true);

@@ -62,7 +62,8 @@ public class GazelleSession {
     /**
      * Attempts to log in with username and password.
      * If successful, receives a token and user object from the server.
-     * @throws ClientException is status code isn't 200
+     * @throws LogInException if status code is 401 (UNAUTHORIZED)
+     * @throws ClientException for all other non-200 status codes
      * @throws javax.ws.rs.ProcessingException if the response is missing/malformed
      */
     public void logIn(String username, String password) {
@@ -73,6 +74,8 @@ public class GazelleSession {
 
         // We always use POST when sending secrets
         Response response = unauthorizedPath("login").post(Entity.json(request));
+        if (response.getStatusInfo() == Response.Status.UNAUTHORIZED)
+            throw new LogInException();
         if (response.getStatusInfo() != Response.Status.OK)
             throw new ClientException("Failed to log in", response);
 
@@ -85,7 +88,8 @@ public class GazelleSession {
      * Attempts to log in with a previously received token.
      * If successful the object representing the logged in user
      * will be received and stored in the session.
-     * @throws ClientException if status code isn't 200
+     * @throws LogInException if status code is 401 (UNAUTHORIZED)
+     * @throws ClientException if all other non-200 status codes
      * @throws javax.ws.rs.ProcessingException if the response is missing/malformed
      */
     public void logIn(String token) {
@@ -109,7 +113,7 @@ public class GazelleSession {
      * Tells the server to invalidate the token and sets
      * the token and logged in user to null.
      * @throws IllegalStateException if client not logged in
-     * @throws ClientException if status code isn't 200
+     * @throws ClientException if request fails
      */
     public void logOut() {
         LogOutRequest request = new LogOutRequest(token);
@@ -150,14 +154,15 @@ public class GazelleSession {
      *
      * @param username the wanted username
      * @param password the wanted password
-     * @return the newly created User or null if it failed
+     * @return the newly created User
+     * @throws ClientException if request fails
      */
     public User addNewUser(String username, String password) {
         User newUser = new User(username, password);
 
         Response response = unauthorizedPath("users").post(Entity.json(newUser));
-        if (response.getStatusInfo() != Response.Status.CREATED)
-            return null; //TODO: Explain why the user wasn't created
+        if (response.getStatusInfo() != Response.Status.OK)
+            throw new ClientException("Failed to create user", response);
 
         return response.readEntity(User.class);
     }
