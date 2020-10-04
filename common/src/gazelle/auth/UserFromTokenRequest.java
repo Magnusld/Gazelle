@@ -1,8 +1,5 @@
 package gazelle.auth;
 
-import javax.persistence.Entity;
-
-@Entity
 public class UserFromTokenRequest {
     private String token;
 

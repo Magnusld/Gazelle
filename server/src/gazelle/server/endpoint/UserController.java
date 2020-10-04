@@ -34,11 +34,6 @@ public class UserController {
         return unwrapOrThrow(userRepository.findById(id));
     }
 
-    @PostMapping
-    public User create(@RequestBody User user) {
-        return userRepository.save(user);
-    }
-
     static User unwrapOrThrow(Optional<User> user) {
         return user.orElseThrow(UserNotFoundException::new);
     }

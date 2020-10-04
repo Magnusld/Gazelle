@@ -1,9 +1,6 @@
 package gazelle.client;
 
-import gazelle.auth.LogInRequest;
-import gazelle.auth.LogInResponse;
-import gazelle.auth.LogOutRequest;
-import gazelle.auth.UserFromTokenRequest;
+import gazelle.auth.*;
 import gazelle.model.Course;
 import gazelle.model.User;
 
@@ -57,6 +54,30 @@ public class GazelleSession {
 
     private Invocation.Builder authorizedPath(String pathname) {
         return authorizedPath(path(pathname));
+    }
+
+    /**
+     *
+     * @param username
+     * @param password
+     */
+    public void signUp(String username, String password) {
+        if(isLoggedIn())
+            logOut();
+
+        SignUpRequest request = new SignUpRequest(username, password);
+
+        Response response = unauthorizedPath("signup").post(Entity.json(request));
+        if(response.getStatusInfo() == Response.Status.CONFLICT)
+            throw new SignUpException(SignUpException.Reason.USERNAME_TAKEN);
+        if(response.getStatus() == 422) //UNPROCESSABLE_ENTITY
+            throw new SignUpException(SignUpException.Reason.PASSWORD_BAD);
+        if(response.getStatusInfo() != Response.Status.OK)
+            throw new ClientException("Failed to sign up", response);
+
+        LogInResponse logInResponse = response.readEntity(LogInResponse.class);
+        this.token = logInResponse.getToken();
+        this.loggedInUser = logInResponse.getUser();
     }
 
     /**

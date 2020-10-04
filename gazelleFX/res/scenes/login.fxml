@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -38,17 +39,26 @@
                   <Font size="14.0" />
                </font>
             </Text>
-            <PasswordField fx:id="password" />
+            <PasswordField fx:id="password" onAction="#onLogInAction" />
          </children>
       </VBox>
       <VBox alignment="CENTER">
          <children>
             <Text fx:id="errorText" fill="#d00c0c" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" />
-            <Button fx:id="logIn" mnemonicParsing="false" onAction="#onLogInAction" text="Logg inn">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
+            <HBox alignment="CENTER" spacing="100.0">
+               <children>
+                  <Button fx:id="signup" mnemonicParsing="false" onAction="#onSignUpAction" styleClass="secondary" text="Ny bruker">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="login" defaultButton="true" mnemonicParsing="false" onAction="#onLogInAction" text="Logg inn">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

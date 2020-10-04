@@ -1,12 +1,13 @@
 package gazelle.auth;
 
-public class LogInRequest {
+
+public class SignUpRequest {
     private String username;
     private String password;
 
-    protected LogInRequest() {}
+    protected SignUpRequest() {}
 
-    public LogInRequest(String username, String password) {
+    public SignUpRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }

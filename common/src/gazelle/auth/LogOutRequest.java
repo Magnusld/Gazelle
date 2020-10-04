@@ -1,8 +1,5 @@
 package gazelle.auth;
 
-import javax.persistence.Entity;
-
-@Entity
 public class LogOutRequest {
     private String token;
 

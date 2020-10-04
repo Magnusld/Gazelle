@@ -2,6 +2,7 @@ package gazelle.ui;
 
 import gazelle.client.ClientException;
 import gazelle.client.LogInException;
+import gazelle.client.SignUpException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,23 +16,37 @@ public class LogInController extends BaseController {
     @FXML
     private TextField password;
     @FXML
-    private Button logIn;
+    private Button login;
+    @FXML
+    private Button signup;
     @FXML
     private Text errorText;
 
     private GazelleController app;
 
-    @FXML
-    private void onLogInAction() {
+    private void onAction(boolean newUser) {
         String username = this.username.getText();
         String password = this.password.getText();
 
         errorText.setVisible(false);
-        logIn.setDisable(true);
+        login.setDisable(true);
+        signup.setDisable(true);
+
         app.sideRun(() -> {
             try {
-                app.getSession().logIn(username, password);
+                if(newUser)
+                    app.getSession().signUp(username, password);
+                else
+                    app.getSession().logIn(username, password);
                 app.mainRun(app::showMyCourses);
+            } catch(SignUpException e) {
+                app.mainRun(() -> {
+                    switch(e.getReason()) {
+                        case USERNAME_TAKEN -> errorText.setText("Brukernavnet er opptatt");
+                        case PASSWORD_BAD -> errorText.setText("Passordet er for dårlig");
+                    }
+                    errorText.setVisible(true);
+                });
             } catch (LogInException e) {
                 app.mainRun(() -> {
                     errorText.setText("Brukernavn/passord er feil");
@@ -44,9 +59,22 @@ public class LogInController extends BaseController {
                 });
                 throw e;
             } finally {
-                app.mainRun(() -> logIn.setDisable(false));
+                app.mainRun(() -> {
+                    login.setDisable(false);
+                    signup.setDisable(false);
+                });
             }
         });
+    }
+
+    @FXML
+    private void onLogInAction() {
+        onAction(false);
+    }
+
+    @FXML
+    private void onSignUpAction() {
+        onAction(true);
     }
 
     public static LogInController load(GazelleController app) {

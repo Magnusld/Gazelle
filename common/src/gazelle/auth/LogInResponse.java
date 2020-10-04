@@ -2,9 +2,6 @@ package gazelle.auth;
 
 import gazelle.model.User;
 
-import javax.persistence.Entity;
-
-@Entity
 public class LogInResponse {
     private String token;
     private User user;

@@ -39,10 +39,12 @@ Button {
     -fx-pref-width: 95;
     -fx-pref-height: 20;
     -fx-background-color: #8AC4FF;
+    -fx-border-radius: 2;
+    -fx-border-color: #477caf;
 }
 
-.buttonNew {
-    -fx-background-color: #8AC4FF;
+Button.secondary {
+    -fx-background-color: #b7cde7;
 }
 
 .separator {
