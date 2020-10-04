@@ -55,7 +55,7 @@ public class GazelleController extends BaseController {
 
         sideRun(() -> {
             List<Course> courses = session.getCoursesForUser(session.getLoggedInUser());
-            mainRun(()->courseListController.setCourses(courses));
+            mainRun(() -> courseListController.setCourses(courses));
         });
     }
 

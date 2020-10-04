@@ -27,7 +27,7 @@ public class LoginEndpoint {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(LoginFailedException::new);
 
-        if(!user.getPassword().equals(request.getPassword()))
+        if (!user.getPassword().equals(request.getPassword()))
             throw new LoginFailedException();
 
         return new LogInResponse("dummy-token", user);
