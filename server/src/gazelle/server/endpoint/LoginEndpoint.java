@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginEndpoint {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public LoginEndpoint(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/login")
     public LogInResponse login(@RequestBody LogInRequest request) {
