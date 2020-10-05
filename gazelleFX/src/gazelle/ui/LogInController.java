@@ -25,8 +25,8 @@ public class LogInController extends BaseController {
     private GazelleController app;
 
     private void onAction(boolean newUser) {
-        String username = this.username.getText();
-        String password = this.password.getText();
+        final String username = this.username.getText();
+        final String password = this.password.getText();
 
         errorText.setVisible(false);
         login.setDisable(true);
@@ -34,16 +34,17 @@ public class LogInController extends BaseController {
 
         app.sideRun(() -> {
             try {
-                if(newUser)
+                if (newUser)
                     app.getSession().signUp(username, password);
                 else
                     app.getSession().logIn(username, password);
                 app.mainRun(app::showMyCourses);
-            } catch(SignUpException e) {
+            } catch (SignUpException e) {
                 app.mainRun(() -> {
-                    switch(e.getReason()) {
+                    switch (e.getReason()) {
                         case USERNAME_TAKEN -> errorText.setText("Brukernavnet er opptatt");
                         case PASSWORD_BAD -> errorText.setText("Passordet er for dårlig");
+                        default -> errorText.setText(e.toString());
                     }
                     errorText.setVisible(true);
                 });

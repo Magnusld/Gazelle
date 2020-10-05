@@ -28,6 +28,10 @@ public class GazelleSession {
     // The token sent with every authenticated request
     private String token;
 
+    /**
+     * Creates a new session, without a logged in user
+     * @param url the server URL, including protocol
+     */
     public GazelleSession(String url) {
         client = ClientBuilder.newClient();
         apiRoot = client.target(url);
@@ -57,9 +61,12 @@ public class GazelleSession {
     }
 
     /**
-     *
-     * @param username
-     * @param password
+     * Create a new User object and try signing it up on the server.
+     * You do not need to be logged in.
+     * @param username the desired username
+     * @param password the desired password
+     * @throws SignUpException for a reason described in the SignUpException.getReason() enum
+     * @throws ClientException if request fails in some other way
      */
     public void signUp(String username, String password) {
         if(isLoggedIn())
