@@ -2,6 +2,7 @@ package gazelle.client;
 
 import gazelle.auth.*;
 import gazelle.model.Course;
+import gazelle.model.CourseRole;
 import gazelle.model.User;
 
 import javax.ws.rs.client.*;
@@ -174,25 +175,26 @@ public class GazelleSession {
         return loggedInUser;
     }
 
-    /**
-     * Tries to create a new User on the server.
-     * You do not need to be logged in to call it.
-     *
-     * <p>Will fail e.g. if username is taken.
-     *
-     * @param username the wanted username
-     * @param password the wanted password
-     * @return the newly created User
-     * @throws ClientException if request fails
-     */
-    public User addNewUser(String username, String password) {
-        User newUser = new User(username, password);
 
-        Response response = unauthorizedPath("users").post(Entity.json(newUser));
+    public Course addNewCourse(Course course) {
+
+        Response response = authorizedPath("courses").post(Entity.json(course));
+
         if (response.getStatusInfo() != Response.Status.OK)
-            throw new ClientException("Failed to create user", response);
+            throw new ClientException("Failed to add new course", response);
 
-        return response.readEntity(User.class);
+        return response.readEntity(Course.class);
+    }
+
+    public CourseRole addNewCourseRole(CourseRole courseRole) {
+
+        Response response = authorizedPath("courseRoles")
+                .post(Entity.json(courseRole));
+
+        if (response.getStatusInfo() != Response.Status.OK)
+            throw new ClientException("Failed to add new course role", response);
+
+        return response.readEntity(CourseRole.class);
     }
 
     /**
@@ -203,7 +205,7 @@ public class GazelleSession {
      * @throws ClientException if request fails
      */
     public List<Course> getCoursesForUser(User user) {
-        WebTarget path = path("courses/user").queryParam("userId", user.getId());
+        WebTarget path = path("courses/user").path(user.getId().toString());
         Response response = authorizedPath(path).get();
 
         if (response.getStatusInfo() != Response.Status.OK)

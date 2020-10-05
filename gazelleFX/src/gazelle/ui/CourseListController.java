@@ -2,6 +2,8 @@ package gazelle.ui;
 
 import gazelle.client.GazelleSession;
 import gazelle.model.Course;
+import gazelle.model.CourseRole;
+import gazelle.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -62,9 +64,14 @@ public class CourseListController extends BaseController {
         String name = result.get();
         if (name.isBlank())
             return;
-        //Course newCourse = database.newCourse(name);
-        //newCourse.addOwner(user);
-        app.showMyCourses();
+        Course course = new Course(name);
+        app.sideRun(() -> {
+            Course courseWithId = app.getSession().addNewCourse(course);
+            User user = app.getSession().getLoggedInUser();
+            CourseRole courseRole = new CourseRole(user, courseWithId, CourseRole.CourseRoleType.OWNER);
+            app.getSession().addNewCourseRole(courseRole);
+            app.mainRun(app::showMyCourses);
+        });
     }
 
     public static CourseListController load(GazelleController app) {
