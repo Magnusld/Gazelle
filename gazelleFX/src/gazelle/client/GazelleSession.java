@@ -28,6 +28,10 @@ public class GazelleSession {
     // The token sent with every authenticated request
     private String token;
 
+    /**
+     * Creates a new session, without a logged in user
+     * @param url the server URL, including protocol
+     */
     public GazelleSession(String url) {
         client = ClientBuilder.newClient();
         apiRoot = client.target(url);
@@ -57,22 +61,25 @@ public class GazelleSession {
     }
 
     /**
-     *
-     * @param username
-     * @param password
+     * Create a new User object and try signing it up on the server.
+     * You do not need to be logged in.
+     * @param username the desired username
+     * @param password the desired password
+     * @throws SignUpException for a reason described in the SignUpException.getReason() enum
+     * @throws ClientException if request fails in some other way
      */
     public void signUp(String username, String password) {
-        if(isLoggedIn())
+        if (isLoggedIn())
             logOut();
 
         SignUpRequest request = new SignUpRequest(username, password);
 
         Response response = unauthorizedPath("signup").post(Entity.json(request));
-        if(response.getStatusInfo() == Response.Status.CONFLICT)
+        if (response.getStatusInfo() == Response.Status.CONFLICT)
             throw new SignUpException(SignUpException.Reason.USERNAME_TAKEN);
-        if(response.getStatus() == 422) //UNPROCESSABLE_ENTITY
+        if (response.getStatus() == 422) //UNPROCESSABLE_ENTITY
             throw new SignUpException(SignUpException.Reason.PASSWORD_BAD);
-        if(response.getStatusInfo() != Response.Status.OK)
+        if (response.getStatusInfo() != Response.Status.OK)
             throw new ClientException("Failed to sign up", response);
 
         LogInResponse logInResponse = response.readEntity(LogInResponse.class);

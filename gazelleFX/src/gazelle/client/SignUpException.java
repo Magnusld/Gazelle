@@ -7,6 +7,7 @@ public class SignUpException extends RuntimeException {
     }
 
     private final Reason reason;
+
     public SignUpException(Reason reason) {
         super(reason.name());
         this.reason = reason;
