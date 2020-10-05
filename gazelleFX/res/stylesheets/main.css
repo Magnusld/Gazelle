@@ -1,11 +1,14 @@
 .body {
-    -fx-background-color: white;
+    background: white;
+    -fx-background-color: background;
     -fx-pref-width: 900;
     -fx-pref-height: 600;
 }
 
 .navbar {
     -fx-background-color: #344966;
+    -fx-spacing: 20;
+    -fx-padding: 10;
 }
 
 .navBarSelected {
@@ -13,18 +16,20 @@
 }
 
 .navBarUnderLine {
-    -fx-pref-height: 2;
-}
-
-.contentBoxScroll {
-    -fx-pref-width: 200;
+    -fx-min-height: 2;
+    -fx-max-height: 2;
 }
 
 .contentBox {
-    -fx-pref-width: 100;
+    -fx-padding: 30 40 20 40;
+    -fx-background-color: background;
 }
 
-TextField {
+.contentBoxScroll {
+    -fx-background-color: background;
+}
+
+TextField, PasswordField {
     -fx-background-color: white;
     -fx-border-color: lightgray;
     -fx-border-radius: 2;
@@ -34,26 +39,33 @@ Button {
     -fx-pref-width: 95;
     -fx-pref-height: 20;
     -fx-background-color: #8AC4FF;
+    -fx-border-radius: 2;
+    -fx-border-color: #477caf;
 }
 
-.buttonNew {
-    -fx-background-color: #8AC4FF;
+Button.secondary {
+    -fx-background-color: #b7cde7;
 }
 
 .separator {
     -fx-background-color: lightgray;
-    -fx-pref-height: 1;
-}
-
-.courseList {
-    -fx-pref-width: 500;
-}
-
-.course {
-    -fx-pref-width: 500;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
 }
 
 .progressBar {
-    -fx-pref-height: 5;
+    -fx-min-height: 5;
+    -fx-max-height: 5;
     -fx-background-color:  #11BA52;
+}
+
+/* Specific to FXML files */
+.courseList {
+    -fx-max-width: 900;
+}
+
+.login {
+    -fx-max-width: 500;
+    -fx-padding: 70 0 0 0;
+    -fx-spacing: 20;
 }

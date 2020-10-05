@@ -1,6 +1,6 @@
 
 # Save files
-database.bin
+database.*.db
 
 # Tmp files
 *~

@@ -10,62 +10,28 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gazelleFX</artifactId>
+    <artifactId>gazelle-common</artifactId>
 
-    <name>GazelleFX</name>
+    <name>Gazelle Common</name>
 
     <dependencies>
-        <!-- Gazelle Common -->
+        <!-- Persistence -->
         <dependency>
-            <groupId>it1901</groupId>
-            <artifactId>gazelle-common</artifactId>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
 
-        <!-- JavaFX -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>14.0.1</version>
-        </dependency>
-
-        <!-- Jersey with Jackson -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>2.32</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-            <version>2.32</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.inject</groupId>
-            <artifactId>jersey-hk2</artifactId>
-            <version>2.32</version>
-        </dependency>
-
-        <!-- JUnit5 -->
+        <!-- Test with JUnit5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>5.4.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <!-- Test with TextFX -->
-        <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>testfx-core</artifactId>
-            <version>4.0.16-alpha</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>testfx-junit5</artifactId>
-            <version>4.0.16-alpha</version>
+            <version>5.4.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -88,16 +54,6 @@
             <!-- Compiling code -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-
-            <!-- Running JavaFX code -->
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.4</version>
-                <configuration>
-                    <mainClass>gazelle.ui.GazelleFX</mainClass>
-                </configuration>
             </plugin>
 
             <!-- Running tests -->

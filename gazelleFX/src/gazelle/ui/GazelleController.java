@@ -1,76 +1,81 @@
 package gazelle.ui;
 
+
+import gazelle.client.GazelleSession;
 import gazelle.model.Course;
-import gazelle.model.Database;
-import gazelle.model.User;
-import gazelle.persistence.DatabaseLoader;
-import gazelle.persistence.DatabaseSaver;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class GazelleController extends BaseController {
 
+    private static final String API_URI = "http://localhost:8080/";
+
+    @FXML
+    private HBox navbar;
     @FXML
     private VBox contentBox;
 
-    private CourseListController courseListController;
+    private GazelleSession session;
 
-    private Database database;
-    private User user;
+    private LogInController logInController;
+    private CourseListController courseListController;
 
     @FXML
     private void initialize() throws IOException {
-        loadDatabase();
+        session = new GazelleSession(API_URI);
 
-        courseListController = CourseListController.load();
-        courseListController.setData(database, user);
+        logInController = LogInController.load(this);
+        courseListController = CourseListController.load(this);
 
-        setCurrentScreen(courseListController);
-    }
-
-    private static final String DEFAULT_SAVE_LOCATION = "database.bin";
-
-    private void loadDatabase() {
-        try (DatabaseLoader loader =
-                     new DatabaseLoader(new FileInputStream(DEFAULT_SAVE_LOCATION))) {
-            database = loader.load();
-            user = database.getUsers().iterator().next(); //TODO: Don't always log in as random user
-        } catch (FileNotFoundException e) {
-            setupDefaultDatabase();
-        } catch (IOException e) {
-            e.printStackTrace();
-            setupDefaultDatabase();
-        }
-    }
-
-    private void setupDefaultDatabase() {
-        //default content
-        database = new Database();
-        user = database.newUser();
+        showLogInScreen(); //TODO: Already logged in?
     }
 
     private void setCurrentScreen(BaseController controller) {
         contentBox.getChildren().setAll(controller.getNode());
     }
 
-    public void onClosing() {
-        try (DatabaseSaver saver = new DatabaseSaver(new FileOutputStream(DEFAULT_SAVE_LOCATION))) {
-            saver.save(database);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Saving failed!");
-        }
+    public GazelleSession getSession() {
+        return session;
     }
 
-    public static GazelleController load() throws IOException {
+    public void showLogInScreen() {
+        navbar.setVisible(false);
+        setCurrentScreen(logInController);
+    }
+
+    public void showMyCourses() {
+        navbar.setVisible(true);
+        courseListController.clearView();
+        setCurrentScreen(courseListController);
+
+        sideRun(() -> {
+            List<Course> courses = session.getCoursesForUser(session.getLoggedInUser());
+            mainRun(() -> courseListController.setCourses(courses));
+        });
+    }
+
+    /**
+     * Start a job that should run in the background
+     * @param runnable the job
+     */
+    public void sideRun(Runnable runnable) {
+        new Thread(runnable).start();
+    }
+
+    /**
+     * Add a job to the JavaFX Application Thread queue
+     * @param runnable the job
+     */
+    public void mainRun(Runnable runnable) {
+        Platform.runLater(runnable);
+    }
+
+    public static GazelleController load() {
         return loadFromFXML("/scenes/main.fxml");
     }
 }
