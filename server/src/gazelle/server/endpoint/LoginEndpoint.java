@@ -48,6 +48,9 @@ public class LoginEndpoint {
         if (password.length() < 4)
             throw new GazelleException("Password too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
 
+        if (username.length() < 4)
+            throw new GazelleException("Username too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
+
         User newUser = new User(username, password);
         userRepository.save(newUser);
 
