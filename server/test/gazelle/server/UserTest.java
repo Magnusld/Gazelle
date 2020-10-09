@@ -29,11 +29,9 @@ public class UserTest {
 
     @Test
     public void signUpNewUserTest() {
-        SignUpRequest signUpRequest =
-                new SignUpRequest("niss2","niss2");
-        assertEquals(loginEndpoint.signup(signUpRequest),
-                new LogInResponse("summy doken",userRepository.findByUsername("niss2")
-                        .stream().findAny().get()));
+        userRepository.save(loginEndpoint.signup(new SignUpRequest("niss2","niss2")).getUser());
+        assertTrue(userRepository.findByUsername("niss2").isPresent());
+
     }
 
     @Test
