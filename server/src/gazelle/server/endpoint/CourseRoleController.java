@@ -45,7 +45,7 @@ public class CourseRoleController {
 
     @GetMapping("/users/{userId}/courses")
     public List<Course> findCoursesForUser(@PathVariable Long userId,
-                                           @RequestParam(required=false) CourseRoleType role) {
+                                           @RequestParam(required = false) CourseRoleType role) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         if (role == null)

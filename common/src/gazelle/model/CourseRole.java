@@ -24,12 +24,12 @@ public class CourseRole {
     private CourseRoleKey id = new CourseRoleKey();
 
     @ManyToOne
-    @MapsId("userid")
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @MapsId("courseid")
+    @MapsId("courseId")
     @JoinColumn(name = "course_id")
     private Course course;
 

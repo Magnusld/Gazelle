@@ -15,32 +15,32 @@ import java.util.Objects;
 public class CourseRoleKey implements Serializable {
 
     @Column(name = "user_id")
-    private Long userid;
+    private Long userId;
 
     @Column(name = "course_id")
-    private Long courseid;
+    private Long courseId;
 
     protected CourseRoleKey() {}
 
-    public CourseRoleKey(Long userid, Long courseid) {
-        this.userid = userid;
-        this.courseid = courseid;
+    public CourseRoleKey(Long userId, Long courseId) {
+        this.userId = userId;
+        this.courseId = courseId;
     }
 
-    public Long getUserid() {
-        return userid;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Long getCourseid() {
-        return courseid;
+    public Long getCourseId() {
+        return courseId;
     }
 
-    public void setCourseid(Long courseid) {
-        this.courseid = courseid;
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     @Override
@@ -48,12 +48,12 @@ public class CourseRoleKey implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CourseRoleKey that = (CourseRoleKey) o;
-        return Objects.equals(userid, that.userid) &&
-                Objects.equals(courseid, that.courseid);
+        return Objects.equals(userId, that.userId)
+                && Objects.equals(courseId, that.courseId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userid, courseid);
+        return Objects.hash(userId, courseId);
     }
 }
