@@ -1,4 +1,4 @@
-package gazelle.client;
+package gazelle.client.error;
 
 public class SignUpException extends RuntimeException {
     public enum Reason {

@@ -1,5 +1,7 @@
 package gazelle.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +17,7 @@ public class Course {
     private String name;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private Set<CourseRole> roles = new HashSet<>();
 
     protected Course() {}

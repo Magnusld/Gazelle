@@ -1,4 +1,4 @@
-package gazelle.client;
+package gazelle.client.error;
 
 import javax.ws.rs.core.Response;
 

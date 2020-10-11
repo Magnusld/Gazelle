@@ -14,13 +14,14 @@ public class UserController {
 
     private final UserRepository userRepository;
 
+
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @GetMapping
-    public Iterable findAll() {
+    public Iterable<User> findAll() {
         return userRepository.findAll();
     }
 

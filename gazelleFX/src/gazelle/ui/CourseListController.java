@@ -1,9 +1,9 @@
 package gazelle.ui;
 
-import gazelle.client.GazelleSession;
 import gazelle.model.Course;
+import gazelle.model.CourseRole;
+import gazelle.model.User;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
@@ -27,6 +27,15 @@ public class CourseListController extends BaseController {
     @FXML
     private void initialize() throws IOException {}
 
+    public void onShow() {
+        clearView();
+        app.sideRun(() -> {
+            User user = app.getSession().getLoggedInUser();
+            List<Course> courses = app.getSession().getCoursesForUser(user, null);
+            app.mainRun(() -> setCourses(courses));
+        });
+    }
+
     public void clearView() {
         courseList.setVisible(false); //TODO: Add spinner
     }
@@ -46,7 +55,9 @@ public class CourseListController extends BaseController {
         // Set list content to the controllers
         courseList
                 .getChildren()
-                .setAll(controllers.stream().map(e -> e.getNode()).collect(Collectors.toList()));
+                .setAll(controllers.stream()
+                        .map(BaseController::getNode)
+                        .collect(Collectors.toList()));
         courseList.setVisible(true);
     }
 
@@ -62,9 +73,23 @@ public class CourseListController extends BaseController {
         String name = result.get();
         if (name.isBlank())
             return;
-        //Course newCourse = database.newCourse(name);
-        //newCourse.addOwner(user);
-        app.showMyCourses();
+
+        clearView();
+
+        app.sideRun(() -> {
+            try {
+                Course course = new Course(name);
+                course = app.getSession().postNewCourse(course);
+                User user = app.getSession().getLoggedInUser();
+                app.getSession()
+                        .setUserRoleForCourse(user, course, CourseRole.CourseRoleType.OWNER);
+            } catch (Exception e) {
+                //TODO: Tell user that something went wrong
+                throw e;
+            } finally {
+                app.mainRun(this::onShow);
+            }
+        });
     }
 
     public static CourseListController load(GazelleController app) {

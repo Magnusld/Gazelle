@@ -1,5 +1,7 @@
 package gazelle.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import javax.persistence.*;
 
 /**
@@ -15,19 +17,19 @@ public class CourseRole {
 
     public enum CourseRoleType {
         FOLLOWER,
-        OWNER
+        OWNER;
     }
 
     @EmbeddedId
-    private CourseRoleKey id;
+    private CourseRoleKey id = new CourseRoleKey();
 
     @ManyToOne
-    @MapsId("userId")
+    @MapsId("userid")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @MapsId("courseId")
+    @MapsId("courseid")
     @JoinColumn(name = "course_id")
     private Course course;
 
