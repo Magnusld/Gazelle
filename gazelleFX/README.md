@@ -21,6 +21,8 @@ hvordan det endelige produktet kommer til å se ut. De brukes hovedsaklig som et
 
 ## Prosjektstruktur
 
+![Arkiktektur](/res/images/architecture.png)
+
 Se [toppnivå-README](../README.md).
 
 ## Brukerhistorier

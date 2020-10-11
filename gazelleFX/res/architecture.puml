@@ -1,0 +1,59 @@
+@startuml
+component common {
+	package gazelle.auth
+	package gazelle.model
+}
+
+component jakartaPersistenceAPI{
+}
+
+common ..> jakartaPersistenceAPI
+
+component gazelleFX{
+	package gazelle.client
+        package gazelle.ui
+}
+
+component jersey{
+}
+
+gazelle.ui ..> gazelle.model
+gazelle.client ..> gazelle.model
+gazelle.client ..> gazelle.auth
+gazelle.client ..> jersey
+
+component javafx {
+	component fxml {
+	}
+}
+
+gazelleFX ..> javafx
+
+component server{
+	package gazelle.server.endpoint
+	package gazelle.server.error
+	package gazelle.server.repository
+}
+
+component spring {
+        component spring.boot{
+        }
+}
+
+component h2database {
+}
+
+component junit{
+}
+
+spring ..> h2database
+
+server ..> spring
+
+server ..> gazelle.auth
+server ..> h2database
+
+server ..> junit
+gazelleFX ..> junit
+common ..> junit
+@enduml
