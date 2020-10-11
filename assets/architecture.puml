@@ -4,10 +4,15 @@ component common {
 	package gazelle.model
 }
 
-component jakartaPersistenceAPI{
+component jakarta.persistence {
 }
 
-common ..> jakartaPersistenceAPI
+common ..> jakarta.persistence
+
+component jackson {
+}
+
+common ..> jackson
 
 component gazelleFX{
 	package gazelle.client
@@ -51,9 +56,12 @@ spring ..> h2database
 server ..> spring
 
 server ..> gazelle.auth
-server ..> h2database
+server ..> gazelle.model
 
 server ..> junit
 gazelleFX ..> junit
 common ..> junit
+
+jakarta.persistence -[hidden]> jackson
+jackson -[hidden]-> junit
 @enduml
