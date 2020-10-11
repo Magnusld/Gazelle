@@ -13,6 +13,8 @@ Appen er delt inn i flere moduler: Klient, tjener og delt logikk.
  - Tjeneren er skrevet i Spring Boot og ligger i mappen `server/`
  - Delt logikk, slik som objekter og tekst-tolking ligger i `common/`
 
+![PlantUML-diagram over arkitektur](assets/architecture.png)
+
 Tjeneren tar seg av lagring og det meste av prosessering.
 Den har et REST-api som klienten bruker for å hente og sende data.
 

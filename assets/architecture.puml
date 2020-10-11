@@ -16,7 +16,7 @@ common ..> jackson
 
 component gazelleFX{
 	package gazelle.client
-        package gazelle.ui
+    package gazelle.ui
 }
 
 component jersey{
@@ -32,13 +32,14 @@ component javafx {
 	}
 }
 
-gazelleFX ..> javafx
+gazelle.ui ..> javafx
 
 component server{
 	package gazelle.server.endpoint
 	package gazelle.server.error
 	package gazelle.server.repository
 }
+
 
 component spring {
         component spring.boot{
@@ -48,20 +49,11 @@ component spring {
 component h2database {
 }
 
-component junit{
-}
-
 spring ..> h2database
-
-server ..> spring
 
 server ..> gazelle.auth
 server ..> gazelle.model
 
-server ..> junit
-gazelleFX ..> junit
-common ..> junit
+server ...> spring
 
-jakarta.persistence -[hidden]> jackson
-jackson -[hidden]-> junit
 @enduml
