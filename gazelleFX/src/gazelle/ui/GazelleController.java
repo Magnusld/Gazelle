@@ -50,13 +50,8 @@ public class GazelleController extends BaseController {
 
     public void showMyCourses() {
         navbar.setVisible(true);
-        courseListController.clearView();
+        courseListController.onShow();
         setCurrentScreen(courseListController);
-
-        sideRun(() -> {
-            List<Course> courses = session.getCoursesForUser(session.getLoggedInUser());
-            mainRun(() -> courseListController.setCourses(courses));
-        });
     }
 
     /**

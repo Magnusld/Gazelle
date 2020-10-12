@@ -21,6 +21,14 @@
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
 
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.10.1</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Test with JUnit5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

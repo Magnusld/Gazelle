@@ -3,6 +3,7 @@ package gazelle.ui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import java.io.IOException;
+import java.util.Objects;
 
 public class BaseController {
     protected Parent node;
@@ -20,8 +21,7 @@ public class BaseController {
             controller.node = parent;
             return controller;
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Failed loading from FXML: " + fxmlPath, e);
         }
     }
 }

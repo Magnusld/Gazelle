@@ -28,7 +28,7 @@ public class CourseRoleKey implements Serializable {
     }
 
     public Long getUserId() {
-        return this.userId;
+        return userId;
     }
 
     public void setUserId(Long userId) {
@@ -36,7 +36,7 @@ public class CourseRoleKey implements Serializable {
     }
 
     public Long getCourseId() {
-        return this.courseId;
+        return courseId;
     }
 
     public void setCourseId(Long courseId) {

@@ -1,5 +1,7 @@
 package gazelle.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,11 +21,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    //TODO: Passe på at vi ikke lekker denne i alle mulige JSON-responser
     @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<CourseRole> roles = new HashSet<>();
 
     protected User() {}

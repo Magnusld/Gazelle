@@ -1,9 +1,7 @@
 package gazelle.ui;
 
-import gazelle.client.ClientException;
-import gazelle.client.LogInException;
-import gazelle.client.SignUpException;
-import javafx.application.Platform;
+import gazelle.client.error.LogInException;
+import gazelle.client.error.SignUpException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
