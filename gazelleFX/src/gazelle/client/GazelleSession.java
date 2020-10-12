@@ -223,6 +223,18 @@ public class GazelleSession {
         return response.readEntity(Course.class);
     }
 
+    public void deleteCourse(Course course) {
+        Objects.requireNonNull(course);
+        if (course.getId() == null)
+            throw new IllegalArgumentException("Can not delete course without id");
+        WebTarget path = path("courses/{id}")
+                .resolveTemplate("id", course.getId());
+        Response response = authorizedPath(path).delete();
+
+        if (!successfulDelete(response.getStatusInfo()))
+            throw new ClientException("Failed to delete course", response);
+    }
+
     /**
      * Tell the server to assign a user to a specific role in a course.
      * Will override any existing role between them.

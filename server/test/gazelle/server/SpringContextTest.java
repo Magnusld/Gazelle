@@ -1,17 +1,17 @@
 package gazelle.server;
 
-import gazelle.server.endpoint.LoginEndpoint;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Tests that loading the application context and running the app works
- * https://www.baeldung.com/spring-boot-start
+ * <p>See: https://www.baeldung.com/spring-boot-start
+ * <br> JUnit4 -> JUnit 5: https://www.baeldung.com/junit-5-runwith
+ * <br> JUnit5-ified: https://dev.to/martinbelev/how-to-enable-junit-5-in-new-spring-boot-project-29a8
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class SpringContextTest {
     @Test

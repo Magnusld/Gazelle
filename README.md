@@ -2,7 +2,7 @@
 
 # Gazelle
 
-![Gazelle logo](/assets/logo.svg)
+![Gazelle logo](assets/logo.svg)
 
 Dette er prosjektet til gruppe 10 i faget IT1901 høsten 2020.
 For en komplett beskrivelse av prosjektet se [her](gazelleFX/README.md).
@@ -18,24 +18,37 @@ Appen er delt inn i flere moduler: Klient, tjener og delt logikk.
 Tjeneren tar seg av lagring og det meste av prosessering.
 Den har et REST-api som klienten bruker for å hente og sende data.
 
-## Bygging og testing
+## Bygging og kjøring
 Vi bruker maven som byggverktøy, og alle modulene er samlet i toppnivå-`pom.xml`-filen.
 
+For å installere alle avhengigheter til den lokale maven-siloen,
+samt kompilere og starte prosjektet med både tjener og klient, skriv på Linux, OSX og GitPod:
+```
+./start.sh
+```
+Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
+
+## Testing
 For å kompilere, teste og sjekke kodekvalitet på hele prosjektet, skriv:
 ```
 mvn verify
 ```
 For å se testdekningsgrad gå til ```target/site/jacoco/index.html``` i hver modul.
 
-For å kompilere og starte prosjektet med både tjener og klient, skriv på Linux, OSX og GitPod:
-```
-./start.sh
-```
-Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
+Testene er en kombinasjon av enhets- og integrasjonstester.
+Med enhetstester mener vi enkeltstående tester av kodeenheter for seg selv.
+Integrasjonstetene starter hele programmet og tester at kodeenhetene samhandler på riktig måte.
 
 #### Manuell kjøring
 Dersom du vil gjøre det manuelt må du først sørge for at alle dine egne avhengigheter er installert
 i din lokale maven-silo.
+```
+mvn clean install
+```
+
+Klient og tjener rekompileres automatisk når du starter dem,
+men felles avhengigheter må manuelt rekompileres og legges i maven-siloen.
+Hvis du gjør forandringer i `common/` og ikke vil reinstallere alt, skriv:
 ```
 mvn install -pl common
 ```

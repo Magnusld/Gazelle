@@ -43,6 +43,25 @@ Button {
     -fx-border-color: #477caf;
 }
 
+Button:hover {
+    -fx-background-color: #7DB6F0;
+}
+
+Button.deleteIcon {
+    -fx-pref-height: 20;
+    -fx-pref-width: 20;
+    -fx-background-color: #FE7A69;
+    -fx-border-color: #FE4A49;
+}
+
+Button.deleteIcon:hover {
+    -fx-background-color: #E66857;
+}
+
+Button.deleteIcon.deleteIconText {
+    -fx-pref-width: 120;
+}
+
 Button.secondary {
     -fx-background-color: #b7cde7;
 }
@@ -59,9 +78,41 @@ Button.secondary {
     -fx-background-color:  #11BA52;
 }
 
+.course {
+    -fx-border-radius: 2;
+    -fx-border-color: rgba(0,0,0,0);
+    -fx-padding: 2 5;
+}
+
 /* Specific to FXML files */
 .courseList {
     -fx-max-width: 900;
+}
+
+/* States for deleting courses */
+.course_undeletable{
+    -fx-background-color: lightgray;
+}
+
+.course_deletable{
+    -fx-border-radius: 2;
+    -fx-border-color: lightgray;
+}
+
+.course_deletable:hover{
+    -fx-background-color: #EBEBEB;
+}
+
+.course_selected{
+    -fx-background-color: #F5CECE;
+    -fx-border-radius: 2;
+    -fx-border-color: #FE4A49;
+}
+
+.course_selected:hover{
+    -fx-background-color: #FE7A69;
+    -fx-border-radius: 2;
+    -fx-border-color: #FE4A49;
 }
 
 .login {

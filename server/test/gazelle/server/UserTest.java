@@ -5,19 +5,22 @@ import gazelle.auth.LogInResponse;
 import gazelle.auth.SignUpRequest;
 import gazelle.model.User;
 import gazelle.server.endpoint.LoginEndpoint;
+import gazelle.server.endpoint.UserController;
 import gazelle.server.error.GazelleException;
 import gazelle.server.error.LoginFailedException;
+import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.UserRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import java.util.Optional;
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+import java.util.List;
+import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class UserTest {
 
@@ -26,6 +29,9 @@ public class UserTest {
 
     @Autowired
     private LoginEndpoint loginEndpoint;
+
+    @Autowired
+    private UserController userController;
 
     @Test
     public void signUpNewUserTest() {
@@ -66,4 +72,23 @@ public class UserTest {
         assertFalse(userRepository.findByUsername("nissen").isPresent());
     }
 
+    @Test
+    public void userControllerTest() {
+        User user = userRepository.save(new User("niss4", "niss4"));
+        User user1 = userRepository.save(new User("niss5", "niss5"));
+        assertEquals(userController.findAll().iterator().next().getUsername(),
+                userRepository.findAll().iterator().next().getUsername());
+        assertEquals(userController.findAll().iterator().next().getId(),
+                userRepository.findAll().iterator().next().getId());
+        assertEquals(user.getUsername(), userController.findByUsername("niss4").getUsername());
+        assertEquals(user.getPassword(), userController.findByUsername("niss4").getPassword());
+        assertEquals(user.getId(), userController.findByUsername("niss4").getId());
+        Throwable exception = assertThrows(UserNotFoundException.class,
+        () -> userController.findByUsername("Jalla"));
+        assertEquals(user.getUsername(), userController.findOne(user.getId()).getUsername());
+        assertEquals(user.getPassword(), userController.findOne(user.getId()).getPassword());
+    }
+
 }
+
+
