@@ -5,6 +5,7 @@ import gazelle.auth.LogInResponse;
 import gazelle.auth.SignUpRequest;
 import gazelle.model.User;
 import gazelle.server.endpoint.LoginEndpoint;
+import gazelle.server.error.GazelleException;
 import gazelle.server.error.LoginFailedException;
 import gazelle.server.repository.UserRepository;
 import org.junit.Test;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Optional;
-
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,13 +29,15 @@ public class UserTest {
 
     @Test
     public void signUpNewUserTest() {
-        if (userRepository.findByUsername("niss2").isPresent()) {
-            userRepository.delete(userRepository.findByUsername("niss2").get());
-        }
         SignUpRequest signUpRequest = new SignUpRequest("niss2", "niss2");
         loginEndpoint.signup(signUpRequest);
         assertTrue(userRepository.findByUsername("niss2").isPresent());
-        userRepository.delete(userRepository.findByUsername("niss2").get());
+        GazelleException exception1 = assertThrows(GazelleException.class,
+                () -> loginEndpoint.signup(new SignUpRequest("niss2", "niss2")));
+        GazelleException exception2 = assertThrows(GazelleException.class,
+                () -> loginEndpoint.signup(new SignUpRequest("niss4","nis")));
+        assertEquals(exception1.getReason(),"Username taken");
+        assertEquals(exception2.getReason(),"Password too short");
     }
 
     @Test
@@ -43,10 +45,9 @@ public class UserTest {
         User user = userRepository.save(new User("niss3","niss3"));
         LogInRequest logInRequest = new LogInRequest("niss3","niss3");
         LogInResponse logInResponse = loginEndpoint.login(logInRequest);
-        assertTrue(logInResponse.getToken().equals("dummy-token"));
+        assertEquals(logInResponse.getToken(),"dummy-token");
         Throwable exception = assertThrows(LoginFailedException.class,
                 () -> loginEndpoint.login(new LogInRequest("nise", "nise")));
-        System.out.println(exception.getMessage());
     }
 
 
@@ -56,12 +57,9 @@ public class UserTest {
                 .save(new User("niss1","niss1"));
         Optional<User> foundUser = userRepository.findByUsername("niss1");
         assertTrue(foundUser.isPresent());
-        assertTrue(user.getId().equals(userRepository.findByUsername("niss1")
-                .get().getId()));
+        assertEquals(user.getId(), foundUser.get().getId());
         assertTrue(userRepository.findById(user.getId()).isPresent());
-        userRepository.delete(user);
     }
-
 
     @Test
     public void testDatabaseTest() {
