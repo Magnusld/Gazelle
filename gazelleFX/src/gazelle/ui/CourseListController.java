@@ -67,7 +67,7 @@ public class CourseListController extends BaseController {
 
     @FXML
     public void handleNewCourseClick() {
-        if (isDeleting){
+        if (isDeleting) {
             controllers.forEach(controller -> {
                 controller.setDeleteState(CourseController.DeleteState.SAFE);
             });
@@ -105,14 +105,13 @@ public class CourseListController extends BaseController {
     @FXML
     public void handleDeleteCourseClick() {
         this.isDeleting = !this.isDeleting;
-        if (this.isDeleting){
+        if (this.isDeleting) {
             deleteCourse.getStyleClass().add("deleteIconText");
             deleteCourse.setText("Slett 0 løp");
             controllers.forEach(controller -> {
                 controller.setDeleteState(CourseController.DeleteState.DELETABLE);
             });
-        }
-        else {
+        } else {
             ArrayList<CourseController> controllersToDelete = getSelectedCourses();
             if (controllersToDelete.size() != 0) {
                 this.clearView();
@@ -140,14 +139,15 @@ public class CourseListController extends BaseController {
     }
 
     private ArrayList<CourseController> getSelectedCourses() {
-        return new ArrayList<>(controllers.stream()
-                .filter(controller -> controller.getDeleteState() == CourseController.DeleteState.SELECTED)
-                .collect(Collectors.toList()));
+        return controllers.stream()
+                .filter(controller -> controller.getDeleteState()
+                        == CourseController.DeleteState.SELECTED)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void handleSelectedCourseClick() {
         ArrayList<CourseController> selectedCourses = getSelectedCourses();
-        deleteCourse.setText("Slett "+selectedCourses.size()+" løp");
+        deleteCourse.setText("Slett " + selectedCourses.size() + " løp");
     }
 
     public static CourseListController load(GazelleController app) {

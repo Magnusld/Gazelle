@@ -67,7 +67,7 @@ public class CourseTest {
         Throwable exception = assertThrows(ExistingEntityException.class,
                 () -> courseController.addNewCourse(course));
         Throwable exception1 = assertThrows(CourseNotFoundException.class,
-                () -> courseController.findOne(42l));
+                () -> courseController.findOne(42L));
     }
 
     @Test
@@ -78,16 +78,16 @@ public class CourseTest {
                 CourseRole.CourseRoleType.OWNER);
         assertTrue(courseRoleRepository.findByUserAndCourse(user, course).isPresent());
         Throwable exception = assertThrows(UserNotFoundException.class,
-                () -> courseRoleController.setCourseRole(52l, course.getId(),
+                () -> courseRoleController.setCourseRole(52L, course.getId(),
                         CourseRole.CourseRoleType.OWNER));
         Throwable exception1 = assertThrows(CourseNotFoundException.class,
                 () -> courseRoleController.setCourseRole(user.getId(),
-                        12l,
+                        12L,
                         CourseRole.CourseRoleType.OWNER));
         assertEquals(CourseRole.CourseRoleType.OWNER,
-                courseRoleController.getCourseRole(user.getId(),course.getId()).getRoleType());
+                courseRoleController.getCourseRole(user.getId(), course.getId()).getRoleType());
         GazelleException exception2 = assertThrows(GazelleException.class,
-                () -> courseRoleController.getCourseRole(32l,52l));
+                () -> courseRoleController.getCourseRole(32L, 52L));
         assertEquals(exception2.getReason(), "Course role not found");
         assertTrue(courseRoleController.findCoursesForUser(user1.getId(), null).isEmpty());
         assertEquals(course.getName(), courseRoleController.findCoursesForUser(user.getId(),
@@ -95,7 +95,7 @@ public class CourseTest {
         assertEquals(course.getId(), courseRoleController.findCoursesForUser(user.getId(),
                 CourseRole.CourseRoleType.OWNER).get(0).getId());
         Throwable exception3 = assertThrows(UserNotFoundException.class,
-                () -> courseRoleController.findCoursesForUser(53l,null));
+                () -> courseRoleController.findCoursesForUser(53L, null));
 
     }
 

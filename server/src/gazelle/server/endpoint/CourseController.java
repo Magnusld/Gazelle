@@ -41,7 +41,7 @@ public class CourseController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCourse(@PathVariable Long id) {
-        if(!courseRepository.existsById(id))
+        if (!courseRepository.existsById(id))
             throw new CourseNotFoundException();
         courseRepository.deleteById(id);
     }

@@ -17,9 +17,11 @@ public class CourseController extends BaseController {
         SELECTED("course_selected"); // Selected for deletion
 
         private String styleClass;
+
         DeleteState() {
             this(null);
         }
+
         DeleteState(String styleClass) {
             this.styleClass = styleClass;
         }
@@ -27,7 +29,7 @@ public class CourseController extends BaseController {
         public String getStyleClass() {
             return styleClass;
         }
-    };
+    }
 
     @FXML
     private Text courseTitle;
@@ -41,12 +43,12 @@ public class CourseController extends BaseController {
     }
 
     public void setDeleteState(DeleteState deleteState) {
-        if(this.deleteState.getStyleClass() != null)
+        if (this.deleteState.getStyleClass() != null)
             getNode().getStyleClass().remove(this.deleteState.getStyleClass());
 
         this.deleteState = deleteState;
 
-        if(this.deleteState.getStyleClass() != null)
+        if (this.deleteState.getStyleClass() != null)
             getNode().getStyleClass().add(this.deleteState.getStyleClass());
     }
 
@@ -56,10 +58,9 @@ public class CourseController extends BaseController {
 
     @FXML
     public void handleClick() {
-        if (this.deleteState == DeleteState.DELETABLE){
+        if (this.deleteState == DeleteState.DELETABLE) {
             this.setDeleteState(DeleteState.SELECTED);
-        }
-        else if (this.deleteState == DeleteState.SELECTED){
+        } else if (this.deleteState == DeleteState.SELECTED) {
             this.setDeleteState(DeleteState.DELETABLE);
         }
         parent.handleSelectedCourseClick();

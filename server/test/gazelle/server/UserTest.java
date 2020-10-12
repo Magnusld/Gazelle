@@ -41,17 +41,17 @@ public class UserTest {
         GazelleException exception1 = assertThrows(GazelleException.class,
                 () -> loginEndpoint.signup(new SignUpRequest("niss2", "niss2")));
         GazelleException exception2 = assertThrows(GazelleException.class,
-                () -> loginEndpoint.signup(new SignUpRequest("niss4","nis")));
-        assertEquals(exception1.getReason(),"Username taken");
-        assertEquals(exception2.getReason(),"Password too short");
+                () -> loginEndpoint.signup(new SignUpRequest("niss4", "nis")));
+        assertEquals(exception1.getReason(), "Username taken");
+        assertEquals(exception2.getReason(), "Password too short");
     }
 
     @Test
     public void logInUserTest() {
-        User user = userRepository.save(new User("niss3","niss3"));
-        LogInRequest logInRequest = new LogInRequest("niss3","niss3");
+        User user = userRepository.save(new User("niss3", "niss3"));
+        LogInRequest logInRequest = new LogInRequest("niss3", "niss3");
         LogInResponse logInResponse = loginEndpoint.login(logInRequest);
-        assertEquals(logInResponse.getToken(),"dummy-token");
+        assertEquals(logInResponse.getToken(), "dummy-token");
         Throwable exception = assertThrows(LoginFailedException.class,
                 () -> loginEndpoint.login(new LogInRequest("nise", "nise")));
     }
@@ -60,7 +60,7 @@ public class UserTest {
     @Test
     public void userRepositoryTest() {
         User user = userRepository
-                .save(new User("niss1","niss1"));
+                .save(new User("niss1", "niss1"));
         Optional<User> foundUser = userRepository.findByUsername("niss1");
         assertTrue(foundUser.isPresent());
         assertEquals(user.getId(), foundUser.get().getId());
@@ -84,7 +84,7 @@ public class UserTest {
         assertEquals(user.getPassword(), userController.findByUsername("niss4").getPassword());
         assertEquals(user.getId(), userController.findByUsername("niss4").getId());
         Throwable exception = assertThrows(UserNotFoundException.class,
-        () -> userController.findByUsername("Jalla"));
+                () -> userController.findByUsername("Jalla"));
         assertEquals(user.getUsername(), userController.findOne(user.getId()).getUsername());
         assertEquals(user.getPassword(), userController.findOne(user.getId()).getPassword());
     }
