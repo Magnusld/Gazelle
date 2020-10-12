@@ -256,7 +256,7 @@ public class GazelleSession {
      * @return true if the response was successful
      */
     private static boolean successfulGet(Response.StatusType status) {
-        return status == Response.Status.OK;
+        return status.equals(Response.Status.OK);
     }
 
     /**
@@ -267,9 +267,9 @@ public class GazelleSession {
      * @return true if the response was successful
      */
     private static boolean successfulPost(Response.StatusType status) {
-        return status == Response.Status.OK
-                || status == Response.Status.CREATED
-                || status == Response.Status.NO_CONTENT;
+        return status.equals(Response.Status.OK)
+                || status.equals(Response.Status.CREATED)
+                || status.equals(Response.Status.NO_CONTENT);
     }
 
     /**
@@ -279,7 +279,7 @@ public class GazelleSession {
      * @return true if the status indicates that the created object is in the response body
      */
     private static boolean successfulPostWithEntity(Response.StatusType status) {
-        return status == Response.Status.OK;
+        return status.equals(Response.Status.OK);
     }
 
     /**
@@ -291,9 +291,9 @@ public class GazelleSession {
      * @return true if the response was successful
      */
     private static boolean successfulPut(Response.StatusType status) {
-        return status == Response.Status.OK
-                || status == Response.Status.CREATED
-                || status == Response.Status.NO_CONTENT;
+        return status.equals(Response.Status.OK)
+                || status.equals(Response.Status.CREATED)
+                || status.equals(Response.Status.NO_CONTENT);
     }
 
     /**
@@ -305,8 +305,8 @@ public class GazelleSession {
      * @return true if the response was successful
      */
     private static boolean successfulDelete(Response.StatusType status) {
-        return status == Response.Status.OK
-                || status == Response.Status.ACCEPTED
-                || status == Response.Status.NO_CONTENT;
+        return status.equals(Response.Status.OK)
+                || status.equals(Response.Status.ACCEPTED)
+                || status.equals(Response.Status.NO_CONTENT);
     }
 }
