@@ -1,7 +1,7 @@
 package gazelle.ui;
 
 import gazelle.model.Course;
-import gazelle.model.CourseRole;
+import gazelle.model.CourseRole.CourseRoleType;
 import gazelle.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,8 +19,12 @@ public class CourseListController extends BaseController {
     @FXML
     public Button newCourse;
     @FXML
+    private Button deleteCourse;
+    @FXML
     private VBox courseList;
     private final ArrayList<CourseController> controllers = new ArrayList<>();
+
+    private boolean isDeleting = false;
 
     private GazelleController app;
 
@@ -31,7 +35,7 @@ public class CourseListController extends BaseController {
         clearView();
         app.sideRun(() -> {
             User user = app.getSession().getLoggedInUser();
-            List<Course> courses = app.getSession().getCoursesForUser(user, null);
+            List<Course> courses = app.getSession().getCoursesForUser(user, CourseRoleType.OWNER);
             app.mainRun(() -> setCourses(courses));
         });
     }
@@ -43,7 +47,7 @@ public class CourseListController extends BaseController {
     public void setCourses(List<Course> courses) {
         // Make enough controllers
         while (controllers.size() < courses.size())
-            controllers.add(CourseController.load());
+            controllers.add(CourseController.load(this));
 
         // Remove extra controllers
         controllers.subList(courses.size(), controllers.size()).clear();
@@ -63,6 +67,12 @@ public class CourseListController extends BaseController {
 
     @FXML
     public void handleNewCourseClick() {
+        if (isDeleting){
+            controllers.forEach(controller -> {
+                controller.setDeleteState(CourseController.DeleteState.SAFE);
+            });
+            isDeleting = false;
+        }
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nytt løp");
         dialog.setContentText("Navn");
@@ -82,7 +92,7 @@ public class CourseListController extends BaseController {
                 course = app.getSession().postNewCourse(course);
                 User user = app.getSession().getLoggedInUser();
                 app.getSession()
-                        .setUserRoleForCourse(user, course, CourseRole.CourseRoleType.OWNER);
+                        .setUserRoleForCourse(user, course, CourseRoleType.OWNER);
             } catch (Exception e) {
                 //TODO: Tell user that something went wrong
                 throw e;
@@ -90,6 +100,54 @@ public class CourseListController extends BaseController {
                 app.mainRun(this::onShow);
             }
         });
+    }
+
+    @FXML
+    public void handleDeleteCourseClick() {
+        this.isDeleting = !this.isDeleting;
+        if (this.isDeleting){
+            deleteCourse.getStyleClass().add("deleteIconText");
+            deleteCourse.setText("Slett 0 løp");
+            controllers.forEach(controller -> {
+                controller.setDeleteState(CourseController.DeleteState.DELETABLE);
+            });
+        }
+        else {
+            ArrayList<CourseController> controllersToDelete = getSelectedCourses();
+            if (controllersToDelete.size() != 0) {
+                this.clearView();
+                app.sideRun(() -> {
+                    try {
+                        controllersToDelete.forEach(controller -> {
+                            app.getSession().deleteCourse(controller.getCourse());
+                        });
+                    } catch (Exception e) {
+                        //TODO: Tell user that something went wrong
+                        throw e;
+                    } finally {
+                        app.mainRun(this::onShow);
+                    }
+                });
+            } else {
+                controllers.forEach(controller -> {
+                    controller.setDeleteState(CourseController.DeleteState.SAFE);
+                });
+            }
+            deleteCourse.getStyleClass().remove("deleteIconText");
+            deleteCourse.setText("");
+            deleteCourse.getGraphic().setDisable(false);
+        }
+    }
+
+    private ArrayList<CourseController> getSelectedCourses() {
+        return new ArrayList<>(controllers.stream()
+                .filter(controller -> controller.getDeleteState() == CourseController.DeleteState.SELECTED)
+                .collect(Collectors.toList()));
+    }
+
+    public void handleSelectedCourseClick() {
+        ArrayList<CourseController> selectedCourses = getSelectedCourses();
+        deleteCourse.setText("Slett "+selectedCourses.size()+" løp");
     }
 
     public static CourseListController load(GazelleController app) {

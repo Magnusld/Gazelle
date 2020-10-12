@@ -5,6 +5,7 @@ import gazelle.server.error.CourseNotFoundException;
 import gazelle.server.error.ExistingEntityException;
 import gazelle.server.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,5 +36,13 @@ public class CourseController {
             throw new ExistingEntityException();
         courseRepository.save(course);
         return course;
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCourse(@PathVariable Long id) {
+        if(!courseRepository.existsById(id))
+            throw new CourseNotFoundException();
+        courseRepository.deleteById(id);
     }
 }
