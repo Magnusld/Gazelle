@@ -63,7 +63,7 @@ public class CourseController extends BaseController {
         } else if (this.deleteState == DeleteState.SELECTED) {
             this.setDeleteState(DeleteState.DELETABLE);
         }
-        parent.handleSelectedCourseClick();
+        parent.handleCourseClick();
     }
 
     public void setCourse(Course course) {
