@@ -21,7 +21,7 @@ Den har et REST-api som klienten bruker for å hente og sende data.
 ## Bygging og kjøring
 Vi bruker maven som byggverktøy, og alle modulene er samlet i toppnivå-`pom.xml`-filen.
 
-For å innstallere alle avhengigheter til den lokale maven-siloen,
+For å installere alle avhengigheter til den lokale maven-siloen,
 samt kompilere og starte prosjektet med både tjener og klient, skriv på Linux, OSX og GitPod:
 ```
 ./start.sh
@@ -35,7 +35,7 @@ mvn verify
 ```
 For å se testdekningsgrad gå til ```target/site/jacoco/index.html``` i hver modul.
 
-Testene er en kombinasjon enhets- og integrasjonstester.
+Testene er en kombinasjon av enhets- og integrasjonstester.
 Med enhetstester mener vi enkeltstående tester av kodeenheter for seg selv.
 Integrasjonstetene starter hele programmet og tester at kodeenhetene samhandler på riktig måte.
 
