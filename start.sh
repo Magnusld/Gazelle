@@ -4,7 +4,7 @@
 set -ex
 
 # Build and install everything to the maven repository
-mvn install
+mvn clean install
 
 # Start the server and fork it once ready
 mvn spring-boot:start -pl server
