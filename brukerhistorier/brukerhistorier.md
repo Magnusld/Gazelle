@@ -86,3 +86,15 @@ En bruker er en måte å "logge inn" på appen og hvordan man lagrer sin data, s
 #### Redigere brukerinnstillinger
 
 ![Redigere innstillinger](mockup-us-3-2.png)
+
+## Webapp (us-5) &ndash; Høy prioritet
+
+Som bruker og faglærer vil jeg bruke nettleser, slik at jeg slipper å installere programmer.
+
+## Viktig å kunne se
+
+* Alt som allerede er implementert i JavaFX (us-1 + us-3)
+
+## Viktig å kunne gjøre
+
+* Alt som allerede er implementert i JavaFX (us-1 + us-3)
