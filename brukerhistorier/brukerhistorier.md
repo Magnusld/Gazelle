@@ -63,8 +63,8 @@ En post er en tidsavgrenset blokk med fokus på en bit av pensum. Her legger fag
 
 ## Bruker (us-3) &ndash; Høy prioritet
 
-Som både faglærer og student trenger jeg å kunne lagre mine innstillinger og 
-hvilke løp jeg eier eller er en del av, slik at det er enkelt å bruke appen.
+Som både faglærer og student trenger jeg å kunne lage en bruker for
+å holde styr på hvilke løp jeg eier og følger, og holde styr på hvilke oppgaver jeg har gjort.
 
 En bruker er en måte å "logge inn" på appen og hvordan man lagrer sin data, slik at man enkelt finner løpene sine.
 
@@ -75,14 +75,26 @@ En bruker er en måte å "logge inn" på appen og hvordan man lagrer sin data, s
 ### Viktig å kunne gjøre
 * Logge inne
 * Logge ut
-* Endre på sine innstillinger
 
-### Illustrerende skjermbilder 
-
-#### Logge inn
+### Illustrerende skjermbilde 
 
 ![Logge inn](mockup-us-3-1.png)
 
-#### Redigere brukerinnstillinger
+## Bruker (us-4) &ndash; Middels prioritet
+
+Som faglærer og brukere ellers trenger jeg å kunne endre innstillingene mine
+i appen. Disse innstillingene inkluderer å sette navn og kontaktinfo,
+særlig viktig for faglærere.
+
+#### Viktig å kunne se
+
+* En måte å komme seg til innstillinger
+* Hvilke innstillinger som gjelder
+
+#### Viktig å kunne gjøre
+
+* Endre innstillingene sine
+
+#### Illustrerende skjermbilde
 
 ![Redigere innstillinger](mockup-us-3-2.png)
