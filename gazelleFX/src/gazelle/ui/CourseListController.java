@@ -62,17 +62,14 @@ public class CourseListController extends BaseController {
                 .setAll(controllers.stream()
                         .map(BaseController::getNode)
                         .collect(Collectors.toList()));
+
         courseList.setVisible(true);
+        deleteCourse.setVisible(!courses.isEmpty());
     }
 
     @FXML
     public void handleNewCourseClick() {
-        if (isDeleting) {
-            controllers.forEach(controller -> {
-                controller.setDeleteState(CourseController.DeleteState.SAFE);
-            });
-            isDeleting = false;
-        }
+        setDeleting(false);
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nytt løp");
         dialog.setContentText("Navn");
@@ -102,9 +99,8 @@ public class CourseListController extends BaseController {
         });
     }
 
-    @FXML
-    public void handleDeleteCourseClick() {
-        this.isDeleting = !this.isDeleting;
+    private void setDeleting(boolean deleting) {
+        this.isDeleting = deleting;
         if (this.isDeleting) {
             deleteCourse.getStyleClass().add("deleteIconText");
             deleteCourse.setText("Slett 0 løp");
@@ -112,30 +108,38 @@ public class CourseListController extends BaseController {
                 controller.setDeleteState(CourseController.DeleteState.DELETABLE);
             });
         } else {
-            ArrayList<CourseController> controllersToDelete = getSelectedCourses();
-            if (controllersToDelete.size() != 0) {
-                this.clearView();
-                app.sideRun(() -> {
-                    try {
-                        controllersToDelete.forEach(controller -> {
-                            app.getSession().deleteCourse(controller.getCourse());
-                        });
-                    } catch (Exception e) {
-                        //TODO: Tell user that something went wrong
-                        throw e;
-                    } finally {
-                        app.mainRun(this::onShow);
-                    }
-                });
-            } else {
-                controllers.forEach(controller -> {
-                    controller.setDeleteState(CourseController.DeleteState.SAFE);
-                });
-            }
             deleteCourse.getStyleClass().remove("deleteIconText");
             deleteCourse.setText("");
-            deleteCourse.getGraphic().setDisable(false);
+            controllers.forEach(controller -> {
+                controller.setDeleteState(CourseController.DeleteState.SAFE);
+            });
         }
+    }
+
+    private void commitDelete() {
+        ArrayList<CourseController> controllersToDelete = getSelectedCourses();
+        if (controllersToDelete.size() == 0)
+            return;
+        this.clearView();
+        app.sideRun(() -> {
+            try {
+                controllersToDelete.forEach(controller -> {
+                    app.getSession().deleteCourse(controller.getCourse());
+                });
+            } catch (Exception e) {
+                //TODO: Tell user that something went wrong
+                throw e;
+            } finally {
+                app.mainRun(this::onShow);
+            }
+        });
+    }
+
+    @FXML
+    public void handleDeleteCourseClick() {
+        if (this.isDeleting)
+            commitDelete();
+        setDeleting(!this.isDeleting);
     }
 
     private ArrayList<CourseController> getSelectedCourses() {
@@ -145,9 +149,11 @@ public class CourseListController extends BaseController {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void handleSelectedCourseClick() {
-        ArrayList<CourseController> selectedCourses = getSelectedCourses();
-        deleteCourse.setText("Slett " + selectedCourses.size() + " løp");
+    public void handleCourseClick() {
+        if (isDeleting) {
+            ArrayList<CourseController> selectedCourses = getSelectedCourses();
+            deleteCourse.setText("Slett " + selectedCourses.size() + " løp");
+        }
     }
 
     public static CourseListController load(GazelleController app) {
