@@ -50,14 +50,15 @@ Dette arbeidet skal skje i en egen gren i git, og det skal skrives både tester 
 eventuell dokumentasjon. Man trenger ikke dogmatisk følge testdrevet utvikling,
 men all kode som skal inn i prosjektet skal ha enhetstester.
 
-I tillegg til å lage en utviklingsgren med et fornuftig navn,
-skal alle kodebunter være navngitt deskriptivt etter reglene i [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
+Grenen skal få navnet GitLab foreslår for oppgaven.
+I tillegg skal alle kodebunter være navngitt deskriptivt etter reglene i
+[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
 Dette vil si at alle buntmeldinger er på formen
 ```
-feat(grensesnitt): legge til statuslinje for nettverksoprasjoner
+feat(#43): legge til statuslinje for nettverksoprasjoner
 
 Beskrivelse av forandringen, kun dersom det trengs.
-Parantesene brukes dersom forandringen kan sies å tilhøre en bestemt del av prosjektet.
+Inni parantesen skrives oppgavenummeret bunten jobber mot.
 Merk at resten av linjen er i infinitiv, har liten forbokstav og er uten tegnsetting.
 Linjen skal passe inn i setningen:
   
@@ -69,14 +70,17 @@ Vi holder oss til de definerte engelske nøkkelordene for maskinlesbarheten sin 
 
 `feat`, `fix`, `chore`, `build`, `test`, `refactor`, `perf`, `style`, `ci`, `docs`.
 
-Bunter med automatiske meldinger (`revert `) trenger ikke følge reglene.
+Bunter med automatiske meldinger (`revert `, `merge `) trenger ikke følge reglene.
 
 ### Kontrollering
 
 Etter utvikling lages en fletteforespørsel (GitLab Merge request) fra utviklingsgrenen til hovedgrenen.
-Fletteforespørselen skal ha en fornuftig tittel, og beskrivelen skal beskrive *hvorfor* forandringen er blitt gjort.
+Fletteforespørselen skal ha en fornuftig tittel, og beskrivelen skal kort beskrive forandingen
+og *hvorfor* forandringen er blitt gjort.
 Hva som er blitt gjort skal være beskrevet i buntmeldingene. Fletteforespørselen skal også
 referere til oppgaven den løser med `Fixes #58`, som GitLab forstår.
+Så fremt man har brukt GitLab sitt forslag til gren-navn på oppgaven vil fletteforespørselen
+automatisk få merkelapper og `Closes #<oppgavenr>` i beskrivelsen.
 
 Oppgaven på sprint-tavlen flyttes til "Til vurdering"-kolonnen, og et annet gruppemedlem
 skal bli bedt om å vurdere fletteforespørselen, gjennom å få den tilegnet. Vidre forbedringer og forandringer skal
@@ -88,11 +92,10 @@ eller lempes om (rebase) med hovedgrenens nye innhold før fletteforespørselen 
 #### CI/CD
 
 Prosjektet skal bruke en GitLab-pipeline for å automatisk kjøre testene i utviklingsgrener,
-og raportere testdekning. Denne statistikken skal vises på README-siden.
-Andre verktøy, f.eks. sjekk av kodekvalitet, skal vurderes fortløpende.
-
-I enhver utviklingsgren skal det være mulig å åpne prosjektet i GitPod,
-både for utvikling og testing. En GitLab-pipeline lager en lenke i enhver fletteforespørsel.
+og raportere testdekning. Denne statistikken skal helst vises på README-siden.
+Andre verktøy vi bruker, f.eks. sjekk av kodekvalitet og formatering, skal også kjøres
+i Pipeline og godkjennes for hver fletteforespørsel. Hvis noen av sjekkene mislykkes skal 
+Pipelinen feile.
 
 ## Sprintretrospektiv
 
