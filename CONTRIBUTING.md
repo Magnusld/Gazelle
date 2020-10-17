@@ -49,8 +49,16 @@ Hver oppgave skal på dette stadiet være et tenkt konkret stykke arbeid.
 Dette arbeidet skal skje i en egen gren i git, og det skal skrives både tester og
 eventuell dokumentasjon. Man trenger ikke dogmatisk følge testdrevet utvikling,
 men all kode som skal inn i prosjektet skal ha enhetstester.
+I tillegg skal man forsøke å ha integrasjonstester for testing av APIer, både
+på klient og tjener. Integrasjonstester betyr her tester som starter programmet
+for å intragere med det, men som kun simulerer kommunikasjon mellom klient og tjener.
 
-Grenen skal få navnet GitLab foreslår for oppgaven.
+For hver oppgave har GitLab et forslag til gren-navn på formen
+```
+71-vurdere-om-vi-skal-kreve-oppgave-nummer-i-buntmeldinger
+```
+Denne blir fort litt lang, men så lenge oppgavenummeret er med på starten
+vil GitLab forstå at grenen hører til oppgaven når tiden er inne for fletting.
 I tillegg skal alle kodebunter være navngitt deskriptivt etter reglene i
 [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
 Dette vil si at alle buntmeldinger er på formen
