@@ -28,6 +28,10 @@ public class User {
     @JsonIgnore
     private Set<CourseRole> roles = new HashSet<>();
 
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.REMOVE})
+    @JsonIgnore
+    private TokenLogIn token;
+    
     protected User() {}
 
     public User(String username, String password) {
