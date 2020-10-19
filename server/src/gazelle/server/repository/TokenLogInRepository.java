@@ -15,4 +15,8 @@ public interface TokenLogInRepository extends CrudRepository<TokenLogIn, Long> {
     Optional<TokenLogIn> findTokenLogInByToken(String token);
 
     Optional<TokenLogIn> findTokenLogInByUser(User user);
+
+    boolean existsByToken(String token);
+
+    void deleteByToken(String token);
 }

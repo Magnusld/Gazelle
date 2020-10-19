@@ -6,13 +6,11 @@ import gazelle.model.CourseRole;
 import gazelle.model.User;
 import gazelle.server.endpoint.CourseController;
 import gazelle.server.endpoint.CourseRoleController;
-import gazelle.server.error.CourseNotFoundException;
-import gazelle.server.error.ExistingEntityException;
-import gazelle.server.error.GazelleException;
-import gazelle.server.error.UserNotFoundException;
+import gazelle.server.error.*;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.CourseRoleRepository;
 import gazelle.server.repository.UserRepository;
+import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -42,13 +40,20 @@ public class CourseTest {
     @Autowired
     CourseRoleController courseRoleController;
 
-    User user;
+    @Autowired
+    TokenAuthService tokenAuthService;
+
     User user1;
+    String user1Token;
+    User user2;
+    String user2Token;
 
     @BeforeAll
     public void setupTests() {
-        user = userRepository.save(new User("tester", "tester"));
-        user1 = userRepository.save(new User("test", "test"));
+        user1 = userRepository.save(new User("tester", "tester"));
+        user1Token = TokenAuthService.addBearer(tokenAuthService.createTokenForUser(user1));
+        user2 = userRepository.save(new User("test", "test"));
+        user2Token = TokenAuthService.addBearer(tokenAuthService.createTokenForUser(user2));
     }
 
     @Test
@@ -73,29 +78,42 @@ public class CourseTest {
     @Test
     public void courseRoleControllerTest() {
         Course course = courseController.addNewCourse(new Course("test3"));
-        courseRoleController.setCourseRole(user.getId(),
+        courseRoleController.setCourseRole(user1.getId(),
                 course.getId(),
-                CourseRole.CourseRoleType.OWNER);
-        assertTrue(courseRoleRepository.findByUserAndCourse(user, course).isPresent());
-        Throwable exception = assertThrows(UserNotFoundException.class,
-                () -> courseRoleController.setCourseRole(52L, course.getId(),
-                        CourseRole.CourseRoleType.OWNER));
+                CourseRole.CourseRoleType.OWNER,
+                user1Token);
+        assertThrows(AuthorizationException.class, () -> {
+            courseRoleController.setCourseRole(user1.getId(),
+                    course.getId(),
+                    CourseRole.CourseRoleType.OWNER,
+                    user2Token);
+        });
+        assertThrows(InvalidTokenException.class, () -> {
+            courseRoleController.setCourseRole(user1.getId(),
+                    course.getId(),
+                    CourseRole.CourseRoleType.OWNER,
+                    "Bearer summy-doken");
+        });
+
+        assertTrue(courseRoleRepository.findByUserAndCourse(user1, course).isPresent());
         Throwable exception1 = assertThrows(CourseNotFoundException.class,
-                () -> courseRoleController.setCourseRole(user.getId(),
+                () -> courseRoleController.setCourseRole(user1.getId(),
                         12L,
-                        CourseRole.CourseRoleType.OWNER));
-        assertEquals(CourseRole.CourseRoleType.OWNER,
-                courseRoleController.getCourseRole(user.getId(), course.getId()).getRoleType());
-        GazelleException exception2 = assertThrows(GazelleException.class,
-                () -> courseRoleController.getCourseRole(32L, 52L));
-        assertEquals(exception2.getReason(), "Course role not found");
-        assertTrue(courseRoleController.findCoursesForUser(user1.getId(), null).isEmpty());
-        assertEquals(course.getName(), courseRoleController.findCoursesForUser(user.getId(),
-                CourseRole.CourseRoleType.OWNER).get(0).getName());
-        assertEquals(course.getId(), courseRoleController.findCoursesForUser(user.getId(),
-                CourseRole.CourseRoleType.OWNER).get(0).getId());
-        Throwable exception3 = assertThrows(UserNotFoundException.class,
-                () -> courseRoleController.findCoursesForUser(53L, null));
+                        CourseRole.CourseRoleType.OWNER, user1Token));
+        assertTrue(
+                courseRoleController.findCoursesForUser(user2.getId(), null, user2Token).isEmpty());
+
+        assertEquals(course.getName(), courseRoleController.findCoursesForUser(user1.getId(),
+                CourseRole.CourseRoleType.OWNER, user1Token).get(0).getName());
+
+        assertEquals(course.getId(), courseRoleController.findCoursesForUser(user1.getId(),
+                CourseRole.CourseRoleType.OWNER, user1Token).get(0).getId());
+
+        assertThrows(AuthorizationException.class,
+                () -> courseRoleController.findCoursesForUser(53L, null, user1Token));
+
+        assertThrows(InvalidTokenException.class,
+                () -> courseRoleController.findCoursesForUser(53L, null, "Bearer dummy-token"));
 
     }
 

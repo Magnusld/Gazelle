@@ -10,6 +10,7 @@ import gazelle.server.error.GazelleException;
 import gazelle.server.error.LoginFailedException;
 import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.UserRepository;
+import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class UserTest {
     @Autowired
     private UserController userController;
 
+    @Autowired
+    private TokenAuthService tokenAuthService;
+
     @Test
     public void signUpNewUserTest() {
         SignUpRequest signUpRequest = new SignUpRequest("niss2", "niss2");
@@ -51,7 +55,8 @@ public class UserTest {
         User user = userRepository.save(new User("niss3", "niss3"));
         LogInRequest logInRequest = new LogInRequest("niss3", "niss3");
         LogInResponse logInResponse = loginEndpoint.login(logInRequest);
-        assertEquals(logInResponse.getToken(), "dummy-token");
+        String bearerToken = TokenAuthService.addBearer(logInResponse.getToken());
+        assertEquals(user, tokenAuthService.getUserForToken(bearerToken));
         Throwable exception = assertThrows(LoginFailedException.class,
                 () -> loginEndpoint.login(new LogInRequest("nise", "nise")));
     }
