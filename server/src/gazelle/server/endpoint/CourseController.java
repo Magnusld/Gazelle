@@ -43,10 +43,16 @@ public class CourseController {
     }
 
     @PostMapping
-    public Course addNewCourse(@RequestBody Course course) {
+    public Course addNewCourse(@RequestBody Course course,
+                               @RequestHeader("Authorization") String auth) {
         if (course.getId() != null)
             throw new ExistingEntityException();
+
+        User user = tokenAuthService.getUserForToken(auth);
+
         courseRepository.save(course);
+        courseRoleService.setRole(user, course, CourseRole.CourseRoleType.OWNER);
+
         return course;
     }
 
@@ -68,7 +74,7 @@ public class CourseController {
         User user = tokenAuthService.getUserForToken(auth);
 
         CourseRole.CourseRoleType role = courseRoleService.getCourseRole(user, course);
-        if (!role.equals(CourseRole.CourseRoleType.OWNER))
+        if (role != CourseRole.CourseRoleType.OWNER)
             throw new AuthorizationException();
 
         courseRepository.deleteById(id);

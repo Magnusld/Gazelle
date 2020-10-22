@@ -1,4 +1,4 @@
-package gazelle.server;
+package gazelle.server.endpoint;
 
 import gazelle.auth.LogInRequest;
 import gazelle.auth.LogInResponse;

@@ -11,6 +11,7 @@ import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.CourseRoleRepository;
 import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,6 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -66,18 +70,19 @@ public class CourseTest {
 
     @Test
     public void courseControllerTest() {
-        Course course = courseController.addNewCourse(new Course("test2"));
+        Course course = courseController.addNewCourse(new Course("test2"), user1Token);
         assertTrue(courseRepository.findById(course.getId()).isPresent());
         assertNotNull(courseController.findOne(course.getId()));
         Throwable exception = assertThrows(ExistingEntityException.class,
-                () -> courseController.addNewCourse(course));
+                () -> courseController.addNewCourse(course, user1Token));
         Throwable exception1 = assertThrows(CourseNotFoundException.class,
                 () -> courseController.findOne(42L));
+        courseController.deleteCourse(course.getId(), user1Token);
     }
 
     @Test
     public void courseRoleControllerTest() {
-        Course course = courseController.addNewCourse(new Course("test3"));
+        Course course = courseController.addNewCourse(new Course("test3"), user1Token);
         courseRoleController.setCourseRole(user1.getId(),
                 course.getId(),
                 CourseRole.CourseRoleType.OWNER,
@@ -103,18 +108,25 @@ public class CourseTest {
         assertTrue(
                 courseRoleController.findCoursesForUser(user2.getId(), null, user2Token).isEmpty());
 
-        assertEquals(course.getName(), courseRoleController.findCoursesForUser(user1.getId(),
-                CourseRole.CourseRoleType.OWNER, user1Token).get(0).getName());
-
-        assertEquals(course.getId(), courseRoleController.findCoursesForUser(user1.getId(),
-                CourseRole.CourseRoleType.OWNER, user1Token).get(0).getId());
+        List<Course> user1Courses =
+                courseRoleController.findCoursesForUser(user1.getId(), CourseRole.CourseRoleType.OWNER, user1Token);
+        assertEquals(1, user1Courses.size());
+        assertEquals(course.getName(), user1Courses.get(0).getName());
+        assertEquals(course.getId(), user1Courses.get(0).getId());
 
         assertThrows(AuthorizationException.class,
-                () -> courseRoleController.findCoursesForUser(53L, null, user1Token));
+                () -> courseRoleController.findCoursesForUser(5000L, null, user1Token));
 
         assertThrows(InvalidTokenException.class,
-                () -> courseRoleController.findCoursesForUser(53L, null, "Bearer dummy-token"));
+                () -> courseRoleController.findCoursesForUser(5001L, null, "Bearer dummy-token"));
 
+        courseController.deleteCourse(course.getId(), user1Token);
     }
 
+    @AfterAll
+    public void cleanup() {
+        //TODO: Use UserController
+        userRepository.deleteById(user1.getId());
+        userRepository.deleteById(user2.getId());
+    }
 }
