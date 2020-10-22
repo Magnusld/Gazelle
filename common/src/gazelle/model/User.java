@@ -25,11 +25,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<CourseRole> roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.REMOVE})
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private TokenLogIn token;
     

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,38 +28,7 @@ public class UserTest {
     private UserRepository userRepository;
 
     @Autowired
-    private LoginEndpoint loginEndpoint;
-
-    @Autowired
     private UserController userController;
-
-    @Autowired
-    private TokenAuthService tokenAuthService;
-
-    @Test
-    public void signUpNewUserTest() {
-        SignUpRequest signUpRequest = new SignUpRequest("niss2", "niss2");
-        loginEndpoint.signup(signUpRequest);
-        assertTrue(userRepository.findByUsername("niss2").isPresent());
-        GazelleException exception1 = assertThrows(GazelleException.class,
-                () -> loginEndpoint.signup(new SignUpRequest("niss2", "niss2")));
-        GazelleException exception2 = assertThrows(GazelleException.class,
-                () -> loginEndpoint.signup(new SignUpRequest("niss4", "nis")));
-        assertEquals(exception1.getReason(), "Username taken");
-        assertEquals(exception2.getReason(), "Password too short");
-    }
-
-    @Test
-    public void logInUserTest() {
-        User user = userRepository.save(new User("niss3", "niss3"));
-        LogInRequest logInRequest = new LogInRequest("niss3", "niss3");
-        LogInResponse logInResponse = loginEndpoint.login(logInRequest);
-        String bearerToken = TokenAuthService.addBearer(logInResponse.getToken());
-        assertEquals(user, tokenAuthService.getUserForToken(bearerToken));
-        Throwable exception = assertThrows(LoginFailedException.class,
-                () -> loginEndpoint.login(new LogInRequest("nise", "nise")));
-    }
-
 
     @Test
     public void userRepositoryTest() {
@@ -70,30 +38,30 @@ public class UserTest {
         assertTrue(foundUser.isPresent());
         assertEquals(user.getId(), foundUser.get().getId());
         assertTrue(userRepository.findById(user.getId()).isPresent());
-    }
-
-    @Test
-    public void testDatabaseTest() {
-        assertFalse(userRepository.findByUsername("nissen").isPresent());
+        userRepository.delete(user);
+        assertFalse(userRepository.findById(user.getId()).isPresent());
     }
 
     @Test
     public void userControllerTest() {
         User user = userRepository.save(new User("niss4", "niss4"));
-        User user1 = userRepository.save(new User("niss5", "niss5"));
         assertEquals(userController.findAll().iterator().next().getUsername(),
                 userRepository.findAll().iterator().next().getUsername());
         assertEquals(userController.findAll().iterator().next().getId(),
                 userRepository.findAll().iterator().next().getId());
         assertEquals(user.getUsername(), userController.findByUsername("niss4").getUsername());
-        assertEquals(user.getPassword(), userController.findByUsername("niss4").getPassword());
-        assertEquals(user.getId(), userController.findByUsername("niss4").getId());
-        Throwable exception = assertThrows(UserNotFoundException.class,
+
+        User user1 = userRepository.save(new User("niss5", "niss5"));
+        assertEquals(user1.getPassword(), userController.findByUsername("niss5").getPassword());
+        assertEquals(user, userController.findByUsername("niss4"));
+        assertThrows(UserNotFoundException.class,
                 () -> userController.findByUsername("Jalla"));
         assertEquals(user.getUsername(), userController.findOne(user.getId()).getUsername());
         assertEquals(user.getPassword(), userController.findOne(user.getId()).getPassword());
-    }
 
+        userRepository.delete(user);
+        userRepository.delete(user1);
+    }
 }
 
 

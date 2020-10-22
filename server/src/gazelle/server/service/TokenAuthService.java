@@ -7,6 +7,7 @@ import gazelle.server.error.InvalidTokenException;
 import gazelle.server.repository.TokenLogInRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
  * <p>See: https://swagger.io/docs/specification/authentication/bearer-authentication/
  */
 @Service
+@Transactional
 public class TokenAuthService {
 
     private final TokenLogInRepository tokenRepository;
@@ -35,6 +37,9 @@ public class TokenAuthService {
      * @return the token created for the user (excluding Bearer-prefix)
      */
     public String createTokenForUser(User user) {
+        //Remove previous token from user
+        tokenRepository.findTokenLogInByUser(user).ifPresent(tokenRepository::delete);
+
         String token = UUID.randomUUID().toString();
         TokenLogIn tokenLogIn = new TokenLogIn(user, token);
         tokenRepository.save(tokenLogIn);

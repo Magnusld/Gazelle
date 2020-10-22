@@ -23,7 +23,9 @@ public class CourseController {
     private final TokenAuthService tokenAuthService;
 
     @Autowired
-    public CourseController(CourseRepository courseRepository, CourseRoleService courseRoleService, TokenAuthService tokenAuthService) {
+    public CourseController(CourseRepository courseRepository,
+                            CourseRoleService courseRoleService,
+                            TokenAuthService tokenAuthService) {
         this.courseRepository = courseRepository;
         this.courseRoleService = courseRoleService;
         this.tokenAuthService = tokenAuthService;
