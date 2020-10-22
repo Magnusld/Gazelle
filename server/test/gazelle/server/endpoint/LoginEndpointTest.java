@@ -61,8 +61,11 @@ public class LoginEndpointTest {
                 () -> loginEndpoint.signup(new SignUpRequest(NAME, "dummypassword")));
         GazelleException exception2 = assertThrows(GazelleException.class,
                 () -> loginEndpoint.signup(new SignUpRequest("nass4", "XXX")));
+        GazelleException exception3 = assertThrows(GazelleException.class,
+                () -> loginEndpoint.signup(new SignUpRequest("nas", "dummypassword")));
         assertEquals("Username taken", exception1.getReason());
         assertEquals("Password too short", exception2.getReason());
+        assertEquals("Username too short", exception3.getReason());
     }
 
     @Test
