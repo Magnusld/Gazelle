@@ -1,4 +1,4 @@
-package gazelle.server;
+package gazelle.server.service;
 
 import gazelle.auth.LogInResponse;
 import gazelle.auth.SignUpRequest;
@@ -7,7 +7,6 @@ import gazelle.server.endpoint.LoginEndpoint;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.repository.UserRepository;
-import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -94,7 +93,15 @@ public class TokenAuthServiceTest {
 
     @AfterAll
     public void deleteUsers() {
+        assertEquals(user1, tokenAuthService.getUserForToken(user1Token));
+        assertEquals(user2, tokenAuthService.getUserForToken(user2Token));
         userRepository.deleteById(user1.getId());
         userRepository.deleteById(user2.getId());
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenAuthService.getUserForToken(user1Token);
+        });
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenAuthService.getUserForToken(user2Token);
+        });
     }
 }

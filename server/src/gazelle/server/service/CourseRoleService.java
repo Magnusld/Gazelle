@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class CourseRoleService {
@@ -66,9 +67,14 @@ public class CourseRoleService {
      */
     public boolean setRole(User user, Course course, CourseRole.CourseRoleType type) {
         Objects.requireNonNull(type);
-        boolean existed = courseRoleRepository.existsByUserAndCourse(user, course);
-        CourseRole role = new CourseRole(user, course, type);
-        courseRoleRepository.save(role);
+        Optional<CourseRole> role = courseRoleRepository.findByUserAndCourse(user, course);
+        boolean existed = false;
+        if (role.isPresent()) {
+            courseRoleRepository.delete(role.get());
+            existed = true;
+        }
+        CourseRole newRole = new CourseRole(user, course, type);
+        courseRoleRepository.save(newRole);
         return existed;
     }
 }
