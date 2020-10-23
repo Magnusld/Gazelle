@@ -27,16 +27,13 @@ public class UserController {
 
     @GetMapping("/username/{username}")
     public User findByUsername(@PathVariable String username) {
-        return unwrapOrThrow(userRepository.findByUsername(username));
+        return userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
     }
 
     @GetMapping("/{id}")
     public User findOne(@PathVariable Long id) {
-        return unwrapOrThrow(userRepository.findById(id));
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
-    static User unwrapOrThrow(Optional<User> user) {
-        return user.orElseThrow(UserNotFoundException::new);
-    }
 }
 
