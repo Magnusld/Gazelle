@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({GazelleException.class})
-    public ResponseEntity<Object> handleNotFound(
+    public ResponseEntity<Object> handleGazelleException(
             GazelleException gex, WebRequest request) {
         return handleExceptionInternal(gex, gex.buildErrorObject(),
                 new HttpHeaders(), gex.getStatusCode(), request);
