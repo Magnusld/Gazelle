@@ -4,9 +4,9 @@ import gazelle.auth.LogInResponse;
 import gazelle.auth.SignUpRequest;
 import gazelle.model.User;
 import gazelle.server.endpoint.LoginEndpoint;
+import gazelle.server.endpoint.UserController;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.InvalidTokenException;
-import gazelle.server.repository.UserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -30,7 +31,7 @@ public class TokenAuthServiceTest {
     private TokenAuthService tokenAuthService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserController userController;
 
     private User user1;
     private String user1Token;
@@ -95,8 +96,8 @@ public class TokenAuthServiceTest {
     public void deleteUsers() {
         assertEquals(user1, tokenAuthService.getUserForToken(user1Token));
         assertEquals(user2, tokenAuthService.getUserForToken(user2Token));
-        userRepository.deleteById(user1.getId());
-        userRepository.deleteById(user2.getId());
+        userController.deleteUser(user1.getId(), user1Token);
+        userController.deleteUser(user2.getId(), user2Token);
         assertThrows(InvalidTokenException.class, () -> {
             tokenAuthService.getUserForToken(user1Token);
         });
