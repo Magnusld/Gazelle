@@ -1,16 +1,9 @@
 package gazelle.server;
 
-import gazelle.auth.LogInRequest;
-import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
 import gazelle.model.User;
-import gazelle.server.endpoint.LoginEndpoint;
 import gazelle.server.endpoint.UserController;
-import gazelle.server.error.GazelleException;
-import gazelle.server.error.LoginFailedException;
 import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.UserRepository;
-import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)

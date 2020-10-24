@@ -4,11 +4,9 @@ import gazelle.auth.LogInRequest;
 import gazelle.auth.LogInResponse;
 import gazelle.auth.SignUpRequest;
 import gazelle.model.User;
-import gazelle.server.endpoint.LoginEndpoint;
 import gazelle.server.error.GazelleException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.LoginFailedException;
-import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,9 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -32,7 +29,7 @@ public class LoginEndpointTest {
     private LoginEndpoint loginEndpoint;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserController userController;
 
     @Autowired
     private TokenAuthService tokenAuthService;
@@ -53,9 +50,8 @@ public class LoginEndpointTest {
 
     @Test
     public void signUpUser() { //Tests that the user created in setup actually exists
-        Optional<User> byName = userRepository.findByUsername(NAME);
-        assertTrue(byName.isPresent());
-        assertEquals(user1, byName.get());
+        User byName = userController.findByUsername(NAME);
+        assertEquals(user1, byName);
 
         GazelleException exception1 = assertThrows(GazelleException.class,
                 () -> loginEndpoint.signup(new SignUpRequest(NAME, "dummypassword")));
@@ -118,7 +114,6 @@ public class LoginEndpointTest {
 
     @AfterAll
     public void cleanup() {
-        //We don't need to log before deleting the user
-        userRepository.deleteById(user1.getId());
+        userController.deleteUser(user1.getId(), token);
     }
 }

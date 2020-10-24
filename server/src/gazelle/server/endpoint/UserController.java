@@ -3,10 +3,9 @@ package gazelle.server.endpoint;
 import gazelle.model.User;
 import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.UserRepository;
+import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -14,10 +13,12 @@ public class UserController {
 
     private final UserRepository userRepository;
 
+    private final TokenAuthService tokenAuthService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, TokenAuthService tokenAuthService) {
         this.userRepository = userRepository;
+        this.tokenAuthService = tokenAuthService;
     }
 
     @GetMapping
@@ -35,5 +36,10 @@ public class UserController {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String auth) {
+        tokenAuthService.assertUserLoggedIn(id, auth);
+        userRepository.deleteById(id);
+    }
 }
 

@@ -39,7 +39,7 @@ public class CourseControllerTest {
     private CourseRoleService courseRoleService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserController userController;
 
     private User user1;
     private String user1Token;
@@ -130,8 +130,7 @@ public class CourseControllerTest {
 
     @AfterAll
     public void cleanup() {
-        //TODO: Add user deleting to the UserController
-        userRepository.deleteById(user1.getId());
-        userRepository.deleteById(user2.getId());
+        userController.deleteUser(user1.getId(), user1Token);
+        userController.deleteUser(user2.getId(), user2Token);
     }
 }
