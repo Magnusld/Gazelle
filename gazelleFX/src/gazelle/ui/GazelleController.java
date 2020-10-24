@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GazelleController extends BaseController {
 
-    private static final String API_URI = "http://localhost:8080/";
+    private static final String API_URI = "http://localhost:8088/";
 
     @FXML
     private HBox navbar;

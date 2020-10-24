@@ -39,7 +39,7 @@ public class LoginFXTest extends ApplicationTest {
 
     @Override
     public void start(final Stage stage) throws Exception {
-        mockServer = ClientAndServer.startClientAndServer(8080);
+        mockServer = ClientAndServer.startClientAndServer(8088);
         createExpectationForLogin();
         createCoursesForUser();
 
