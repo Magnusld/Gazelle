@@ -3,6 +3,7 @@ package gazelle.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * A relationship between a course and a user with extra info describing the role.
@@ -74,5 +75,18 @@ public class CourseRole {
 
     public void setRoleType(CourseRoleType roleType) {
         this.roleType = roleType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CourseRole)) return false;
+        CourseRole that = (CourseRole) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
