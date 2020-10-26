@@ -7,6 +7,7 @@ import gazelle.server.endpoint.LoginEndpoint;
 import gazelle.server.endpoint.UserController;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.InvalidTokenException;
+import gazelle.server.error.UserNotFoundException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -103,6 +104,9 @@ public class TokenAuthServiceTest {
         });
         assertThrows(InvalidTokenException.class, () -> {
             tokenAuthService.getUserForToken(user2Token);
+        });
+        assertThrows(UserNotFoundException.class, () -> {
+            tokenAuthService.createTokenForUser(user1);
         });
     }
 }

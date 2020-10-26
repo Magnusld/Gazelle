@@ -8,7 +8,7 @@ import gazelle.model.User;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.CourseNotFoundException;
 import gazelle.server.error.InvalidTokenException;
-import gazelle.server.repository.UserRepository;
+import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.service.CourseRoleService;
 import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.AfterAll;
@@ -121,6 +121,12 @@ public class CourseControllerTest {
         Course c = addTmpCourse();
         assertThrows(AuthorizationException.class, () -> {
             courseController.deleteCourse(c.getId(), user2Token);
+        });
+        assertThrows(MissingAuthorizationException.class, () -> {
+            courseController.deleteCourse(c.getId(), null);
+        });
+        assertThrows(InvalidTokenException.class, () -> {
+            courseController.deleteCourse(c.getId(), "dummy-token");
         });
         deleteTmpCourse(c);
         assertThrows(CourseNotFoundException.class, () -> {

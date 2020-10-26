@@ -7,6 +7,7 @@ import gazelle.model.User;
 import gazelle.server.error.GazelleException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.LoginFailedException;
+import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -53,6 +53,9 @@ public class LoginEndpointTest {
         User byName = userController.findByUsername(NAME);
         assertEquals(user1, byName);
 
+        assertEquals(user1.getUsername(), NAME);
+        assertEquals(user1.getPassword(), PASSWD);
+
         GazelleException exception1 = assertThrows(GazelleException.class,
                 () -> loginEndpoint.signup(new SignUpRequest(NAME, "dummypassword")));
         GazelleException exception2 = assertThrows(GazelleException.class,
@@ -62,6 +65,18 @@ public class LoginEndpointTest {
         assertEquals("Username taken", exception1.getReason());
         assertEquals("Password too short", exception2.getReason());
         assertEquals("Username too short", exception3.getReason());
+
+        // Try deleting the user and signing up again with same name
+        userController.deleteUser(user1.getId(), token);
+
+        assertThrows(InvalidTokenException.class, () -> {
+            loginEndpoint.loginWithToken(token);
+        });
+
+        LogInResponse response = loginEndpoint.signup(new SignUpRequest(NAME, PASSWD));
+        assertNotEquals(user1, response.getUser());
+        user1 = response.getUser();
+        token = TokenAuthService.addBearer(response.getToken());
     }
 
     @Test
@@ -84,6 +99,17 @@ public class LoginEndpointTest {
                 () -> loginEndpoint.login(new LogInRequest("nise", "nise"))); //Unknown user
         assertThrows(LoginFailedException.class,
                 () -> loginEndpoint.login(new LogInRequest(NAME, "wrongpassword")));
+    }
+
+    @Test
+    public void loginWithToken() {
+        assertThrows(MissingAuthorizationException.class, () -> {
+            loginEndpoint.loginWithToken(null);
+        });
+        assertThrows(InvalidTokenException.class, () -> {
+            loginEndpoint.loginWithToken("dummy token");
+        });
+        assertEquals(user1, loginEndpoint.loginWithToken(token));
     }
 
     @Test
@@ -115,5 +141,16 @@ public class LoginEndpointTest {
     @AfterAll
     public void cleanup() {
         userController.deleteUser(user1.getId(), token);
+
+        // Check that the user is deleted from everything
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenAuthService.getUserForToken(token);
+        });
+        assertThrows(LoginFailedException.class, () -> {
+            loginEndpoint.login(new LogInRequest(NAME, PASSWD));
+        });
+        assertThrows(LoginFailedException.class, () -> {
+            loginEndpoint.login(new LogInRequest(NAME, PASSWD));
+        });
     }
 }
