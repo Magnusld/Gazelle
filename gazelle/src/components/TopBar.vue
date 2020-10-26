@@ -1,19 +1,22 @@
 <template>
-  <div class="navBar">
-    <img src="../assets/logo.png" alt="logo" id="navLogo"/>
+  <md-app>
+    <md-app-toolbar class="navBar md-primary">
+      <img src="../assets/logo.png" alt="logo" id="navLogo"/>
 
-    <button text>Mine Løp</button>
-    <button text>Fokuslista</button>
+      <md-button>Mine Løp</md-button>
+      <md-button>Fokuslista</md-button>
 
-    <div onclick="" id="userInfo">
-      <span>Fornavn Etternavn</span>
-      <img src="../assets/images/profPic.png" alt="profilbilde" id="profPic"/>
-    </div>
+      <md-button id="userInfo">
+        <span>Fornavn Etternavn</span>
+        <img src="../assets/images/profPic.png" alt="profilbilde" id="profPic"/>
+      </md-button>
 
-    <!--<div v-for="(route, index) in routes" :key="index">
-      <router-link v-bind:to=route.path>{{ route.name }}</router-link>
-    </div>-->
-  </div>
+      <!--<div v-for="(route, index) in routes" :key="index">
+        <router-link v-bind:to=route.path>{{ route.name }}</router-link>
+      </div>-->
+    </md-app-toolbar>
+  </md-app>
+
 </template>
 
 <script lang="ts">
@@ -36,23 +39,20 @@ export default class TopBar extends Vue {
   padding: 10px;
   position: sticky;
   top: 0;
-
+  color: white;
   background-color: #075A86;
 }
 #navLogo {
-  height: 55px;
+  height: 40px;
 }
 #profPic{
   border-radius: 50%;
-  height: 55px;
+  height: 30px;
   margin-left: 5px;
 }
 #userInfo {
   display: flex;
   align-items: center;
   margin-left: auto;
-
-  color: white;
 }
-
 </style>
