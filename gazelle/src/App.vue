@@ -1,12 +1,15 @@
 <template>
+<div class="app">
   <TopBar />
   <router-view />
+</div>
 </template>
 
-<script>
-import { Options, Vue } from "vue-class-component";
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
 import TopBar from "@/components/TopBar.vue";
-@Options({
+
+@Component({
   components: { TopBar }
 })
 export default class App extends Vue {}
@@ -27,7 +30,6 @@ body {
   display: flex;
   align-items: stretch;
   flex-direction: column;
-
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
