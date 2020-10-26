@@ -17,24 +17,19 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Component, Vue } from "vue-property-decorator";
 
+@Component
 export default class TopBar extends Vue {
-  data() {
-    return {
-      routes: [
+  routes = [
         { name: "Mine Løp", path: "/" },
-        { name: "Fokuslista", path: "/About" }
-      ]
-    };
-  }
+        { name: "Fokuslista", path: "/About" }];
 }
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .navBar {
-
   display: flex;
   flex-direction: row;
   align-items: center;

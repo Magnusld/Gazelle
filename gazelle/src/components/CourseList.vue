@@ -3,25 +3,25 @@
     <h1>Mine løp</h1>
     <span id="separator"></span>
     <div class="courses">
-      <Course v-for="(course, index) in courses" :key="index" :course="course" />
+      <CourseListing v-for="(course, index) in courses" :key="index" :course="course" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import type { Course } from "@/types"
+import { Component, Prop, Vue } from "vue-property-decorator";
+import type { Course } from "@/types";
+import CourseListing from "./CourseListing.vue";
 
-@Options({
-  props: {
-    courses: [Course]
-  }
+@Component({
+  components: { CourseListing }
 })
 export default class CourseList extends Vue {
-  courses!: Course[];
+  @Prop()
+  private courses!: Course[];
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>
