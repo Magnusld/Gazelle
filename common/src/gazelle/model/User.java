@@ -64,10 +64,26 @@ public class User {
         this.password = password;
     }
 
+    public Set<CourseRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<CourseRole> roles) {
+        this.roles = roles;
+    }
+
+    public TokenLogIn getToken() {
+        return token;
+    }
+
+    public void setToken(TokenLogIn token) {
+        this.token = token;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
         return Objects.equals(id, user.id);
     }
