@@ -3,7 +3,11 @@
     <h1>Mine løp</h1>
     <span id="separator"></span>
     <div class="courses">
-      <CourseListing v-for="(course, index) in courses" :key="index" :course="course" />
+      <CourseListing
+        v-for="(course, index) in courses"
+        :key="index"
+        :course="course"
+      />
     </div>
   </div>
 </template>
@@ -22,6 +26,4 @@ export default class CourseList extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

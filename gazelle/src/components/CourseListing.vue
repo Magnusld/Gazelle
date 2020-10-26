@@ -1,8 +1,16 @@
 <template>
   <div class="courseListing">
-    <h1>Course</h1>
-    <span id="separator"></span>
-    name: {{ course.name }}
+    <div id="top">
+      <h2>{{ course.name }}</h2>
+      <span>Neste frist: I dag</span>
+    </div>
+    <p>Nå: Datastrukturer (4 dager igjen)</p>
+    <div id="progress">
+      <span>Gjort: 11/16</span>
+      <span>På fokuslista: 3</span>
+    </div>
+    <!-- PROGRESS BAR -->
+    <p>Forrige: Kombinatorikk</p>
   </div>
 </template>
 
@@ -17,6 +25,4 @@ export default class CourseListing extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

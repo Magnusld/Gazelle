@@ -1,8 +1,8 @@
 <template>
-<div class="app">
-  <TopBar />
-  <router-view />
-</div>
+  <div class="app">
+    <TopBar />
+    <router-view />
+  </div>
 </template>
 
 <script lang="ts">
