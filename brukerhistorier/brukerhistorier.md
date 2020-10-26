@@ -103,10 +103,24 @@ særlig viktig for faglærere.
 
 Som bruker og faglærer vil jeg bruke nettleser, slik at jeg slipper å installere programmer.
 
-## Viktig å kunne se
+#### Viktig å kunne se
 
 * Alt som allerede er implementert i JavaFX (us-1 + us-3)
 
-## Viktig å kunne gjøre
+#### Viktig å kunne gjøre
 
 * Alt som allerede er implementert i JavaFX (us-1 + us-3)
+
+## Skille mellom eierskap og følging av løp (us-6) &ndash; Middels prioritet
+
+Som faglærer vil jeg kunne eie løp fra i fjor, uten at de er i veien for årets løp,
+slik at jeg lettere har oversikt over hvilke løp som er relevante for semesteret.
+
+#### Viktig å kunne se
+
+* Hvilke løp man følger, og hvilke løp man eier
+
+#### Viktig å kunne gjøre 
+
+* Følge / avfølge alle offentlige og egne løp
+* Slette løp man eier
