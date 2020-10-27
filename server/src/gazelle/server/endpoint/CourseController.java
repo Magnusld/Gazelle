@@ -43,8 +43,7 @@ public class CourseController {
     }
 
     @PostMapping
-    public Course addNewCourse(@RequestBody Course course,
-                               @RequestHeader("Authorization") String auth) {
+    public Course addNewCourse(@RequestBody Course course, @RequestHeader("Authorization") String auth) {
         if (course.getId() != null)
             throw new ExistingEntityException();
 

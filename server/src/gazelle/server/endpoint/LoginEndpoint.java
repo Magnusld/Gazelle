@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 public class LoginEndpoint {
 
@@ -39,6 +41,7 @@ public class LoginEndpoint {
      */
     @PostMapping("/login")
     public LogInResponse login(@RequestBody LogInRequest request) {
+        Objects.requireNonNull(request);
         String username = request.getUsername();
         String password = request.getPassword();
 
@@ -50,6 +53,20 @@ public class LoginEndpoint {
 
         String token = tokenAuthService.createTokenForUser(user);
         return new LogInResponse(token, user);
+    }
+
+    /**
+     * Authenticates a user with an existing token.
+     * If the token is still valid, returns the User object the token belongs to.
+     * If the token is invalid, returns 401 (Unauthorized)
+     *
+     * @param auth the authentication token
+     * @return the user owning the token
+     * @throws gazelle.server.error.InvalidTokenException if the token is not valid
+     */
+    @GetMapping("/login")
+    public User loginWithToken(@RequestHeader("Authorization") String auth) {
+        return tokenAuthService.getUserForToken(auth);
     }
 
     /**

@@ -4,7 +4,10 @@ import gazelle.model.TokenLogIn;
 import gazelle.model.User;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.InvalidTokenException;
+import gazelle.server.error.MissingAuthorizationException;
+import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.TokenLogInRepository;
+import gazelle.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +26,12 @@ import java.util.UUID;
 public class TokenAuthService {
 
     private final TokenLogInRepository tokenRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TokenAuthService(TokenLogInRepository tokenRepository) {
+    public TokenAuthService(TokenLogInRepository tokenRepository, UserRepository userRepository) {
         this.tokenRepository = tokenRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -37,7 +42,10 @@ public class TokenAuthService {
      * @return the token created for the user (excluding Bearer-prefix)
      */
     public String createTokenForUser(User user) {
-        //Remove previous token from user
+        // Make sure the user exists
+        userRepository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
+
+        // Remove any previous token from user
         tokenRepository.findTokenLogInByUser(user).ifPresent(tokenRepository::delete);
 
         String token = UUID.randomUUID().toString();
@@ -55,6 +63,7 @@ public class TokenAuthService {
      * @throws InvalidTokenException if the token is malformed or doesn't belong to a user
      */
     public User getUserForToken(String token) {
+        TokenAuthService.assertTokenExists(token);
         token = stripBearer(token);
         Optional<User> user = tokenRepository.findUserByToken(token);
         return user.orElseThrow(InvalidTokenException::new);
@@ -97,6 +106,7 @@ public class TokenAuthService {
      * @throws InvalidTokenException if the token is malformed or doesn't belong to a user
      */
     public void removeToken(String token) {
+        TokenAuthService.assertTokenExists(token);
         token = stripBearer(token);
         if (!tokenRepository.existsByToken(token))
             throw new InvalidTokenException();
@@ -111,6 +121,14 @@ public class TokenAuthService {
      */
     public static final String BEARER_PREFIX = "Bearer ";
 
+    /**
+     * Removes the prefix "Bearer " from the string token and returns whats left.
+     * Throws if the string doesn't have the prefix.
+     *
+     * @param token with "Bearer " prefix
+     * @return token with prefix removed
+     * @throws InvalidTokenException if token doesn't have Bearer prefix
+     */
     public static String stripBearer(String token) {
         if (!token.startsWith(BEARER_PREFIX))
             throw new InvalidTokenException(
@@ -118,7 +136,25 @@ public class TokenAuthService {
         return token.substring(BEARER_PREFIX.length());
     }
 
+    /**
+     * Adds the prefix "Bearer " to the supplied string.
+     *
+     * @param token the text to be prefixed
+     * @return the token with a "Bearer " prefix
+     */
     public static String addBearer(String token) {
         return String.format("%s%s", BEARER_PREFIX, token);
+    }
+
+    /**
+     * Throws 401 (Unauthorized) if the token is null
+     *
+     * @param token to be checked
+     * @throws MissingAuthorizationException if token is null
+     */
+    public static void assertTokenExists(String token) {
+        //@Contract("null -> fail")
+        if (token == null)
+            throw new MissingAuthorizationException();
     }
 }
