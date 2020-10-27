@@ -1,25 +1,20 @@
 <template>
-  <md-app>
-    <md-app-toolbar class="navBar md-primary">
-      <img src="../assets/logo.png" alt="logo" id="navLogo" />
-
-      <md-button>Mine Løp</md-button>
-      <md-button>Fokuslista</md-button>
-
-      <md-button id="userInfo">
-        <span>Fornavn Etternavn</span>
-        <img
-          src="../assets/images/profPic.png"
-          alt="profilbilde"
-          id="profPic"
-        />
-      </md-button>
-
-      <!--<div v-for="(route, index) in routes" :key="index">
-        <router-link v-bind:to=route.path>{{ route.name }}</router-link>
-      </div>-->
-    </md-app-toolbar>
-  </md-app>
+  <div id="topBar">
+    <md-content class="md-layout md-primary md-elevation-2">
+      <div class="md-layout-item md-layout">
+        <img src="../assets/logo.png" alt="logo" id="navLogo" />
+        <md-tabs class="md-primary" id="navTabs" md-sync-route>
+          <md-tab md-label="Mine løp" to="/my-courses"></md-tab>
+          <md-tab md-label="Fokuslista" to="/focus-list"></md-tab>
+        </md-tabs>
+      </div>
+      <div class="md-layout-item" id="buttonContainer">
+        <md-button class="md-icon-button" id="userInfo" to="/user-settings">
+          <md-icon>person</md-icon>
+        </md-button>
+      </div>
+    </md-content>
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,35 +22,28 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class TopBar extends Vue {
-  routes = [
-    { name: "Mine Løp", path: "/" },
-    { name: "Fokuslista", path: "/About" }
-  ];
 }
 </script>
 
 <style scoped lang="scss">
-.navBar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 10px;
-  position: sticky;
-  top: 0;
-  color: white;
-  background-color: #075a86;
+#topBar{
+  z-index: 100;
+  width: 100%;
+}
+#navTabs{
+  margin:0;
+  width: 50%;
 }
 #navLogo {
-  height: 40px;
+  height: 45px;
+  padding: 5px;
 }
-#profPic {
-  border-radius: 50%;
-  height: 30px;
-  margin-left: 5px;
+#buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 #userInfo {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
+  float:right;
 }
 </style>
