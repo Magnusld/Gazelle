@@ -124,3 +124,19 @@ slik at jeg lettere har oversikt over hvilke løp som er relevante for semestere
 
 * Følge / avfølge alle offentlige og egne løp
 * Slette løp man eier
+
+## Administrator bruker (us-7) &ndash; Lav prioritet
+
+Som en administrator bruker vil jeg kunne se, endre og slette alt, 
+slik at jeg kan hjelpe faglærerer og studenter dersom de har problemer.
+
+#### Viktig å kunne se
+
+* Oversikt over alle løp
+* Oversikt over alle registrerte brukere
+
+#### Viktig å kunne gjøre
+
+* Redigere og slette løp og deltagere
+* Redigere og slette poster og gjøremål 
+  
