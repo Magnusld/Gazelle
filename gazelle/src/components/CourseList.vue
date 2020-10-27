@@ -1,14 +1,19 @@
 <template>
   <div class="courseList">
-    <h1>Mine løp</h1>
-    <span id="separator"></span>
-    <div class="courses">
+    <div class="horizontalSeparator">
+      <span class="md-headline">Mine løp</span>
+      <md-button class="md-icon-button">
+        <md-icon>delete</md-icon>
+      </md-button>
+    </div>
+    <md-divider></md-divider>
+    <md-content class="courses">
       <CourseListing
         v-for="(course, index) in courses"
         :key="index"
         :course="course"
       />
-    </div>
+    </md-content>
   </div>
 </template>
 
@@ -26,4 +31,15 @@ export default class CourseList extends Vue {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.horizontalSeparator{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0 10px 10px;
+}
+.courseList{
+  margin: auto;
+  width: 60%;
+}
+</style>

@@ -8,9 +8,15 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import TopBar from "@/components/TopBar.vue";
+import CourseListing from "@/components/CourseListing.vue";
+import CourseList from "@/components/CourseList.vue";
 
 @Component({
-  components: { TopBar }
+  components: {
+    CourseList,
+    TopBar,
+    CourseListing
+  }
 })
 export default class App extends Vue {}
 </script>
@@ -23,7 +29,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
 #app {
   width: 100%;
   min-height: 100vh;
