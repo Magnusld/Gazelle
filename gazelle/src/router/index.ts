@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import MyCourses from "@/views/MyCourses.vue";
 import FocusList from "@/views/FocusList.vue";
 import UserSettings from "@/views/UserSettings.vue";
+import LoginPage from "@/components/LoginPage.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes: Array<RouteConfig> = [
     path: "/user-settings",
     name: "User settings",
     component: UserSettings
+  },
+  {
+    path: "/",
+    name: "Login Page",
+    component: LoginPage
   }
 ];
 
