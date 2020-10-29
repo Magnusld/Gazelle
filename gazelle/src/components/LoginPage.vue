@@ -14,7 +14,7 @@
     </md-field>
     <div class="buttonBar">
       <md-button class="md-raised md-primary">Logg inn</md-button>
-      <md-button class="md-raised">Ny bruker</md-button>
+      <md-button class="md-primary">Ny bruker</md-button>
     </div>
   </div>
 </template>
