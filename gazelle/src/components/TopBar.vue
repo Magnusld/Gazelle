@@ -1,6 +1,5 @@
 <template>
-  <div id="topBar">
-    <md-content class="md-layout md-primary md-elevation-2">
+    <md-content class="md-layout md-primary md-elevation-2" id="topBar">
       <div class="md-layout-item md-layout">
         <router-link to="/">
           <img src="../assets/logo.png" alt="logo" id="navLogo"/>
@@ -16,7 +15,6 @@
         </md-button>
       </div>
     </md-content>
-  </div>
 </template>
 
 <script lang="ts">
@@ -28,10 +26,6 @@ export default class TopBar extends Vue {
 </script>
 
 <style scoped lang="scss">
-#topBar{
-  z-index: 100;
-  width: 100%;
-}
 #navTabs{
   margin:0;
   width: 50%;
