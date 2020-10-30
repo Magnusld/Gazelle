@@ -12,7 +12,6 @@
     <name>Gazelle</name>
 
     <modules>
-        <module>gazelleFX</module>
         <module>server</module>
         <module>common</module>
     </modules>
