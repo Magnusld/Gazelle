@@ -25,11 +25,23 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @ManyToMany
+    @JoinTable(
+            name = "user_course_follow",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
     @JsonIgnore
-    private Set<CourseRole> roles = new HashSet<>();
+    private Set<Course> following = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @ManyToMany
+    @JoinTable(
+            name = "user_course_own",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @JsonIgnore
+    private Set<Course> owning = new HashSet<>();
+
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JsonIgnore
     private TokenLogIn token;
     
@@ -64,12 +76,12 @@ public class User {
         this.password = password;
     }
 
-    public Set<CourseRole> getRoles() {
-        return roles;
+    public Set<Course> getFollowing() {
+        return following;
     }
 
-    public void setRoles(Set<CourseRole> roles) {
-        this.roles = roles;
+    public Set<Course> getOwning() {
+        return owning;
     }
 
     public TokenLogIn getToken() {

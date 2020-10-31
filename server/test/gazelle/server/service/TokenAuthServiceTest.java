@@ -1,15 +1,10 @@
 package gazelle.server.service;
 
-import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
-import gazelle.model.User;
-import gazelle.server.endpoint.LoginEndpoint;
-import gazelle.server.endpoint.UserController;
+import gazelle.server.TestHelper;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.InvalidTokenException;
+import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.error.UserNotFoundException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -26,87 +20,101 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class TokenAuthServiceTest {
 
     @Autowired
-    private LoginEndpoint loginEndpoint;
+    private TestHelper testHelper;
 
     @Autowired
     private TokenAuthService tokenAuthService;
 
-    @Autowired
-    private UserController userController;
+    @Test
+    public void createTokenForUser() {
+        assertThrows(UserNotFoundException.class, () -> {
+            tokenAuthService.createTokenForUser(5000L);
+        });
 
-    private User user1;
-    private String user1Token;
-    private User user2;
-    private String user2Token;
+        Long userId = testHelper.createTestUser();
+        String token = TokenAuthService.addBearer(
+                tokenAuthService.createTokenForUser(userId));
 
-    @BeforeAll
-    public void createUsers() {
-        LogInResponse r1 = loginEndpoint.signup(new SignUpRequest("TAST1", "1356394"));
-        user1 = r1.getUser();
-        user1Token = TokenAuthService.addBearer(r1.getToken());
-        LogInResponse r2 = loginEndpoint.signup(new SignUpRequest("TAST2", "1356394"));
-        user2 = r2.getUser();
-        user2Token = TokenAuthService.addBearer(r2.getToken());
+        assertEquals(userId, tokenAuthService.getUserIdFromToken(token));
+
+        // Create a new token, which should invalidate the first one
+        String token2 = TokenAuthService.addBearer(
+                tokenAuthService.createTokenForUser(userId));
+
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenAuthService.getUserObjectFromToken(token);
+        });
+
+        assertEquals(userId, tokenAuthService.getUserIdFromToken(token2));
+
+        testHelper.deleteTestUser(userId);
     }
 
     @Test
-    public void testAssertLoggedIn() {
-        assertEquals(user1, tokenAuthService.assertUserLoggedIn(user1.getId(), user1Token));
-        tokenAuthService.assertUserLoggedIn(user2, user2Token);
+    public void getUserFromToken() {
+        Long userId = testHelper.createTestUser();
+        String token = testHelper.logInUser(userId);
 
+        assertThrows(MissingAuthorizationException.class, () -> {
+            tokenAuthService.getUserIdFromToken(null);
+        });
         assertThrows(InvalidTokenException.class, () -> {
-            tokenAuthService.assertUserLoggedIn(user1, "not a token");
+            tokenAuthService.getUserObjectFromToken("Bearer: dummy");
+        });
+        assertEquals(userId, tokenAuthService.getUserIdFromToken(token));
+        assertEquals(userId, tokenAuthService.getUserObjectFromToken(token).getId());
+
+        testHelper.deleteTestUser(userId);
+    }
+
+    @Test
+    public void assertTokenForUser() {
+        final Long userId = testHelper.createTestUser();
+        final Long user2Id = testHelper.createTestUser();
+        final String token = testHelper.logInUser(userId);
+
+        tokenAuthService.assertTokenForUser(userId, token);
+
+        assertThrows(MissingAuthorizationException.class, () -> {
+            tokenAuthService.assertTokenForUser(userId, null);
+        });
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenAuthService.assertTokenForUser(userId, "wrong-token");
         });
         assertThrows(AuthorizationException.class, () -> {
-            tokenAuthService.assertUserLoggedIn(user1, user2Token);
+            tokenAuthService.assertTokenForUser(user2Id, token);
         });
+
+        testHelper.deleteTestUser(userId);
+        testHelper.deleteTestUser(user2Id);
     }
 
     @Test
-    public void testGetUserForToken() {
-        assertEquals(tokenAuthService.getUserForToken(user1Token), user1);
-        assertEquals(tokenAuthService.getUserForToken(user2Token), user2);
+    public void removeToken() {
+        final Long userId = testHelper.createTestUser();
+        final String token = testHelper.logInUser(userId);
+
+        assertEquals(userId, tokenAuthService.getUserIdFromToken(token));
+
+        tokenAuthService.removeToken(token);
 
         assertThrows(InvalidTokenException.class, () -> {
-            tokenAuthService.getUserForToken("not a token");
+            tokenAuthService.getUserIdFromToken(token);
         });
-    }
 
-    @Test
-    public void testCreateTokenForUser() {
-        String oldUser1Token = user1Token;
-        user1Token = TokenAuthService.addBearer(tokenAuthService.createTokenForUser(user1));
         assertThrows(InvalidTokenException.class, () -> {
-            tokenAuthService.getUserForToken(oldUser1Token);
+            tokenAuthService.removeToken(token);
         });
-        assertEquals(user1, tokenAuthService.getUserForToken(user1Token));
-    }
+        assertThrows(MissingAuthorizationException.class, () -> {
+            tokenAuthService.removeToken(null);
+        });
 
-    @Test
-    public void testDeleteToken() {
-        assertEquals(user1, tokenAuthService.getUserForToken(user1Token));
-        tokenAuthService.removeToken(user1Token);
-        assertThrows(InvalidTokenException.class, () -> {
-            tokenAuthService.getUserForToken(user1Token);
-        });
-        user1Token = TokenAuthService.addBearer(tokenAuthService.createTokenForUser(user1));
-        assertEquals(user1, tokenAuthService.getUserForToken(user1Token));
-    }
+        //Test that creating a new token works
+        final String token2 = TokenAuthService.addBearer(
+                tokenAuthService.createTokenForUser(userId));
 
-    @AfterAll
-    public void deleteUsers() {
-        assertEquals(user1, tokenAuthService.getUserForToken(user1Token));
-        assertEquals(user2, tokenAuthService.getUserForToken(user2Token));
-        userController.deleteUser(user1.getId(), user1Token);
-        userController.deleteUser(user2.getId(), user2Token);
-        assertThrows(InvalidTokenException.class, () -> {
-            tokenAuthService.getUserForToken(user1Token);
-        });
-        assertThrows(InvalidTokenException.class, () -> {
-            tokenAuthService.getUserForToken(user2Token);
-        });
-        assertThrows(UserNotFoundException.class, () -> {
-            tokenAuthService.createTokenForUser(user1);
-        });
+        assertEquals(userId, tokenAuthService.getUserIdFromToken(token2));
+
+        testHelper.deleteTestUser(userId);
     }
 }

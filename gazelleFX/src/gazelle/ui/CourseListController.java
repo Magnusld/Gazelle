@@ -1,7 +1,6 @@
 package gazelle.ui;
 
 import gazelle.model.Course;
-import gazelle.model.CourseRole.CourseRoleType;
 import gazelle.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,8 +34,8 @@ public class CourseListController extends BaseController {
         clearView();
         app.sideRun(() -> {
             User user = app.getSession().getLoggedInUser();
-            List<Course> courses = app.getSession().getCoursesForUser(user, CourseRoleType.OWNER);
-            app.mainRun(() -> setCourses(courses));
+            //List<Course> courses = app.getSession().getCoursesForUser(user, CourseRoleType.OWNER);
+            //app.mainRun(() -> setCourses(courses));
         });
     }
 
@@ -88,8 +87,8 @@ public class CourseListController extends BaseController {
                 Course course = new Course(name);
                 course = app.getSession().postNewCourse(course);
                 User user = app.getSession().getLoggedInUser();
-                app.getSession()
-                        .setUserRoleForCourse(user, course, CourseRoleType.OWNER);
+                //app.getSession()
+                //        .setUserRoleForCourse(user, course, CourseRoleType.OWNER);
             } catch (Exception e) {
                 //TODO: Tell user that something went wrong
                 throw e;

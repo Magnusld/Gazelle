@@ -3,14 +3,18 @@ package gazelle.server.service;
 import gazelle.model.Course;
 import gazelle.model.User;
 import gazelle.server.TestHelper;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import gazelle.server.error.CourseNotFoundException;
+import gazelle.server.error.UserNotFoundException;
+import gazelle.server.repository.CourseRepository;
+import gazelle.server.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,125 +24,109 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CourseAndUserServiceTest {
 
     @Autowired
-    private CourseAndUserService courseAndUserService;
-    @Autowired
     private TestHelper testHelper;
 
-    private User user1;
-    private User user2;
-    private Course course1;
-    private Course course2;
+    @Autowired
+    private CourseAndUserService courseAndUserService;
 
-    @BeforeAll
-    public void setup() {
-        user1 = testHelper.createTestUser();
-        user2 = testHelper.createTestUser();
-        course1 = testHelper.createTestCourse();
-        course2 = testHelper.createTestCourse();
-    }
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
+    @Transactional
     public void followerTest() {
-        assertTrue(course1.getFollowers().isEmpty());
+        final User user1 = testHelper.createTestUserObject();
+        final User user2 = testHelper.createTestUserObject();
+
+        final Course course1 = testHelper.createTestCourseObject();
+
+        assertFalse(courseAndUserService.isFollowing(user1, course1));
         courseAndUserService.addFollower(user1, course1);
-        assertTrue(course1.getFollowers().contains(user1));
-        assertFalse(course1.getFollowers().contains(user2));
+        assertTrue(courseAndUserService.isFollowing(user1, course1));
+        assertFalse(courseAndUserService.isFollowing(user2, course1));
+
+        assertEquals(1, user1.getFollowing().size());
+        assertEquals(1, course1.getFollowers().size());
         assertTrue(user1.getFollowing().contains(course1));
-        assertTrue(courseAndUserService.isFollower(user1, course1));
-        assertFalse(user1.getFollowing().contains(course2));
-        assertFalse(courseAndUserService.isFollower(user1, course2));
-        courseAndUserService.addFollower(user1, course2);
-        assertTrue(user1.getFollowing().contains(course2));
-        assertTrue(courseAndUserService.isFollower(user1, course2));
-        courseAndUserService.addFollower(user1, course2); //Add again
-        assertEquals(2, user1.getFollowing().size());
-        assertEquals(1, course2.getFollowers().size());
+        assertTrue(course1.getFollowers().contains(user1));
 
-        assertFalse(courseAndUserService.removeFollower(user2, course2));
-        assertTrue(courseAndUserService.removeFollower(user1, course2));
-        assertFalse(courseAndUserService.removeFollower(user1, course2));
-        assertEquals(1, user1.getFollowing().size());
-        assertEquals(0, course2.getFollowers().size());
+        courseAndUserService.addFollower(user2, course1);
+        assertEquals(2, course1.getFollowers().size());
 
-        courseAndUserService.removeFollower(user1, course1);
-        courseAndUserService.removeFollower(user2, course1);
+        assertTrue(courseAndUserService.removeFollower(user1, course1));
+        assertFalse(courseAndUserService.removeFollower(user1, course1));
+
+        assertTrue(user1.getFollowing().isEmpty());
+
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+        TestTransaction.start(); //We commit the changes to check the DB round trip
+
+        User dbUser1 = userRepository.findById(user1.getId())
+                .orElseThrow(UserNotFoundException::new);
+        User dbUser2 = userRepository.findById(user2.getId())
+                .orElseThrow(UserNotFoundException::new);
+        assertTrue(dbUser1.getFollowing().isEmpty());
+        assertEquals(1, dbUser2.getFollowing().size());
+        assertTrue(dbUser2.getFollowing().contains(course1));
+
+        Course dbCourse1 = courseRepository.findById(course1.getId())
+                .orElseThrow(CourseNotFoundException::new);
+        assertTrue(dbCourse1.getFollowers().contains(user2));
+        assertTrue(dbCourse1.getFollowers().contains(dbUser2)); //Same id
+
+        testHelper.deleteTestUser(user1.getId());
+        testHelper.deleteTestUser(user2.getId());
+        testHelper.deleteTestCourse(course1.getId());
     }
 
     @Test
-    public void ownerTest() {
-        assertTrue(course1.getOwners().isEmpty());
-        courseAndUserService.addOwner(user1, course1);
-        assertTrue(course1.getOwners().contains(user1));
-        assertFalse(course1.getOwners().contains(user2));
-        assertTrue(user1.getOwning().contains(course1));
-        assertTrue(courseAndUserService.isOwner(user1, course1));
-        assertFalse(user1.getOwning().contains(course2));
-        assertFalse(courseAndUserService.isOwner(user1, course2));
-        courseAndUserService.addOwner(user1, course2);
-        assertTrue(user1.getOwning().contains(course2));
-        assertTrue(courseAndUserService.isOwner(user1, course2));
-        courseAndUserService.addOwner(user1, course2); //Add again
-        assertEquals(2, user1.getOwning().size());
-        assertEquals(1, course2.getOwners().size());
-
-        assertFalse(courseAndUserService.removeOwner(user2, course2));
-        assertTrue(courseAndUserService.removeOwner(user1, course2));
-        assertFalse(courseAndUserService.removeOwner(user1, course2));
-        assertEquals(1, user1.getOwning().size());
-        assertEquals(0, course2.getOwners().size());
-
-        courseAndUserService.removeOwner(user1, course1);
-        courseAndUserService.removeOwner(user2, course1);
-    }
-
-    @Test
-    public void bothTest() {
-        assertFalse(courseAndUserService.isFollower(user1, course1));
-        assertFalse(courseAndUserService.isOwner(user1, course1));
-        courseAndUserService.addFollower(user1, course1);
-        courseAndUserService.addOwner(user1, course1);
-        assertTrue(courseAndUserService.isFollower(user1, course1));
-        assertTrue(courseAndUserService.isOwner(user1, course1));
-        courseAndUserService.removeFollower(user1, course1);
-        courseAndUserService.removeOwner(user1, course1);
-    }
-
-    @Test
-    public void deletionTest() {
-        //What happens when one part of the relation is deleted?
+    @Transactional
+    public void deleteTest() {
+        User user1 = testHelper.createTestUserObject();
+        User user2 = testHelper.createTestUserObject();
+        Course course1 = testHelper.createTestCourseObject();
 
         courseAndUserService.addFollower(user1, course1);
-        courseAndUserService.addFollower(user1, course2);
-        courseAndUserService.addOwner(user1, course1);
-        courseAndUserService.addOwner(user2, course1);
-        courseAndUserService.addOwner(user2, course2);
+        courseAndUserService.addFollower(user2, course1);
 
-        testHelper.deleteTestCourse(course1);
+        assertEquals(2, course1.getFollowers().size());
 
-        assertEquals(1, user1.getFollowing().size());
-        assertEquals(0, user1.getOwning().size());
-        assertEquals(1, user2.getOwning().size());
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+        TestTransaction.start(); //We commit the changes to check the DB round trip
 
-        course1 = testHelper.createTestCourse();
+        course1 = courseRepository.findById(course1.getId())
+                .orElseThrow(CourseNotFoundException::new);
+        user1 = userRepository.findById(user1.getId())
+                .orElseThrow(UserNotFoundException::new);
 
-        testHelper.deleteTestUser(user1);
+        testHelper.deleteTestUser(user1.getId());
 
-        assertEquals(0, course2.getFollowers().size());
-        assertEquals(1, course2.getOwners().size());
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+        TestTransaction.start(); //We commit the changes to check the DB round trip
 
-        user1 = testHelper.createTestUser();
+        course1 = courseRepository.findById(course1.getId())
+                .orElseThrow(CourseNotFoundException::new);
+        user2 = userRepository.findById(user2.getId())
+                .orElseThrow(UserNotFoundException::new);
 
-        courseAndUserService.removeOwner(user2, course2);
-    }
+        //Now the user has been deleted
+        assertEquals(1, course1.getFollowers().size());
 
-    @Test
-    public void multipleObjectsTest() {
+        testHelper.deleteTestCourse(course1.getId());
 
-    }
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+        TestTransaction.start(); //We commit the changes to check the DB round trip
 
-    @AfterAll
-    public void cleanup() {
-        testHelper.deleteTestUser(user1);
-        testHelper.deleteTestUser(user2);
+        user2 = userRepository.findById(user2.getId())
+                .orElseThrow(UserNotFoundException::new);
+
+        assertTrue(user2.getFollowing().isEmpty());
     }
 }

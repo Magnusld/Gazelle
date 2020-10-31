@@ -5,7 +5,6 @@ import gazelle.client.error.ClientException;
 import gazelle.client.error.LogInException;
 import gazelle.client.error.SignUpException;
 import gazelle.model.Course;
-import gazelle.model.CourseRole.CourseRoleType;
 import gazelle.model.User;
 import org.jetbrains.annotations.Nullable;
 
@@ -182,29 +181,6 @@ public class GazelleSession {
     }
 
     /**
-     * Gets a list of all courses associated with a user.
-     *
-     * @param user the User object
-     * @param roleFilter if non-null: only return courses where the user has this role
-     * @return all courses owner or followed by the user
-     * @throws ClientException if request fails
-     */
-    public List<Course> getCoursesForUser(User user, @Nullable CourseRoleType roleFilter) {
-        WebTarget path = path("users/{userId}/courses")
-                .resolveTemplate("userId", user.getId());
-        if (roleFilter != null)
-            path = path.queryParam("role", roleFilter);
-        Response response = authorizedPath(path).get();
-
-        if (!successfulGet(response.getStatusInfo()))
-            throw new ClientException("Failed to get courses for user", response);
-
-        // This is how we specify what T is when receiving a List<T>
-        // https://stackoverflow.com/questions/35313767/how-to-get-liststring-as-response-from-jersey2-client
-        return response.readEntity(new GenericType<List<Course>>() {});
-    }
-
-    /**
      * Upload a new course to the server
      * @param course the new course
      * @return the new course with the id on the server
@@ -233,32 +209,6 @@ public class GazelleSession {
 
         if (!successfulDelete(response.getStatusInfo()))
             throw new ClientException("Failed to delete course", response);
-    }
-
-    /**
-     * Tell the server to assign a user to a specific role in a course.
-     * Will override any existing role between them.
-     * If role is null will delete the relationship.
-     * If the role didn't exist, attempting do delete it will cause a ClientException
-     * @param user the user to assign role to
-     * @param course the course in question
-     * @param role the desired role, or null to remove
-     * @throws ClientException if the request failed
-     */
-    public void setUserRoleForCourse(User user, Course course, @Nullable CourseRoleType role) {
-        WebTarget path = path("users/{userId}/courses/{courseId}/role")
-                .resolveTemplate("userId", user.getId())
-                .resolveTemplate("courseId", course.getId());
-
-        if (role != null) {
-            Response response = authorizedPath(path).put(Entity.json(role));
-            if (!successfulPut(response.getStatusInfo()))
-                throw new ClientException("Failed to set role for user for course", response);
-        } else {
-            Response response = authorizedPath(path).delete();
-            if (!successfulDelete(response.getStatusInfo()))
-                throw new ClientException("Failed to delete role for user for course", response);
-        }
     }
 
     /**

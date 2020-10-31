@@ -1,14 +1,19 @@
 package gazelle.server;
 
+import gazelle.auth.LogInRequest;
 import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
 import gazelle.model.Course;
 import gazelle.model.User;
+import gazelle.server.endpoint.CourseController;
 import gazelle.server.endpoint.LoginEndpoint;
+import gazelle.server.error.CourseNotFoundException;
+import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.UserRepository;
+import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -16,37 +21,62 @@ import java.util.UUID;
 public class TestHelper {
 
     @Autowired
-    private LoginEndpoint loginEndpoint;
+    private TokenAuthService tokenAuthService;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private CourseRepository courseRepository;
 
-    public String randString() {
+    public String makeRandomString() {
         return UUID.randomUUID().toString();
     }
 
-    public User createTestUser() {
-        String name = randString();
-        User user = new User(name, name);
+    public User createTestUserObject() {
+        User user = new User(makeRandomString(), makeRandomString());
         return userRepository.save(user);
     }
 
-    public LogInResponse createLoggedInTestUser() {
-        String name = randString();
-        return loginEndpoint.signup(new SignUpRequest(name, name));
+    public User createLoggedInTestUserObject() {
+        User user = new User(makeRandomString(), makeRandomString());
+        userRepository.save(user);
+        tokenAuthService.createTokenForUser(user);
+        return user;
     }
 
-    public void deleteTestUser(User user) {
-        userRepository.delete(user);
+    @Transactional
+    public Long createTestUser() {
+        return createTestUserObject().getId();
     }
 
-    public Course createTestCourse() {
-        Course course = new Course(randString());
+    /**
+     * Logs a user in with its password
+     *
+     * @param userId the id of the user to log in
+     * @return the token, including "Bearer "-prefix
+     */
+    public String logInUser(Long userId) {
+        return TokenAuthService.addBearer(tokenAuthService.createTokenForUser(userId));
+    }
+
+    @Transactional
+    public void deleteTestUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    /**
+     * Creates a Course without any owners, followers or posts
+     *
+     * @return the course object
+     */
+    public Course createTestCourseObject() {
+        Course course = new Course(makeRandomString());
         return courseRepository.save(course);
     }
 
-    public void deleteTestCourse(Course course) {
-        courseRepository.delete(course);
+    @Transactional
+    public void deleteTestCourse(Long courseId) {
+        courseRepository.deleteById(courseId);
     }
 }
