@@ -14,8 +14,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
-
 @RestController
 public class LoginEndpoint {
 
@@ -88,11 +86,11 @@ public class LoginEndpoint {
         if (userRepository.findByUsername(username).isPresent())
             throw new GazelleException("Username taken", username, HttpStatus.CONFLICT);
 
-        if (password.length() < 4)
-            throw new GazelleException("Password too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
-
         if (username.length() < 4)
             throw new GazelleException("Username too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
+
+        if (password.length() < 4)
+            throw new GazelleException("Password too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
 
         User newUser = new User(username, password);
         userRepository.save(newUser);

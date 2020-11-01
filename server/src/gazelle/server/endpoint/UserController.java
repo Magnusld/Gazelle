@@ -6,7 +6,6 @@ import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,19 +23,16 @@ public class UserController {
     }
 
     @GetMapping
-    @Transactional
     public Iterable<User> findAll() {
         return userRepository.findAll();
     }
 
     @GetMapping("/username/{username}")
-    @Transactional
     public User findByUsername(@PathVariable String username) {
         return userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
     }
 
     @GetMapping("/{id}")
-    @Transactional
     public User findOne(@PathVariable Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }

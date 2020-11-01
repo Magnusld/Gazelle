@@ -29,7 +29,7 @@ public class TestHelper {
     @Autowired
     private CourseRepository courseRepository;
 
-    public String makeRandomString() {
+    public static String makeRandomString() {
         return UUID.randomUUID().toString();
     }
 
@@ -65,6 +65,10 @@ public class TestHelper {
         userRepository.deleteById(userId);
     }
 
+    public void deleteTestUser(User user) {
+        deleteTestUser(user.getId());
+    }
+
     /**
      * Creates a Course without any owners, followers or posts
      *
@@ -78,5 +82,9 @@ public class TestHelper {
     @Transactional
     public void deleteTestCourse(Long courseId) {
         courseRepository.deleteById(courseId);
+    }
+
+    public void deleteTestCourse(Course course) {
+        deleteTestCourse(course.getId());
     }
 }

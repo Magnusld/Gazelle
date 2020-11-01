@@ -85,6 +85,54 @@ public class CourseAndUserServiceTest {
 
     @Test
     @Transactional
+    public void ownerTest() {
+        final User user1 = testHelper.createTestUserObject();
+        final User user2 = testHelper.createTestUserObject();
+
+        final Course course1 = testHelper.createTestCourseObject();
+
+        assertFalse(courseAndUserService.isOwning(user1, course1));
+        courseAndUserService.addOwner(user1, course1);
+        assertTrue(courseAndUserService.isOwning(user1, course1));
+        assertFalse(courseAndUserService.isOwning(user2, course1));
+
+        assertEquals(1, user1.getOwning().size());
+        assertEquals(1, course1.getOwners().size());
+        assertTrue(user1.getOwning().contains(course1));
+        assertTrue(course1.getOwners().contains(user1));
+
+        courseAndUserService.addOwner(user2, course1);
+        assertEquals(2, course1.getOwners().size());
+
+        assertTrue(courseAndUserService.removeOwner(user1, course1));
+        assertFalse(courseAndUserService.removeOwner(user1, course1));
+
+        assertTrue(user1.getOwning().isEmpty());
+
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+        TestTransaction.start(); //We commit the changes to check the DB round trip
+
+        User dbUser1 = userRepository.findById(user1.getId())
+                .orElseThrow(UserNotFoundException::new);
+        User dbUser2 = userRepository.findById(user2.getId())
+                .orElseThrow(UserNotFoundException::new);
+        assertTrue(dbUser1.getOwning().isEmpty());
+        assertEquals(1, dbUser2.getOwning().size());
+        assertTrue(dbUser2.getOwning().contains(course1));
+
+        Course dbCourse1 = courseRepository.findById(course1.getId())
+                .orElseThrow(CourseNotFoundException::new);
+        assertTrue(dbCourse1.getOwners().contains(user2));
+        assertTrue(dbCourse1.getOwners().contains(dbUser2)); //Same id
+
+        testHelper.deleteTestUser(user1.getId());
+        testHelper.deleteTestUser(user2.getId());
+        testHelper.deleteTestCourse(course1.getId());
+    }
+
+    @Test
+    @Transactional
     public void deleteTest() {
         User user1 = testHelper.createTestUserObject();
         User user2 = testHelper.createTestUserObject();
