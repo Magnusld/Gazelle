@@ -12,6 +12,7 @@
       </md-tabs>
     </div>
     <div class="md-layout-item buttonContainer">
+      <md-button class="md-secondary" v-on:click="logout">Logg ut</md-button>
       <md-button class="md-icon-button" id="userInfo" to="/user-settings">
         <md-icon>person</md-icon>
       </md-button>
@@ -23,7 +24,16 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class TopBar extends Vue {}
+export default class TopBar extends Vue {
+
+
+  private logout() {
+    this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/login')
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">
