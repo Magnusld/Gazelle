@@ -37,32 +37,34 @@ public class LoginEndpointTest {
     @Test
     public void signup() {
         GazelleException ex = assertThrows(GazelleException.class, () -> {
-            loginEndpoint.signup(new SignUpRequest("hal", "hal"));
+            loginEndpoint.signup(new SignUpRequest("hal", "hal", "hal", "hal"));
         });
         assertEquals("Username too short", ex.getReason());
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, ex.getStatusCode());
 
         ex = assertThrows(GazelleException.class, () -> {
-            loginEndpoint.signup(new SignUpRequest("hall", "hal"));
+            loginEndpoint.signup(new SignUpRequest("hall", "hal", "hal", "hal"));
         });
         assertEquals("Password too short", ex.getReason());
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, ex.getStatusCode());
 
-        final String NAME = "testuser";
+        final String FIRSTNAME = "testfirst";
+        final String LASTNAME = "testlast";
+        final String EMAIL = "testemail";
         final String PASS = "testpass";
 
-        LogInResponse response = loginEndpoint.signup(new SignUpRequest(NAME, PASS));
+        LogInResponse response = loginEndpoint.signup(new SignUpRequest(FIRSTNAME, LASTNAME, EMAIL, PASS));
         User user = response.getUser();
         String token = TokenAuthService.addBearer(response.getToken());
 
-        assertEquals(NAME, user.getUsername());
+        assertEquals(EMAIL, user.getEmail());
         assertEquals(PASS, user.getPassword());
         assertEquals(user, tokenAuthService.getUserObjectFromToken(token));
 
         ex = assertThrows(GazelleException.class, () -> {
-            loginEndpoint.signup(new SignUpRequest(NAME, "dummy"));
+            loginEndpoint.signup(new SignUpRequest("dummy", "dummy",EMAIL, "dummy"));
         });
-        assertEquals("Username taken", ex.getReason());
+        assertEquals("Email taken", ex.getReason());
         assertEquals(HttpStatus.CONFLICT, ex.getStatusCode());
 
         testHelper.deleteTestUser(user);
@@ -75,9 +77,9 @@ public class LoginEndpointTest {
             loginEndpoint.login(new LogInRequest("dummy username", "dummy password"));
         });
         assertThrows(LoginFailedException.class, () -> {
-            loginEndpoint.login(new LogInRequest(user.getUsername(), "dummy password"));
+            loginEndpoint.login(new LogInRequest(user.getEmail(), "dummy password"));
         });
-        LogInResponse response = loginEndpoint.login(new LogInRequest(user.getUsername(), user.getPassword()));
+        LogInResponse response = loginEndpoint.login(new LogInRequest(user.getEmail(), user.getPassword()));
         assertEquals(user, response.getUser());
         String token = TokenAuthService.addBearer(response.getToken());
         assertEquals(user, tokenAuthService.getUserObjectFromToken(token));

@@ -27,9 +27,9 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping("/username/{username}")
-    public User findByUsername(@PathVariable String username) {
-        return userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+    @GetMapping("/email/{email}")
+    public User findByEmail(@PathVariable String email) {
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 
     @GetMapping("/{id}")

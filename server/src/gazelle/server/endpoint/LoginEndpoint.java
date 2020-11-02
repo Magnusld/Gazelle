@@ -42,10 +42,10 @@ public class LoginEndpoint {
     @PostMapping("/login")
     @Transactional
     public LogInResponse login(@RequestBody LogInRequest request) {
-        String username = request.getUsername();
+        String email = request.getEmail();
         String password = request.getPassword();
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(LoginFailedException::new);
 
         if (!user.getPassword().equals(password))
@@ -80,19 +80,21 @@ public class LoginEndpoint {
     @PostMapping("/signup")
     @Transactional
     public LogInResponse signup(@RequestBody SignUpRequest request) {
-        String username = request.getUsername();
+        String firstname = request.getFirstname();
+        String lastname = request.getLastname();
+        String email = request.getEmail();
         String password = request.getPassword();
 
-        if (userRepository.findByUsername(username).isPresent())
-            throw new GazelleException("Username taken", username, HttpStatus.CONFLICT);
+        if (userRepository.findByEmail(email).isPresent())
+            throw new GazelleException("Email taken", email, HttpStatus.CONFLICT);
 
-        if (username.length() < 4)
-            throw new GazelleException("Username too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
+        if (email.length() < 4)
+            throw new GazelleException("Email too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
 
         if (password.length() < 4)
             throw new GazelleException("Password too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
 
-        User newUser = new User(username, password);
+        User newUser = new User(firstname, lastname, email, password);
         userRepository.save(newUser);
 
         String token = tokenAuthService.createTokenForUser(newUser);
