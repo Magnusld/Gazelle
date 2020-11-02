@@ -17,7 +17,11 @@
       </div>
       <md-field>
         <label>E-post:</label>
-        <md-input v-model="initial" type="email" autocomplete="email"></md-input>
+        <md-input
+          v-model="initial"
+          type="email"
+          autocomplete="email"
+        ></md-input>
       </md-field>
       <div class="horizontalWrapper">
         <md-field :md-toggle-password="true" class="horizontalField">
@@ -29,30 +33,30 @@
           <md-input v-model="password" type="password"></md-input>
         </md-field>
       </div>
-      <md-button class="md-raised md-primary signUpButton" v-on:keyup.enter="signUp">
-        Opprett Bruker</md-button>
+      <md-button
+        class="md-raised md-primary signUpButton"
+        v-on:keyup.enter="signUp"
+      >
+        Opprett Bruker</md-button
+      >
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 @Component
-export default class SignUpPage extends Vue {
-
-
-}
+export default class SignUpPage extends Vue {}
 </script>
 
 <style scoped>
-
-.horizontalSeparator{
+.horizontalSeparator {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 0 10px 10px;
 }
-.horizontalWrapper{
+.horizontalWrapper {
   display: flex;
   justify-content: space-between;
 }
@@ -62,11 +66,11 @@ export default class SignUpPage extends Vue {
   align-items: center;
   height: 90vh;
 }
-.signUpButton{
+.signUpButton {
   display: flex;
   width: 100%;
 }
-.horizontalField{
+.horizontalField {
   width: 48%;
 }
 </style>

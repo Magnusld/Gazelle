@@ -30,8 +30,8 @@ const routes: Array<RouteConfig> = [
     component: LoginPage
   },
   {
-    path: "/ny_bruker",
-    name: "Login Page",
+    path: "/signUp",
+    name: "Sign Up Page",
     component: SignUpPage
   }
 ];
