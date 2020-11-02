@@ -35,6 +35,13 @@ public class CourseAndUserService {
         course.getOwners().add(user);
     }
 
+    @Transactional
+    public void addOwner(Long userId, Long courseId) {
+        addOwner(
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
+                courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
+    }
+
     /**
      * Remove ownership of a course from a user.
      *
@@ -46,6 +53,13 @@ public class CourseAndUserService {
         final boolean result = user.getOwning().remove(course);
         course.getOwners().remove(user);
         return result;
+    }
+
+    @Transactional
+    public boolean removeOwner(Long userId, Long courseId) {
+        return removeOwner(
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
+                courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
     }
 
     /**
@@ -78,6 +92,13 @@ public class CourseAndUserService {
         course.getFollowers().add(user);
     }
 
+    @Transactional
+    public void addFollower(Long userId, Long courseId) {
+        removeOwner(
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
+                courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
+    }
+
     /**
      * Unfollow a user from a course.
      *
@@ -91,6 +112,13 @@ public class CourseAndUserService {
         return result;
     }
 
+    @Transactional
+    public boolean removeFollower(Long userId, Long courseId) {
+        return removeFollower(
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
+                courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
+    }
+
     /**
      * Checks if a use follows a course
      *
@@ -100,5 +128,12 @@ public class CourseAndUserService {
      */
     public boolean isFollowing(User user, Course course) {
         return user.getFollowing().contains(course);
+    }
+
+    @Transactional
+    public boolean isFollowing(Long userId, Long courseId) {
+        return isOwning(
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
+                courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
     }
 }

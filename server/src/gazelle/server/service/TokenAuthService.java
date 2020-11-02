@@ -86,7 +86,6 @@ public class TokenAuthService {
      * @return the id of the user owning the token
      * @throws InvalidTokenException if the token doesn't belong to any user
      */
-    @Transactional
     public Long getUserIdFromToken(@Nullable String token) {
         return getUserObjectFromToken(token).getId();
     }
@@ -103,6 +102,18 @@ public class TokenAuthService {
         Long authedId = getUserIdFromToken(token);
         if (!authedId.equals(userId))
             throw new AuthorizationException();
+    }
+
+    /**
+     * Checks that the token is a valid credential for the userId
+     *
+     * @param user the user we want to be logged in as
+     * @param token the token we are authorized as (including Bearer-prefix)
+     * @throws InvalidTokenException if the token is invalid
+     * @throws AuthorizationException if the user is not the one we are logged in as
+     */
+    public void assertTokenForUser(User user, @Nullable String token) {
+        assertTokenForUser(user.getId(), token);
     }
 
     /**

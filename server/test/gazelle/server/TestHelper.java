@@ -38,13 +38,6 @@ public class TestHelper {
         return userRepository.save(user);
     }
 
-    public User createLoggedInTestUserObject() {
-        User user = new User(makeRandomString(), makeRandomString());
-        userRepository.save(user);
-        tokenAuthService.createTokenForUser(user);
-        return user;
-    }
-
     @Transactional
     public Long createTestUser() {
         return createTestUserObject().getId();
