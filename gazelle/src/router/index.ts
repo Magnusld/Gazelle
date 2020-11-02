@@ -4,8 +4,9 @@ import MyCourses from "@/views/MyCourses.vue";
 import FocusList from "@/views/FocusList.vue";
 import UserSettings from "@/views/UserSettings.vue";
 import LoginPage from "@/components/LoginPage.vue";
-import store from "@/store";
 import Home from "@/views/Home.vue";
+import SignUpPage from "@/components/SignUpPage.vue";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -43,6 +44,11 @@ const routes: Array<RouteConfig> = [
     path: "/login",
     name: "Login Page",
     component: LoginPage
+  },
+  {
+    path: "/signUp",
+    name: "Sign Up Page",
+    component: SignUpPage
   }
 ];
 
