@@ -50,9 +50,9 @@ public class UserControllerTest {
 
     @Test
     public void findById() {
-        assertEquals(user1, userController.findOne(user1.getId()));
+        assertEquals(user1, userController.findById(user1.getId()));
         assertThrows(UserNotFoundException.class, () -> {
-            userController.findOne(5000L);
+            userController.findById(5000L);
         });
     }
 

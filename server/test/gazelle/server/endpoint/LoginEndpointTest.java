@@ -8,6 +8,7 @@ import gazelle.server.TestHelper;
 import gazelle.server.error.GazelleException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.LoginFailedException;
+import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -92,6 +93,26 @@ public class LoginEndpointTest {
             loginEndpoint.loginWithToken("Bearer: dummy");
         });
         assertEquals(user, loginEndpoint.loginWithToken(token));
+        testHelper.deleteTestUser(user);
+    }
+
+    @Test
+    public void logout() {
+        User user = testHelper.createTestUserObject();
+        String token = testHelper.logInUser(user.getId());
+
+        assertThrows(MissingAuthorizationException.class, () -> {
+            loginEndpoint.logout(null);
+        });
+        assertThrows(InvalidTokenException.class, () -> {
+            loginEndpoint.logout("Bearer: dummy");
+        });
+        loginEndpoint.logout(token);
+
+        assertThrows(InvalidTokenException.class, () -> {
+            tokenAuthService.getUserIdFromToken(token);
+        });
+
         testHelper.deleteTestUser(user);
     }
 }

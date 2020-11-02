@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User findOne(@PathVariable Long id) {
+    public User findById(@PathVariable Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 

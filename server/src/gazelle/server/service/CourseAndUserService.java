@@ -2,6 +2,8 @@ package gazelle.server.service;
 
 import gazelle.model.Course;
 import gazelle.model.User;
+import gazelle.server.endpoint.CourseController;
+import gazelle.server.endpoint.UserController;
 import gazelle.server.error.CourseNotFoundException;
 import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.CourseRepository;
@@ -10,11 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-import java.util.Set;
-
 @Service
 public class CourseAndUserService {
+
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
+
+    @Autowired
+    public CourseAndUserService(UserRepository userRepository, CourseRepository courseRepository) {
+        this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
+    }
+
     /**
      * Add a user as an owner, unless it already owns the course.
      *
@@ -49,6 +58,14 @@ public class CourseAndUserService {
     public boolean isOwning(User user, Course course) {
         return user.getOwning().contains(course);
     }
+
+    @Transactional
+    public boolean isOwning(Long userId, Long courseId) {
+        return isOwning(
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
+                courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
+    }
+
 
     /**
      * Add a user as a follower, unless it already owns the course.

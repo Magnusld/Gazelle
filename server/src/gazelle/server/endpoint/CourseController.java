@@ -37,7 +37,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public Course findOne(@PathVariable Long id) {
+    public Course findById(@PathVariable Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(CourseNotFoundException::new);
     }
