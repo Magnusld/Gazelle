@@ -32,13 +32,13 @@ export default class CourseList extends Vue {
 </script>
 
 <style scoped lang="scss">
-.horizontalSeparator{
+.horizontalSeparator {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0 10px 10px;
 }
-.courseList{
+.courseList {
   margin: auto;
   width: 60%;
 }
