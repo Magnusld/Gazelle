@@ -15,7 +15,7 @@
       </md-field>
       <div class="buttonBar">
         <md-button class="md-raised md-primary" v-on:keyup.enter="login">Logg inn</md-button>
-        <md-button class="md-primary">Ny bruker</md-button>
+        <md-button class="md-primary" to="/ny_bruker">Ny bruker</md-button>
       </div>
     </div>
   </div>
