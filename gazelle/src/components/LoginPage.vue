@@ -14,20 +14,19 @@
         <md-input v-model="password" type="password"></md-input>
       </md-field>
       <div class="buttonBar">
-        <md-button class="md-raised md-primary" v-on:keyup.enter="login">Logg inn</md-button>
-        <md-button class="md-primary">Ny bruker</md-button>
+        <md-button class="md-raised md-primary" v-on:keyup.enter="login"
+          >Logg inn</md-button
+        >
+        <md-button class="md-primary" to="/signUp">Ny bruker</md-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 @Component
-export default class LoginPage extends Vue{
-
-}
-
+export default class LoginPage extends Vue {}
 </script>
 
 <style scoped lang="scss">
@@ -37,23 +36,21 @@ export default class LoginPage extends Vue{
   align-items: center;
   height: 90vh;
 }
-.loginPage{
+.loginPage {
   width: 30%;
 }
-.horizontalSeparator{
+.horizontalSeparator {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 0 10px 10px;
 }
 
-.buttonBar{
+.buttonBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: auto;
   width: 100%;
 }
-
-
 </style>
