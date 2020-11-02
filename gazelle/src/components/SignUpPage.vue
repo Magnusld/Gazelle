@@ -8,24 +8,20 @@
       <div class="horizontalWrapper">
         <md-field class="horizontalField">
           <label>Fornavn:</label>
-          <md-input v-model="initial"></md-input>
+          <md-input v-model="initial" autocomplete="given-name"></md-input>
         </md-field>
         <md-field class="horizontalField">
           <label>Etternavn:</label>
-          <md-input v-model="initial"></md-input>
+          <md-input v-model="initial" autocomplete="family-name"></md-input>
         </md-field>
       </div>
       <md-field>
         <label>E-post:</label>
-        <md-input v-model="initial"></md-input>
-      </md-field>
-      <md-field>
-        <label>Ønsket brukernavn:</label>
-        <md-input v-model="initial"></md-input>
+        <md-input v-model="initial" type="email" autocomplete="email"></md-input>
       </md-field>
       <div class="horizontalWrapper">
-        <md-field :md-toggle-password="false" class="horizontalField">
-          <label>Ønsket passord:</label>
+        <md-field :md-toggle-password="true" class="horizontalField">
+          <label>Passord:</label>
           <md-input v-model="password" type="password"></md-input>
         </md-field>
         <md-field :md-toggle-password="false" class="horizontalField">
