@@ -1,6 +1,6 @@
 <template>
-  <div class="userSettings">
-    Brukerinsstillinger
+  <div class="focusList">
+    Hjemmeside
   </div>
 </template>
 
@@ -8,5 +8,5 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class UserSettings extends Vue {}
+export default class Home extends Vue {}
 </script>

@@ -7,16 +7,18 @@
             <div class="md-title">{{ course.name }}</div>
             <span>Neste frist: I dag</span>
           </div>
-        <div class="md-subhead">Nå: Datastrukturer (4 dager igjen)</div>
+          <div class="md-subhead">Nå: Datastrukturer (4 dager igjen)</div>
         </md-card-header-text>
       </md-card-header>
       <md-card-content>
-
         <div class="spacing">
           <span>Gjort: 11/16</span>
           <span>På fokuslista: 3</span>
         </div>
-        <md-progress-bar md-mode="determinate" :md-value="68.75"></md-progress-bar>
+        <md-progress-bar
+          md-mode="determinate"
+          :md-value="68.75"
+        ></md-progress-bar>
         <p>Forrige: Kombinatorikk</p>
       </md-card-content>
     </md-ripple>
