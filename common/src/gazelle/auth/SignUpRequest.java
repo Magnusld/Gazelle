@@ -35,8 +35,8 @@ public class SignUpRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SignUpRequest request = (SignUpRequest) o;
-        return Objects.equals(username, request.username) &&
-                Objects.equals(password, request.password);
+        return Objects.equals(username, request.username)
+                && Objects.equals(password, request.password);
     }
 
     @Override

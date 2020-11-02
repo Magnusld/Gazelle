@@ -1,16 +1,10 @@
 package gazelle.server.endpoint;
 
-import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
 import gazelle.model.Course;
-import gazelle.model.CourseRole;
-import gazelle.model.User;
-import gazelle.server.error.AuthorizationException;
-import gazelle.server.error.CourseNotFoundException;
-import gazelle.server.error.InvalidTokenException;
-import gazelle.server.error.MissingAuthorizationException;
-import gazelle.server.service.CourseRoleService;
-import gazelle.server.service.TokenAuthService;
+import gazelle.server.TestHelper;
+import gazelle.server.error.*;
+import gazelle.server.repository.UserRepository;
+import gazelle.server.service.CourseAndUserService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,7 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,113 +25,100 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CourseControllerTest {
 
     @Autowired
-    private LoginEndpoint loginEndpoint;
-
-    @Autowired
     private CourseController courseController;
-
-    @Autowired
-    private CourseRoleService courseRoleService;
 
     @Autowired
     private UserController userController;
 
-    private User user1;
-    private String user1Token;
-    private User user2;
-    private String user2Token;
+    @Autowired
+    private CourseAndUserService courseAndUserService;
+
+    @Autowired
+    private TestHelper testHelper;
+
+    private Course course1;
+    private Course course2;
 
     @BeforeAll
     public void setup() {
-        SignUpRequest request = new SignUpRequest("TEST_USR", "HELLO-SAILOR");
-        LogInResponse response = loginEndpoint.signup(request);
-        user1 = response.getUser();
-        user1Token = TokenAuthService.addBearer(response.getToken());
-
-        request = new SignUpRequest("TEST_USR2", "HELLO-WORLD");
-        response = loginEndpoint.signup(request);
-        user2 = response.getUser();
-        user2Token = TokenAuthService.addBearer(response.getToken());
-    }
-
-    private Course addTmpCourse() {
-        Course course = new Course("Test");
-        return courseController.addNewCourse(course, user1Token);
-    }
-
-    private void deleteTmpCourse(Course course) {
-        courseController.deleteCourse(course.getId(), user1Token);
+        course1 = testHelper.createTestCourseObject();
+        course2 = testHelper.createTestCourseObject();
     }
 
     @Test
-    public void testFindAll() {
-        // Should be empty
-        assertFalse(courseController.findAll().iterator().hasNext());
-
-        Course c = addTmpCourse();
-
-        Iterator<Course> it = courseController.findAll().iterator();
-        assertEquals(c, it.next());
-        assertFalse(it.hasNext());
-
-        deleteTmpCourse(c);
+    public void findAll() {
+        List<Course> courses = new ArrayList<>();
+        courseController.findAll().forEach(courses::add);
+        assertEquals(2, courses.size());
+        assertTrue(courses.contains(course1));
+        assertTrue(courses.contains(course2));
     }
 
     @Test
-    public void testFindOne() {
-        Course c = addTmpCourse();
+    public void findById() {
+        assertEquals(course1, courseController.findById(course1.getId()));
+        assertThrows(CourseNotFoundException.class, () -> {
+            courseController.findById(5000L);
+        });
+    }
 
-        Long id = c.getId();
-        assertEquals(c, courseController.findOne(id));
+    @Test
+    public void addNewCourse() {
+        Long user = testHelper.createTestUser();
+        String token = testHelper.logInUser(user);
+        assertThrows(ExistingEntityException.class, () -> {
+            courseController.addNewCourse(course1, token);
+        });
 
-        deleteTmpCourse(c);
+        Course course = new Course("Testname");
+        assertThrows(InvalidTokenException.class, () -> {
+            courseController.addNewCourse(course, "Bearer: dummy");
+        });
+        courseController.addNewCourse(course, token);
+        assertNotNull(course.getId());
+
+        //Check that user is an owner
+        assertTrue(courseAndUserService.isOwning(user, course.getId()));
+        testHelper.deleteTestCourse(course);
+        testHelper.deleteTestUser(user);
+    }
+
+    @Test
+    public void deleteCourse() {
+        Long user = testHelper.createTestUser();
+        String token = testHelper.logInUser(user);
+        Long user2 = testHelper.createTestUser();
+        String token2 = testHelper.logInUser(user2);
 
         assertThrows(CourseNotFoundException.class, () -> {
-            courseController.findOne(c.getId());
+            courseController.deleteCourse(5000L, token);
         });
-    }
 
-    @Test
-    public void testAddNewCourse() {
-        Course course = new Course("Test");
-        Course course2 = new Course("Test2");
+        Course course = new Course("Testname");
+        courseController.addNewCourse(course, token);
 
-        assertThrows(InvalidTokenException.class, () -> {
-            courseController.addNewCourse(course, "dummy-token");
-        });
-        courseController.addNewCourse(course, user1Token);
-        courseController.addNewCourse(course2, user2Token);
-
-        assertEquals(CourseRole.CourseRoleType.OWNER,
-                courseRoleService.getCourseRole(user1, course));
-
-        assertNull(courseRoleService.getCourseRole(user2, course));
-
-        courseController.deleteCourse(course.getId(), user1Token);
-        courseController.deleteCourse(course2.getId(), user2Token);
-    }
-
-    @Test
-    public void testDeleteCourse() {
-        Course c = addTmpCourse();
-        assertThrows(AuthorizationException.class, () -> {
-            courseController.deleteCourse(c.getId(), user2Token);
-        });
         assertThrows(MissingAuthorizationException.class, () -> {
-            courseController.deleteCourse(c.getId(), null);
+            courseController.deleteCourse(course.getId(), null);
         });
         assertThrows(InvalidTokenException.class, () -> {
-            courseController.deleteCourse(c.getId(), "dummy-token");
+            courseController.deleteCourse(course.getId(), "Bearer: dummy");
         });
-        deleteTmpCourse(c);
+        assertThrows(AuthorizationException.class, () -> {
+            courseController.deleteCourse(course.getId(), token2);
+        });
+        courseController.deleteCourse(course.getId(), token);
+
         assertThrows(CourseNotFoundException.class, () -> {
-            courseController.deleteCourse(c.getId(), user1Token);
+            courseAndUserService.isOwning(user, course.getId());
         });
+
+        testHelper.deleteTestUser(user);
+        testHelper.deleteTestUser(user2);
     }
 
     @AfterAll
     public void cleanup() {
-        userController.deleteUser(user1.getId(), user1Token);
-        userController.deleteUser(user2.getId(), user2Token);
+        testHelper.deleteTestCourse(course1);
+        testHelper.deleteTestCourse(course2);
     }
 }

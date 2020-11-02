@@ -10,9 +10,9 @@ import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 @RestController
 public class LoginEndpoint {
@@ -40,8 +40,8 @@ public class LoginEndpoint {
      * @throws LoginFailedException if the username or password is wrong
      */
     @PostMapping("/login")
+    @Transactional
     public LogInResponse login(@RequestBody LogInRequest request) {
-        Objects.requireNonNull(request);
         String username = request.getUsername();
         String password = request.getPassword();
 
@@ -65,8 +65,9 @@ public class LoginEndpoint {
      * @throws gazelle.server.error.InvalidTokenException if the token is not valid
      */
     @GetMapping("/login")
-    public User loginWithToken(@RequestHeader("Authorization") String auth) {
-        return tokenAuthService.getUserForToken(auth);
+    @Transactional
+    public User loginWithToken(@RequestHeader("Authorization") @Nullable String auth) {
+        return tokenAuthService.getUserObjectFromToken(auth);
     }
 
     /**
@@ -77,6 +78,7 @@ public class LoginEndpoint {
      * @throws GazelleException if the name or password is denied (too short, taken etc.)
      */
     @PostMapping("/signup")
+    @Transactional
     public LogInResponse signup(@RequestBody SignUpRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
@@ -84,11 +86,11 @@ public class LoginEndpoint {
         if (userRepository.findByUsername(username).isPresent())
             throw new GazelleException("Username taken", username, HttpStatus.CONFLICT);
 
-        if (password.length() < 4)
-            throw new GazelleException("Password too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
-
         if (username.length() < 4)
             throw new GazelleException("Username too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
+
+        if (password.length() < 4)
+            throw new GazelleException("Password too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
 
         User newUser = new User(username, password);
         userRepository.save(newUser);
@@ -105,7 +107,7 @@ public class LoginEndpoint {
      */
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@RequestHeader("Authorization") String auth) {
+    public void logout(@RequestHeader("Authorization") @Nullable String auth) {
         tokenAuthService.removeToken(auth);
     }
 }
