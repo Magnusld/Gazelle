@@ -1,4 +1,7 @@
 
+# Npm / yarn files
+node_modules/
+
 # Save files
 database.*.db
 

@@ -8,11 +8,12 @@ import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.TokenLogInRepository;
 import gazelle.server.repository.UserRepository;
+import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,7 +23,6 @@ import java.util.UUID;
  * <p>See: https://swagger.io/docs/specification/authentication/bearer-authentication/
  */
 @Service
-@Transactional
 public class TokenAuthService {
 
     private final TokenLogInRepository tokenRepository;
@@ -42,61 +42,78 @@ public class TokenAuthService {
      * @return the token created for the user (excluding Bearer-prefix)
      */
     public String createTokenForUser(User user) {
-        // Make sure the user exists
-        userRepository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
-
-        // Remove any previous token from user
-        tokenRepository.findTokenLogInByUser(user).ifPresent(tokenRepository::delete);
+        TokenLogIn previous = user.getToken();
+        if (previous != null)
+            tokenRepository.delete(previous);
 
         String token = UUID.randomUUID().toString();
         TokenLogIn tokenLogIn = new TokenLogIn(user, token);
-        tokenRepository.save(tokenLogIn);
+        user.setToken(tokenLogIn);
         return token;
     }
 
     /**
-     * Gets the User object associated with an authorization token.
-     * Note that a previously valid token can become invalid at any time.
-     *
-     * @param token the token (including Bearer-prefix)
-     * @return the user for which the token belongs
-     * @throws InvalidTokenException if the token is malformed or doesn't belong to a user
+     * Creates an authorization token for a user
+     * @param userId the is of the user to create a token for
+     * @return the created token (excluding Bearer-prefix)
      */
-    public User getUserForToken(String token) {
-        TokenAuthService.assertTokenExists(token);
+    @Transactional
+    public String createTokenForUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return createTokenForUser(user);
+    }
+
+    /**
+     * Gets the User-object owning a token
+     *
+     * @param token the token (including "Bearer "-prefix)
+     * @return the user object owning the token
+     * @throws InvalidTokenException if the token doesn't belong to any user
+     */
+    public User getUserObjectFromToken(@Nullable String token) {
+        assertTokenNonNull(token);
         token = stripBearer(token);
-        Optional<User> user = tokenRepository.findUserByToken(token);
-        return user.orElseThrow(InvalidTokenException::new);
+        return userRepository.findByToken_Token(token)
+                .orElseThrow(InvalidTokenException::new);
     }
 
     /**
-     * Checks that the user object is the user we are logged in as
+     * Gets the id of the user owning a token
      *
-     * @param user the user object we want to be logged in as
-     * @param token the token we are authorized as (including Bearer-prefix)
-     * @throws InvalidTokenException if the token is invalid
-     * @throws AuthorizationException if the user is not the one we are logged in as
+     * @param token the token (including "Bearer "-prefix)
+     * @return the id of the user owning the token
+     * @throws InvalidTokenException if the token doesn't belong to any user
      */
-    public void assertUserLoggedIn(User user, String token) {
-        User authed = getUserForToken(token);
-        if (!authed.equals(user))
-            throw new AuthorizationException();
+    public Long getUserIdFromToken(@Nullable String token) {
+        return getUserObjectFromToken(token).getId();
     }
 
     /**
-     * Checks that the userId is the user we are logged in as
+     * Checks that the token is a valid credential for the userId
      *
      * @param userId the id of the user we want to be logged in as
      * @param token the token we are authorized as (including Bearer-prefix)
-     * @return User the user object of the authenticated in user
      * @throws InvalidTokenException if the token is invalid
      * @throws AuthorizationException if the user is not the one we are logged in as
      */
-    public User assertUserLoggedIn(Long userId, String token) {
-        User authed = getUserForToken(token);
-        if (!authed.getId().equals(userId))
+    public void assertTokenForUser(Long userId, @Nullable String token) {
+        Long authedId = getUserIdFromToken(token);
+        if (!authedId.equals(userId))
             throw new AuthorizationException();
-        return authed;
+    }
+
+    /**
+     * Checks that the token is a valid credential for the userId
+     *
+     * @param user the user we want to be logged in as
+     * @param token the token we are authorized as (including Bearer-prefix)
+     * @throws InvalidTokenException if the token is invalid
+     * @throws AuthorizationException if the user is not the one we are logged in as
+     */
+    public void assertTokenForUser(User user, @Nullable String token) {
+        assertTokenForUser(user.getId(), token);
     }
 
     /**
@@ -105,12 +122,15 @@ public class TokenAuthService {
      * @param token the token (including Bearer-prefix)
      * @throws InvalidTokenException if the token is malformed or doesn't belong to a user
      */
-    public void removeToken(String token) {
-        TokenAuthService.assertTokenExists(token);
+    @Transactional
+    public void removeToken(@Nullable String token) {
+        TokenAuthService.assertTokenNonNull(token);
         token = stripBearer(token);
-        if (!tokenRepository.existsByToken(token))
-            throw new InvalidTokenException();
-        tokenRepository.deleteByToken(token);
+        TokenLogIn row = tokenRepository.findByToken(token)
+                .orElseThrow(InvalidTokenException::new);
+        if (row.getUser() != null)
+            row.getUser().setToken(null);
+        tokenRepository.delete(row);
     }
 
     /**
@@ -152,8 +172,8 @@ public class TokenAuthService {
      * @param token to be checked
      * @throws MissingAuthorizationException if token is null
      */
-    public static void assertTokenExists(String token) {
-        //@Contract("null -> fail")
+    @Contract("null -> fail")
+    public static void assertTokenNonNull(@Nullable String token) {
         if (token == null)
             throw new MissingAuthorizationException();
     }

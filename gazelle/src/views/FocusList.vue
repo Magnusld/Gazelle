@@ -12,10 +12,6 @@
 import { Component, Vue } from "vue-property-decorator";
 import VueMarkdown from "vue-markdown";
 
-@Component({
-  components: {
-    'vue-markdown': VueMarkdown
-  }
-})
-export default class Home extends Vue {}
+@Component
+export default class FocusList extends Vue {}
 </script>

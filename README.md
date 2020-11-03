@@ -5,27 +5,26 @@
 ![Gazelle logo](assets/logo.svg)
 
 Dette er prosjektet til gruppe 10 i faget IT1901 høsten 2020.
-For en komplett beskrivelse av prosjektet se [her](gazelleFX/README.md).
+For en komplett beskrivelse av prosjektet se [her](gazelle/README.md).
 
 ## Organisering
 Appen er delt inn i flere moduler: Klient, tjener og delt logikk.
- - Klienten er skrevet i JavaFX og ligger i mappen `gazelleFX/`
+ - Klienten er skrevet i Vue og ligger i mappen `gazelle/`
  - Tjeneren er skrevet i Spring Boot og ligger i mappen `server/`
  - Delt logikk, slik som objekter og tekst-tolking ligger i `common/`
 
-![PlantUML-diagram over arkitektur](assets/architecture.png)
+Plant-uml (Må oppdateres)
 
 Tjeneren tar seg av lagring og det meste av prosessering.
 Den har et REST-api som klienten bruker for å hente og sende data.
 
 ## Bygging og kjøring
-Vi bruker maven som byggverktøy, og alle modulene er samlet i toppnivå-`pom.xml`-filen.
+Vi bruker maven som byggverktøy, og alle java modulene er samlet i toppnivå-`pom.xml`-filen.
 
 For å installere alle avhengigheter til den lokale maven-siloen,
-samt kompilere og starte prosjektet med både tjener og klient, skriv på Linux, OSX og GitPod:
-```
-./start.sh
-```
+samt kompilere og starte prosjektet med både tjener og klient, se instruksjon nedfor på manuel kjøring.
+
+
 Merk at `JAVA_HOME` må være satt til en installasjon av Java 14.
 
 ## Testing
@@ -56,17 +55,18 @@ Deretter må du starte tjeneren
 ```
 mvn spring-boot:start -pl server
 ```
-Og til slutt starte klienten
+Og til slutt starte vue-serveren
 ```
-mvn javafx:run -pl gazelleFX
+cd gazelle
+yarn serve
 ```
 For å skru av tjeneren, send en POST til `/actuator/shutdown`
 ```
-curl -X POST localhost:8080/actuator/shutdown
+curl -X POST localhost:8088/actuator/shutdown
 ```
 
 #### Manuell bruk av database
-Mens tjeneren kjører, gå til `localhost:8080/h2`. Skriv inn følgende:
+Mens tjeneren kjører, gå til `localhost:8088/h2`. Skriv inn følgende:
  - JDBC URL: `jdbc:h2:file:./database`
  - User Name: `sa`
  - Password: blankt

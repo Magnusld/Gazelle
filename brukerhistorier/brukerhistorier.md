@@ -10,9 +10,9 @@ Alle brukerhistoriene skal ha en assosiert prioritet, og om de er ferdig impleme
 
 ## Løp (us-1) &ndash; Høy prioritet
 
-Som en faglærer trenger jeg å opprette nye løp elevene kan følge gjennom semesteret sånn at jeg ikke trenger å lage pensumhefter som elevene må oppdatere seg på manuelt.
+Som en faglærer trenger jeg å opprette nye løp studentene kan følge gjennom semesteret sånn at jeg ikke trenger å lage pensumhefter som studentene må oppdatere seg på manuelt.
 
-Et løp er en beskrivelse av pensum, læringsmål og gjøremål innenfor et fag i form av tema-poster som elever kan registrere seg for å følge.
+Et løp er en beskrivelse av pensum, læringsmål og gjøremål innenfor et fag i form av tema-poster som studenter kan registrere seg for å følge.
 
 ### Viktig å kunne se
 
@@ -31,15 +31,15 @@ Et løp er en beskrivelse av pensum, læringsmål og gjøremål innenfor et fag 
 
 ## Post (us-2) &ndash; Høy prioritet
 
-Som en faglærer trenger jeg å opprette nye poster innen løp sånn at jeg kan publisere nytt pensum, læremål og gjøremål til elevene.
+Som en faglærer trenger jeg å opprette nye poster innen løp sånn at jeg kan publisere nytt pensum, læremål og gjøremål til studentene.
 
-En post er en tidsavgrenset blokk med fokus på en bit av pensum. Her legger faglærer inn både pensum, læringsmål og gjøremål for hver konkrete bit av pensum, som elever kan bruke for å holde oversikt over fremdrift.
+En post er en tidsavgrenset blokk med fokus på en bit av pensum. Her legger faglærer inn både pensum, læringsmål og gjøremål for hver konkrete bit av pensum, som studenter kan bruke for å holde oversikt over fremdrift.
 
 ### Viktig å kunne se
 
 * Liste over alle poster
 * Knapp for å legge til nye poster [Kun for faglærere]
-* Grunnleggende informasjon om poster [Forskjellig informasjon ut ifra rolle i løpet (faglærer/elev)]
+* Grunnleggende informasjon om poster [Forskjellig informasjon ut ifra rolle i løpet (faglærer/student)]
 
 ### Viktig å kunne gjøre
 
@@ -49,9 +49,9 @@ En post er en tidsavgrenset blokk med fokus på en bit av pensum. Her legger fag
 
 ### Illustrerende skjermbilder
 
-#### Liste over poster [Elev]
+#### Liste over poster [Student]
 
-![Liste over poster for elev](mockup-us-2-1.png)
+![Liste over poster for student](mockup-us-2-1.png)
 
 #### Liste over poster [Faglærer]
 
@@ -125,9 +125,9 @@ slik at jeg lettere har oversikt over hvilke løp som er relevante for semestere
 * Følge / avfølge alle offentlige og egne løp
 * Slette løp man eier
 
-## Administrator bruker (us-7) &ndash; Lav prioritet
+## Administratorbruker (us-7) &ndash; Lav prioritet
 
-Som en administrator bruker vil jeg kunne se, endre og slette alt, 
+Som en administratorbruker vil jeg kunne se, endre og slette alt, 
 slik at jeg kan hjelpe faglærerer og studenter dersom de har problemer.
 
 #### Viktig å kunne se

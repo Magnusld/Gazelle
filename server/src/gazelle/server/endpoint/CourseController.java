@@ -1,17 +1,17 @@
 package gazelle.server.endpoint;
 
 import gazelle.model.Course;
-import gazelle.model.CourseRole;
 import gazelle.model.User;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.CourseNotFoundException;
 import gazelle.server.error.ExistingEntityException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.repository.CourseRepository;
-import gazelle.server.service.CourseRoleService;
+import gazelle.server.service.CourseAndUserService;
 import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.*;
 public class CourseController {
 
     private final CourseRepository courseRepository;
-    private final CourseRoleService courseRoleService;
     private final TokenAuthService tokenAuthService;
+    private final CourseAndUserService courseAndUserService;
 
     @Autowired
     public CourseController(CourseRepository courseRepository,
-                            CourseRoleService courseRoleService,
-                            TokenAuthService tokenAuthService) {
+                            TokenAuthService tokenAuthService,
+                            CourseAndUserService courseAndUserService) {
         this.courseRepository = courseRepository;
-        this.courseRoleService = courseRoleService;
         this.tokenAuthService = tokenAuthService;
+        this.courseAndUserService = courseAndUserService;
     }
 
     @GetMapping
@@ -37,20 +37,22 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public Course findOne(@PathVariable Long id) {
+    public Course findById(@PathVariable Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(CourseNotFoundException::new);
     }
 
     @PostMapping
-    public Course addNewCourse(@RequestBody Course course, @RequestHeader("Authorization") String auth) {
+    @Transactional
+    public Course addNewCourse(@RequestBody Course course,
+                               @RequestHeader("Authorization") String auth) {
         if (course.getId() != null)
             throw new ExistingEntityException();
 
-        User user = tokenAuthService.getUserForToken(auth);
+        User user = tokenAuthService.getUserObjectFromToken(auth);
 
         courseRepository.save(course);
-        courseRoleService.setRole(user, course, CourseRole.CourseRoleType.OWNER);
+        courseAndUserService.addOwner(user, course);
 
         return course;
     }
@@ -66,14 +68,14 @@ public class CourseController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     public void deleteCourse(@PathVariable Long id, @RequestHeader("Authorization") String auth) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(CourseNotFoundException::new);
 
-        User user = tokenAuthService.getUserForToken(auth);
+        User user = tokenAuthService.getUserObjectFromToken(auth);
 
-        CourseRole.CourseRoleType role = courseRoleService.getCourseRole(user, course);
-        if (role != CourseRole.CourseRoleType.OWNER)
+        if (!courseAndUserService.isOwning(user, course))
             throw new AuthorizationException();
 
         courseRepository.deleteById(id);
