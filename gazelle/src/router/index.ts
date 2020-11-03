@@ -7,6 +7,7 @@ import LoginPage from "@/components/LoginPage.vue";
 import Home from "@/views/Home.vue";
 import SignUpPage from "@/components/SignUpPage.vue";
 import store from "@/store";
+import LoginView from "@/views/LoginView.vue";
 
 Vue.use(VueRouter);
 
@@ -46,7 +47,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "Login Page",
-    component: LoginPage,
+    component: LoginView,
     meta: {
       requiresLoggedOut: true
     }
