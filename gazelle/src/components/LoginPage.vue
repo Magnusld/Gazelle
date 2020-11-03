@@ -6,12 +6,12 @@
       </div>
       <md-divider></md-divider>
       <md-field md-clearable>
-        <label>Brukernavn:</label>
-        <md-input v-model="username" type="username"></md-input>
+        <label>E-post:</label>
+        <md-input v-model="email" type="email" autocomplete="email"></md-input>
       </md-field>
       <md-field :md-toggle-password="true">
         <label>Passord:</label>
-        <md-input v-model="password" type="password"></md-input>
+        <md-input v-model="password" type="password" autocomplete="password"></md-input>
       </md-field>
       <div class="buttonBar">
         <md-button
@@ -20,9 +20,7 @@
           v-on:click="login"
           >Logg inn</md-button
         >
-        <md-button class="md-primary" v-on:click="register"
-          >Ny bruker</md-button
-        >
+        <md-button class="md-primary" to="/signup">Ny bruker</md-button>
       </div>
     </div>
   </form>
@@ -32,23 +30,14 @@
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class LoginPage extends Vue {
-  private username = "";
+  private email = "";
   private password = "";
 
   private login() {
-    const username: string = this.username;
+    const email: string = this.email;
     const password: string = this.password;
     this.$store
-      .dispatch("login", { username, password })
-      .then(() => this.$router.push("/"))
-      .catch(err => console.log(err));
-  }
-
-  private register() {
-    const username: string = this.username;
-    const password: string = this.password;
-    this.$store
-      .dispatch("register", { username, password })
+      .dispatch("login", { email, password })
       .then(() => this.$router.push("/"))
       .catch(err => console.log(err));
   }

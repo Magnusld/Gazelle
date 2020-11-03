@@ -57,10 +57,10 @@ public class UserControllerTest {
     }
 
     @Test
-    public void findByUsername() {
-        assertEquals(user1, userController.findByUsername(user1.getUsername()));
+    public void findByEmail() {
+        assertEquals(user1, userController.findByEmail(user1.getEmail()));
         assertThrows(UserNotFoundException.class, () -> {
-            userController.findByUsername("dummy name");
+            userController.findByEmail("dummy name");
         });
     }
 
