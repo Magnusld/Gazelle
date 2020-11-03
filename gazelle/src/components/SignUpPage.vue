@@ -31,7 +31,7 @@
       </div>
       <md-button
         class="md-raised md-primary signUpButton"
-        v-on:keyup.enter="signUp"
+        v-on:click="signUp"
       >
         Opprett Bruker</md-button
       >
@@ -50,13 +50,14 @@ export default class SignUpPage extends Vue {
   private repeatedPassword = "";
 
   private signUp() {
+    console.log("Signing up")
     const firstname: string = this.firstname;
     const lastname: string = this.lastname;
     const email: string = this.email;
     const password: string = this.password;
     this.$store
       .dispatch("register", { firstname, lastname, email, password })
-      .then(() => this.$router.push("/"))
+      .then(() => this.$router.push("/login"))
       .catch(err => console.log(err));
   }
 }

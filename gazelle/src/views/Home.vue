@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="../assets/images/orangelogo.svg" alt="applogo"/>
+    <img src="../assets/images/orangelogo.svg" alt="applogo" />
   </div>
 </template>
 

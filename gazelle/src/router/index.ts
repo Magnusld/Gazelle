@@ -14,7 +14,10 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: Home,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/my-courses",
@@ -43,7 +46,10 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "Login Page",
-    component: LoginPage
+    component: LoginPage,
+    meta: {
+      requiresLoggedOut: true
+    }
   },
   {
     path: "/signUp",
@@ -65,6 +71,12 @@ router.beforeEach((to, from, next) => {
       return;
     }
     next("/login");
+  } else if (to.matched.some(record => record.meta.requiresLoggedOut)) {
+    if (!store.getters.isLoggedIn) {
+      next();
+      return;
+    }
+    next("/");
   } else {
     next();
   }

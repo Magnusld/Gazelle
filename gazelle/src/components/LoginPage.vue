@@ -7,11 +7,11 @@
       <md-divider></md-divider>
       <md-field md-clearable>
         <label>E-post:</label>
-        <md-input v-model="email" type="username"></md-input>
+        <md-input v-model="email" type="email" autocomplete="email"></md-input>
       </md-field>
       <md-field :md-toggle-password="true">
         <label>Passord:</label>
-        <md-input v-model="password" type="password"></md-input>
+        <md-input v-model="password" type="password" autocomplete="password"></md-input>
       </md-field>
       <div class="buttonBar">
         <md-button
