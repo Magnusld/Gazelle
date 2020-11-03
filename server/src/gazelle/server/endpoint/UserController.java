@@ -5,6 +5,7 @@ import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,19 +27,20 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping("/username/{username}")
-    public User findByUsername(@PathVariable String username) {
-        return userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+    @GetMapping("/email/{email}")
+    public User findByEmail(@PathVariable String email) {
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 
     @GetMapping("/{id}")
-    public User findOne(@PathVariable Long id) {
+    public User findById(@PathVariable Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String auth) {
-        tokenAuthService.assertUserLoggedIn(id, auth);
+    public void deleteUser(@PathVariable Long id,
+                           @RequestHeader("Authorization") @Nullable String auth) {
+        tokenAuthService.assertTokenForUser(id, auth);
         userRepository.deleteById(id);
     }
 }

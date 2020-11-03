@@ -17,9 +17,13 @@ public class Course {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "course", cascade = {CascadeType.REMOVE})
+    @ManyToMany(mappedBy = "following")
     @JsonIgnore
-    private Set<CourseRole> roles = new HashSet<>();
+    private Set<User> followers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "owning")
+    @JsonIgnore
+    private Set<User> owners = new HashSet<>();
 
     protected Course() {}
 
@@ -43,12 +47,30 @@ public class Course {
         this.name = name;
     }
 
-    public Set<CourseRole> getRoles() {
-        return roles;
+    public Set<User> getFollowers() {
+        return followers;
     }
 
-    public void setRoles(Set<CourseRole> roles) {
-        this.roles = roles;
+    public void setFollowers(Set<User> followers) {
+        this.followers = followers;
+    }
+
+    public Set<User> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(Set<User> owners) {
+        this.owners = owners;
+    }
+
+    @PreRemove
+    private void removeGroupsFromUsers() {
+        for (User user : followers) {
+            user.getFollowing().remove(this);
+        }
+        for (User user : owners) {
+            user.getOwning().remove(this);
+        }
     }
 
     @Override

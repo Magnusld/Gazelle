@@ -6,14 +6,13 @@
         <md-icon>delete</md-icon>
       </md-button>
     </div>
-    <md-divider></md-divider>
-    <md-content class="courses">
+    <div class="courses">
       <CourseListing
         v-for="(course, index) in courses"
         :key="index"
         :course="course"
       />
-    </md-content>
+    </div>
   </div>
 </template>
 

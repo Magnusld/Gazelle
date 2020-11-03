@@ -4,22 +4,42 @@ package gazelle.auth;
 import java.util.Objects;
 
 public class SignUpRequest {
-    private String username;
+    private String firstname;
+    private String lastname;
+    private String email;
     private String password;
 
     protected SignUpRequest() {}
 
-    public SignUpRequest(String username, String password) {
-        this.username = username;
+    public SignUpRequest(String firstname, String lastname, String email, String password) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFirstname() {
+        return this.firstname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return this.lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -35,12 +55,12 @@ public class SignUpRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SignUpRequest request = (SignUpRequest) o;
-        return Objects.equals(username, request.username) &&
-                Objects.equals(password, request.password);
+        return Objects.equals(email, request.email)
+                && Objects.equals(password, request.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password);
+        return Objects.hash(email, password);
     }
 }

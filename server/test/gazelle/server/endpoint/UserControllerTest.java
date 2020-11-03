@@ -1,13 +1,10 @@
 package gazelle.server.endpoint;
 
-import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
 import gazelle.model.User;
+import gazelle.server.TestHelper;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.InvalidTokenException;
-import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.error.UserNotFoundException;
-import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,95 +14,75 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserControllerTest {
+
     @Autowired
     private UserController userController;
 
     @Autowired
-    private LoginEndpoint loginEndpoint;
-
-    private static final String NAME1 = "username1";
-    private static final String NAME2 = "username2";
+    private TestHelper testHelper;
 
     private User user1;
-    private String user1Token;
     private User user2;
-    private String user2Token;
 
     @BeforeAll
     public void setup() {
-        LogInResponse response = loginEndpoint.signup(new SignUpRequest(NAME1, "fkdlgjrg"));
-        user1 = response.getUser();
-        user1Token = TokenAuthService.addBearer(response.getToken());
-        response = loginEndpoint.signup(new SignUpRequest(NAME2, "fkdlgjrg"));
-        user2 = response.getUser();
-        user2Token = TokenAuthService.addBearer(response.getToken());
+        user1 = testHelper.createTestUserObject();
+        user2 = testHelper.createTestUserObject();
     }
 
     @Test
-    public void testFindAll() {
-        int user1Seen = 0;
-        int user2Seen = 0;
-        for (User user : userController.findAll()) {
-            user1Seen += user.equals(user1) ? 0 : 1;
-            user2Seen += user.equals(user2) ? 0 : 1;
-        }
-        assertEquals(1, user1Seen);
-        assertEquals(1, user2Seen);
+    public void findAll() {
+        List<User> users = new ArrayList<>();
+        userController.findAll().forEach(users::add);
+        assertEquals(2, users.size());
+        assertTrue(users.contains(user1));
+        assertTrue(users.contains(user2));
     }
 
     @Test
-    public void testFindByUsername() {
-        assertEquals(user1, userController.findByUsername(user1.getUsername()));
+    public void findById() {
+        assertEquals(user1, userController.findById(user1.getId()));
         assertThrows(UserNotFoundException.class, () -> {
-            userController.findByUsername("dummy username");
+            userController.findById(5000L);
         });
     }
 
     @Test
-    public void testFindOne() {
-        assertEquals(user1, userController.findOne(user1.getId()));
-        assertEquals(user2, userController.findOne(user2.getId()));
+    public void findByEmail() {
+        assertEquals(user1, userController.findByEmail(user1.getEmail()));
         assertThrows(UserNotFoundException.class, () -> {
-            userController.findOne(5001L);
+            userController.findByEmail("dummy name");
         });
     }
 
     @Test
-    public void testDeleteUser() {
-        assertThrows(MissingAuthorizationException.class, () -> {
-            userController.deleteUser(user1.getId(), null);
+    public void deleteUser() {
+        String token = testHelper.logInUser(user1.getId());
+        assertThrows(InvalidTokenException.class, () -> {
+            userController.deleteUser(user1.getId(), "Bearer: dummy token");
         });
         assertThrows(AuthorizationException.class, () -> {
-            userController.deleteUser(user1.getId(), user2Token);
+            userController.deleteUser(user2.getId(), token);
         });
+        userController.deleteUser(user1.getId(), token);
         assertThrows(InvalidTokenException.class, () -> {
-            userController.deleteUser(user1.getId(), "dummy-token");
+            userController.deleteUser(user1.getId(), token);
         });
-        assertEquals(user1, userController.findOne(user1.getId()));
-
-        userController.deleteUser(user1.getId(), user1Token);
-        assertThrows(UserNotFoundException.class, () -> {
-            userController.findByUsername(NAME1);
-        });
-        assertThrows(UserNotFoundException.class, () -> {
-            userController.findOne(user1.getId());
-        });
-
-        // Make a new user to uphold test invariant
-        LogInResponse response = loginEndpoint.signup(new SignUpRequest(NAME1, "gjsekf"));
-        user1 = response.getUser();
-        user1Token = TokenAuthService.addBearer(response.getToken());
+        user1 = testHelper.createTestUserObject();
     }
 
     @AfterAll
     public void cleanup() {
-        userController.deleteUser(user1.getId(), user1Token);
-        userController.deleteUser(user2.getId(), user2Token);
+        testHelper.deleteTestUser(user1.getId());
+        testHelper.deleteTestUser(user2.getId());
     }
 }

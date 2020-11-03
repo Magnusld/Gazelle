@@ -3,22 +3,22 @@ package gazelle.auth;
 import java.util.Objects;
 
 public class LogInRequest {
-    private String username;
+    private String email;
     private String password;
 
     protected LogInRequest() {}
 
-    public LogInRequest(String username, String password) {
-        this.username = username;
+    public LogInRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -34,12 +34,12 @@ public class LogInRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LogInRequest that = (LogInRequest) o;
-        return Objects.equals(username, that.username) &&
-                Objects.equals(password, that.password);
+        return Objects.equals(email, that.email)
+                && Objects.equals(password, that.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password);
+        return Objects.hash(email, password);
     }
 }

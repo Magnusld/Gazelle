@@ -36,8 +36,8 @@ public class LogInResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LogInResponse that = (LogInResponse) o;
-        return Objects.equals(token, that.token) &&
-                Objects.equals(user, that.user);
+        return Objects.equals(token, that.token)
+                && Objects.equals(user, that.user);
     }
 
     @Override

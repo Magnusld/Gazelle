@@ -8,8 +8,12 @@ import org.springframework.http.HttpStatus;
  */
 public class AuthorizationException extends GazelleException {
     public AuthorizationException() {
+        this("The logged in user does not have permission");
+    }
+
+    public AuthorizationException(String message) {
         super("Unauthorized",
-                "The logged in user does not have permission",
+                message,
                 HttpStatus.UNAUTHORIZED);
     }
 }

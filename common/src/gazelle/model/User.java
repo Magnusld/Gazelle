@@ -20,23 +20,43 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String firstname;
+
+    @Column(nullable = false, unique = true)
+    private String lastname;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @ManyToMany
+    @JoinTable(
+            name = "user_course_follow",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
     @JsonIgnore
-    private Set<CourseRole> roles = new HashSet<>();
+    private Set<Course> following = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @ManyToMany
+    @JoinTable(
+            name = "user_course_own",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @JsonIgnore
+    private Set<Course> owning = new HashSet<>();
+
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JsonIgnore
     private TokenLogIn token;
     
     protected User() {}
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(String firstname, String lastname, String email, String password) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
         this.password = password;
     }
 
@@ -48,12 +68,28 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getFirstname() {
+        return this.firstname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return this.lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -64,12 +100,12 @@ public class User {
         this.password = password;
     }
 
-    public Set<CourseRole> getRoles() {
-        return roles;
+    public Set<Course> getFollowing() {
+        return following;
     }
 
-    public void setRoles(Set<CourseRole> roles) {
-        this.roles = roles;
+    public Set<Course> getOwning() {
+        return owning;
     }
 
     public TokenLogIn getToken() {
