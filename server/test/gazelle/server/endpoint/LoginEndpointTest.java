@@ -39,11 +39,11 @@ public class LoginEndpointTest {
         GazelleException ex = assertThrows(GazelleException.class, () -> {
             loginEndpoint.signup(new SignUpRequest("hal", "hal", "hal", "hal"));
         });
-        assertEquals("Username too short", ex.getReason());
+        assertEquals("Email too short", ex.getReason());
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, ex.getStatusCode());
 
         ex = assertThrows(GazelleException.class, () -> {
-            loginEndpoint.signup(new SignUpRequest("hall", "hal", "hal", "hal"));
+            loginEndpoint.signup(new SignUpRequest("hall", "hal", "hell", "hal"));
         });
         assertEquals("Password too short", ex.getReason());
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, ex.getStatusCode());
