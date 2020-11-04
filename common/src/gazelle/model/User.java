@@ -124,6 +124,21 @@ public class User {
         return Objects.equals(id, user.id);
     }
 
+    public void verify() throws ModelException {
+        if (this.password.length() < 4) {
+            throw new ModelException("Passordet må være over 4 tegn.");
+        }
+        if (this.email.contains(" ")) {
+            throw new ModelException("E-post adressen kan ikke inneholde mellomrom.");
+        }
+        if (this.firstname.contains(" ") || this.lastname.contains(" ")) {
+            throw new ModelException("Navn og etternavn kan ikke inneholde mellomrom.");
+        }
+        if (this.firstname.length() < 1 || this.lastname.length() < 1) {
+            throw new ModelException("Ver vennlig å fylle inn både fornavn og etternavn.");
+        }
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
