@@ -53,8 +53,9 @@ public class SignUpRequest {
         this.password = password;
     }
 
-    public void buildUser() throws ModelException {
+    public User buildUser() {
         User user = new User(this.firstname, this.lastname, this.email, this.password);
+        return user;
     }
 
     @Override

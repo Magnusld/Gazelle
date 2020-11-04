@@ -3,9 +3,11 @@ package gazelle.server.endpoint;
 import gazelle.auth.LogInRequest;
 import gazelle.auth.LogInResponse;
 import gazelle.auth.SignUpRequest;
+import gazelle.model.ModelException;
 import gazelle.model.User;
 import gazelle.server.error.GazelleException;
 import gazelle.server.error.LoginFailedException;
+import gazelle.server.error.UnprocessableEntityException;
 import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,26 +82,19 @@ public class LoginEndpoint {
     @PostMapping("/signup")
     @Transactional
     public LogInResponse signup(@RequestBody SignUpRequest request) {
-        String firstname = request.getFirstname();
-        String lastname = request.getLastname();
-        String email = request.getEmail();
-        String password = request.getPassword();
+        User user = request.buildUser();
+        try {
+            user.verify();
+        } catch (ModelException e) {
+            throw new UnprocessableEntityException(e.getMessage());
+        }
 
-        if (userRepository.findByEmail(email).isPresent())
-            throw new GazelleException("Email taken", email, HttpStatus.CONFLICT);
+        if (userRepository.findByEmail(user.getEmail()).isPresent())
+            throw new GazelleException("Email taken", user.getEmail(), HttpStatus.CONFLICT);
 
-        if (email.length() < 4)
-            throw new GazelleException("Email too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
-
-        if (password.length() < 4)
-            throw new GazelleException("Password too short", null, HttpStatus.UNPROCESSABLE_ENTITY);
-
-        User newUser = new User(firstname, lastname, email, password);
-        userRepository.save(newUser);
-
-        String token = tokenAuthService.createTokenForUser(newUser);
-
-        return new LogInResponse(token, newUser);
+        userRepository.save(user);
+        String token = tokenAuthService.createTokenForUser(user);
+        return new LogInResponse(token, user);
     }
 
     /**
