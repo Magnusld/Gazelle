@@ -1,6 +1,9 @@
 package gazelle.auth;
 
 
+import gazelle.model.ModelException;
+import gazelle.model.User;
+
 import java.util.Objects;
 
 public class SignUpRequest {
@@ -48,6 +51,10 @@ public class SignUpRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void buildUser() throws ModelException {
+        User user = new User(this.firstname, this.lastname, this.email, this.password);
     }
 
     @Override
