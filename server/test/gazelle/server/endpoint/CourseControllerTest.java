@@ -3,7 +3,6 @@ package gazelle.server.endpoint;
 import gazelle.model.Course;
 import gazelle.server.TestHelper;
 import gazelle.server.error.*;
-import gazelle.server.repository.UserRepository;
 import gazelle.server.service.CourseAndUserService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -85,10 +84,10 @@ public class CourseControllerTest {
 
     @Test
     public void deleteCourse() {
-        Long user = testHelper.createTestUser();
-        String token = testHelper.logInUser(user);
-        Long user2 = testHelper.createTestUser();
-        String token2 = testHelper.logInUser(user2);
+        final Long user = testHelper.createTestUser();
+        final String token = testHelper.logInUser(user);
+        final Long user2 = testHelper.createTestUser();
+        final String token2 = testHelper.logInUser(user2);
 
         assertThrows(CourseNotFoundException.class, () -> {
             courseController.deleteCourse(5000L, token);

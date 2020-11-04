@@ -80,10 +80,10 @@ public class LoginEndpoint {
     @PostMapping("/signup")
     @Transactional
     public LogInResponse signup(@RequestBody SignUpRequest request) {
-        String firstname = request.getFirstname();
-        String lastname = request.getLastname();
-        String email = request.getEmail();
-        String password = request.getPassword();
+        final String firstname = request.getFirstname();
+        final String lastname = request.getLastname();
+        final String email = request.getEmail();
+        final String password = request.getPassword();
 
         if (userRepository.findByEmail(email).isPresent())
             throw new GazelleException("Email taken", email, HttpStatus.CONFLICT);

@@ -53,7 +53,8 @@ public class LoginEndpointTest {
         final String EMAIL = "testemail";
         final String PASS = "testpass";
 
-        LogInResponse response = loginEndpoint.signup(new SignUpRequest(FIRSTNAME, LASTNAME, EMAIL, PASS));
+        LogInResponse response = loginEndpoint.signup(
+                new SignUpRequest(FIRSTNAME, LASTNAME, EMAIL, PASS));
         User user = response.getUser();
         String token = TokenAuthService.addBearer(response.getToken());
 
@@ -62,7 +63,7 @@ public class LoginEndpointTest {
         assertEquals(user, tokenAuthService.getUserObjectFromToken(token));
 
         ex = assertThrows(GazelleException.class, () -> {
-            loginEndpoint.signup(new SignUpRequest("dummy", "dummy",EMAIL, "dummy"));
+            loginEndpoint.signup(new SignUpRequest("dummy", "dummy", EMAIL, "dummy"));
         });
         assertEquals("Email taken", ex.getReason());
         assertEquals(HttpStatus.CONFLICT, ex.getStatusCode());
@@ -79,7 +80,10 @@ public class LoginEndpointTest {
         assertThrows(LoginFailedException.class, () -> {
             loginEndpoint.login(new LogInRequest(user.getEmail(), "dummy password"));
         });
-        LogInResponse response = loginEndpoint.login(new LogInRequest(user.getEmail(), user.getPassword()));
+
+        LogInResponse response = loginEndpoint.login(
+                new LogInRequest(user.getEmail(), user.getPassword()));
+
         assertEquals(user, response.getUser());
         String token = TokenAuthService.addBearer(response.getToken());
         assertEquals(user, tokenAuthService.getUserObjectFromToken(token));
