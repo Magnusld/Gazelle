@@ -77,7 +77,8 @@ public class LoginEndpointTest {
         assertThrows(LoginFailedException.class, () -> {
             loginEndpoint.login(new LogInRequest(user.getUsername(), "dummy password"));
         });
-        LogInResponse response = loginEndpoint.login(new LogInRequest(user.getUsername(), user.getPassword()));
+        LogInResponse response = loginEndpoint.login(
+                new LogInRequest(user.getUsername(), user.getPassword()));
         assertEquals(user, response.getUser());
         String token = TokenAuthService.addBearer(response.getToken());
         assertEquals(user, tokenAuthService.getUserObjectFromToken(token));

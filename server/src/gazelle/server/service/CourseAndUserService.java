@@ -94,7 +94,7 @@ public class CourseAndUserService {
 
     @Transactional
     public void addFollower(Long userId, Long courseId) {
-        removeOwner(
+        addFollower(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
                 courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
     }
@@ -132,7 +132,7 @@ public class CourseAndUserService {
 
     @Transactional
     public boolean isFollowing(Long userId, Long courseId) {
-        return isOwning(
+        return isFollowing(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
                 courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
     }
