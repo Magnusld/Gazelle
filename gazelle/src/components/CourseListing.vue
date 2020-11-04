@@ -1,28 +1,26 @@
 <template>
-  <md-card class="courseListing" md-with-hover>
-    <md-ripple>
-      <md-card-header>
-        <md-card-header-text>
-          <div class="spacing">
-            <div class="md-title">{{ course.name }}</div>
-            <span>Neste frist: I dag</span>
-          </div>
-          <div class="md-subhead">Nå: Datastrukturer (4 dager igjen)</div>
-        </md-card-header-text>
-      </md-card-header>
-      <md-card-content>
-        <div class="spacing">
-          <span>Gjort: 11/16</span>
-          <span>På fokuslista: 3</span>
+  <div>
+    <md-divider/>
+    <div class="courseListing">
+      <div class="header">
+        <div class="horizontalSeparator">
+          <a style="color:black" class="title">{{ course.name }}</a>
+          <div>Neste frist: I dag</div>
         </div>
-        <md-progress-bar
+        <div class="subheader">Nå: Datastrukturer (4 dager igjen)</div>
+      </div>
+
+      <div class="horizontalSeparator">
+        <div>Gjort: 11/16</div>
+        <div>På fokuslista: 3</div>
+      </div>
+      <md-progress-bar
           md-mode="determinate"
           :md-value="68.75"
-        ></md-progress-bar>
-        <p>Forrige: Kombinatorikk</p>
-      </md-card-content>
-    </md-ripple>
-  </md-card>
+      ></md-progress-bar>
+      <div class="subheader">Forrige: Kombinatorikk</div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,13 +35,26 @@ export default class CourseListing extends Vue {
 </script>
 
 <style scoped lang="scss">
-.spacing {
+.horizontalSeparator {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
 }
 .courseListing {
   width: 100%;
-  margin: 10px 0;
+  padding: 10px;
+}
+.header{
+  margin-bottom: 5px;
+}
+.subheader{
+  color: gray;
+}
+.title{
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: .005em;
+  line-height: 26px;
+  cursor: pointer;
 }
 </style>

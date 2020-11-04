@@ -28,7 +28,8 @@ public class TestHelper {
     }
 
     public User createTestUserObject() {
-        User user = new User(makeRandomString(), makeRandomString());
+        User user = new User(makeRandomString(), makeRandomString(),
+                makeRandomString(), makeRandomString());
         return userRepository.save(user);
     }
 
