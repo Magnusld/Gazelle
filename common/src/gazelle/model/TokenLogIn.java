@@ -1,5 +1,7 @@
 package gazelle.model;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -23,7 +25,7 @@ public class TokenLogIn {
         this.token = token;
     }
 
-    public Long getId() {
+    public @Nullable Long getId() {
         return id;
     }
 
