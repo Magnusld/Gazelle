@@ -87,8 +87,4 @@ public class CourseOwnControllerTest {
 
     }
 
-    @Test
-    public void addRedundantCourseOwner() {
-
-    }
 }
