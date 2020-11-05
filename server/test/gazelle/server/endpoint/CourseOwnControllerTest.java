@@ -46,4 +46,17 @@ public class CourseOwnControllerTest {
         assertTrue(courses.contains(course1));
         assertTrue(courses.contains(course2));
     }
+
+    @Test
+    public void getCourseOwners() {
+        User user3 = testHelper.createTestUserObject();
+        courseAndUserService.addOwner(user1, course1);
+        courseAndUserService.addOwner(user2, course1);
+        ArrayList<User> owners;
+        owners = courseOwnController.getCourseOwners(course1.getId());
+        assertEquals(2, owners.size());
+        assertTrue(owners.contains(user1));
+        assertTrue(owners.contains(user2));
+        assertFalse(owners.contains(user3));
+    }
 }
