@@ -84,7 +84,7 @@ public class LoginEndpoint {
     public LogInResponse signup(@RequestBody SignUpRequest request) {
         User user = request.buildUser();
         try {
-            user.verify();
+            user.validate();
         } catch (ModelException e) {
             throw new UnprocessableEntityException(e.getMessage());
         }

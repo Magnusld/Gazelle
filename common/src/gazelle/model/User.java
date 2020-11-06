@@ -124,7 +124,7 @@ public class User {
         return Objects.equals(id, user.id);
     }
 
-    public void verify() throws ModelException {
+    public void validate() throws ModelException {
         if (this.password.length() < 4)
             throw new ModelException("Passordet må være minst 4 tegn.");
 

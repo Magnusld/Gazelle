@@ -10,31 +10,31 @@ public class UserTest {
     public void validationTest() {
         User user = new User("Per", "Jensen", "per.jensen@hotmail.org", "123");
 
-        ModelException ex = assertThrows(ModelException.class, user::verify);
+        ModelException ex = assertThrows(ModelException.class, user::validate);
         assertEquals("Passordet må være minst 4 tegn.", ex.getMessage());
 
         user.setPassword("5784");
         user.setFirstname(" Per");
-        ex = assertThrows(ModelException.class, user::verify);
+        ex = assertThrows(ModelException.class, user::validate);
         assertEquals("Fornavn kan ikke starte eller slutte med mellomrom.", ex.getMessage());
 
         user.setFirstname("Per Jhonny");
         user.setLastname("Jensen ");
-        ex = assertThrows(ModelException.class, user::verify);
+        ex = assertThrows(ModelException.class, user::validate);
         assertEquals("Etternavn kan ikke starte eller slutte med mellomrom.", ex.getMessage());
 
         user.setLastname("Jensen");
         user.setEmail("per. jensen@hotmail.org");
-        ex = assertThrows(ModelException.class, user::verify);
+        ex = assertThrows(ModelException.class, user::validate);
         assertEquals("E-post-adressen kan ikke inneholde mellomrom.", ex.getMessage());
 
         user.setEmail("per.jensen@hotmail.org");
         user.setFirstname("Å");
-        ex = assertThrows(ModelException.class, user::verify);
+        ex = assertThrows(ModelException.class, user::validate);
         assertEquals("Fornavn må være minst 2 tegn.", ex.getMessage());
 
         user.setFirstname("Per Jhonny");
-        assertDoesNotThrow(user::verify);
+        assertDoesNotThrow(user::validate);
     }
 
     @Test
