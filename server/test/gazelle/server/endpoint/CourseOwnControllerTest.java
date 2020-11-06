@@ -68,14 +68,17 @@ public class CourseOwnControllerTest {
         assertFalse(owners.contains(user3));
     }
 
+    /**
+     * Potensielt problem(?):
+     * Eg / vi sjekkar forskjellige scenario av testdata i same metode
+     * Dermed; om ein ting failer, vil vi berre få den første erroren, sidan resten ikkje vil bli køyrt?
+     */
     @Test
     public void addCourseOwner() {
         courseAndUserService.addOwner(user1.getId(), course1.getId());
         assertThrows(MissingAuthorizationException.class, () -> {
             courseOwnController.addCourseOwner(user2.getId(), course1.getId(), null);
         });
-        // Spørsmålet er no, kva er ein invalid token?
-        // Svar: noko som ikkje startar på Bearer:
         assertThrows(InvalidTokenException.class, () -> {
             courseOwnController.addCourseOwner(user2.getId(), course1.getId(), "Unbearer: 123");
         });
@@ -83,16 +86,10 @@ public class CourseOwnControllerTest {
             courseOwnController.addCourseOwner(user2.getId(), course1.getId(), token2);
         });
         courseOwnController.addCourseOwner(user2.getId(), course1.getId(), token1);
-        assertEquals(2, course1.getOwners().size());
-        assertTrue(course1.getOwners()
-                        .stream().anyMatch(u -> u.getId().equals(user2.getId())));
+        assertEquals(2, courseOwnController.getCourseOwners(course1.getId()));
+        assertTrue(courseOwnController.getCourseOwners(course1.getId()).contains(user2));
     }
 
-    /**
-     * Potensielt problem(?):
-     * Eg / vi sjekkar forskjellige scenario av testdata i same metode
-     * Dermed; om ein ting failer, vil vi berre få den første errore, sidan resten ikkje vil bli køyrt?
-     */
     @Test
     public void removeCourseOwner() {
 
