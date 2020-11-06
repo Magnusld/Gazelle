@@ -8,6 +8,7 @@ import gazelle.server.error.GazelleException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.service.CourseAndUserService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -107,6 +108,14 @@ public class CourseOwnControllerTest {
            courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), token1);
             // Dette vil vere den einaste eigaren
         });
+    }
+
+    @AfterAll
+    public void cleanup() {
+        testHelper.deleteTestUser(user1);
+        testHelper.deleteTestUser(user2);
+        testHelper.deleteTestCourse(course1);
+        testHelper.deleteTestCourse(course2);
     }
 
 }
