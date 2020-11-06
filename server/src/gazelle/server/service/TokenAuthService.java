@@ -116,8 +116,7 @@ public class TokenAuthService {
         token = stripBearer(token);
         TokenLogIn row = tokenRepository.findByToken(token)
                 .orElseThrow(InvalidTokenException::new);
-        if (row.getUser() != null)
-            row.getUser().setToken(null);
+        row.getUser().setToken(null);
         tokenRepository.delete(row);
     }
 

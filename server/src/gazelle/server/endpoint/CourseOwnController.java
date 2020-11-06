@@ -87,7 +87,6 @@ public class CourseOwnController {
                 .orElseThrow(CourseNotFoundException::new);
         if (!courseAndUserService.isOwning(caller, course))
             throw new AuthorizationException("You don't own the course");
-        tokenAuthService.assertTokenForUser(userId, auth);
         courseAndUserService.addOwner(userId, courseId);
     }
 

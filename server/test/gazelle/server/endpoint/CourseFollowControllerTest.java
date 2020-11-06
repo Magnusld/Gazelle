@@ -73,6 +73,8 @@ public class CourseFollowControllerTest {
         });
         ArrayList<User> followers = courseFollowController.getCourseFollowers(course1, token2);
         assertTrue(followers.stream().anyMatch(user -> user.getId().equals(user1)));
+        assertTrue(courseAndUserService.isFollowing(user1, course1));
+        assertFalse(courseAndUserService.isFollowing(user2, course1));
         assertEquals(1, followers.size());
     }
 
