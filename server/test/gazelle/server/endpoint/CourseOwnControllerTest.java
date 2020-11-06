@@ -12,19 +12,24 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CourseOwnControllerTest {
 
-    private Course course1;
-    private Course course2;
-    private User user1;
-    private User user2;
+    private Long course1;
+    private Long course2;
+    private Long user1;
+    private Long user2;
     private String token1;
     private String token2;
 
@@ -33,81 +38,91 @@ public class CourseOwnControllerTest {
 
     @Autowired
     private CourseAndUserService courseAndUserService;
+
     @Autowired
     private TestHelper testHelper;
 
     @BeforeAll
     public void setup() {
-        user1 = testHelper.createTestUserObject();
-        user2 = testHelper.createTestUserObject();
-        token1 = testHelper.logInUser(user1.getId());
-        token2 = testHelper.logInUser(user2.getId());
-        course1 = testHelper.createTestCourseObject();
-        course2 = testHelper.createTestCourseObject();
+        user1 = testHelper.createTestUser();
+        user2 = testHelper.createTestUser();
+        token1 = testHelper.logInUser(user1);
+        token2 = testHelper.logInUser(user2);
+        course1 = testHelper.createTestCourse();
+        course2 = testHelper.createTestCourse();
     }
 
     @Test
     public void getOwnedCourses() {
         courseAndUserService.addOwner(user1, course1);
         courseAndUserService.addOwner(user1, course2);
-        ArrayList<Course> courses;
-        courses = courseOwnController.getOwnedCourses(user1.getId());
+        ArrayList<Course> courses = courseOwnController.getOwnedCourses(user1);
         assertEquals(2, courses.size());
-        assertTrue(courses.contains(course1));
-        assertTrue(courses.contains(course2));
+        assertTrue(courses.stream().anyMatch(it -> it.getId().equals(course1)));
+        assertTrue(courses.stream().anyMatch(it -> it.getId().equals(course2)));
+        courseAndUserService.removeOwner(user1, course1);
+        courseAndUserService.removeOwner(user1, course2);
     }
 
     @Test
     public void getCourseOwners() {
-        User user3 = testHelper.createTestUserObject();
+        final User user3 = testHelper.createTestUserObject();
         courseAndUserService.addOwner(user1, course1);
         courseAndUserService.addOwner(user2, course1);
-        ArrayList<User> owners;
-        owners = courseOwnController.getCourseOwners(course1.getId());
+        assertTrue(courseOwnController.getCourseOwners(course2).isEmpty());
+        ArrayList<User> owners = courseOwnController.getCourseOwners(course1);
         assertEquals(2, owners.size());
-        assertTrue(owners.contains(user1));
-        assertTrue(owners.contains(user2));
+        assertTrue(owners.stream().anyMatch(it -> it.getId().equals(user1)));
+        assertTrue(owners.stream().anyMatch(it -> it.getId().equals(user2)));
         assertFalse(owners.contains(user3));
+        courseAndUserService.removeOwner(user1, course1);
+        courseAndUserService.removeOwner(user2, course1);
+        testHelper.deleteTestUser(user3);
     }
 
     @Test
     public void addCourseOwner() {
-        courseAndUserService.addOwner(user1.getId(), course1.getId());
+        courseAndUserService.addOwner(user1, course1);
         assertThrows(MissingAuthorizationException.class, () -> {
-            courseOwnController.addCourseOwner(user2.getId(), course1.getId(), null);
+            courseOwnController.addCourseOwner(user2, course1, null);
         });
         assertThrows(InvalidTokenException.class, () -> {
-            courseOwnController.addCourseOwner(user2.getId(), course1.getId(), "Unbearer: 123");
+            courseOwnController.addCourseOwner(user2, course1, "Unbearer: 123");
         });
         assertThrows(AuthorizationException.class, () -> {
-            courseOwnController.addCourseOwner(user2.getId(), course1.getId(), token2);
+            courseOwnController.addCourseOwner(user2, course1, token2);
         });
-        courseOwnController.addCourseOwner(user2.getId(), course1.getId(), token1);
-        assertEquals(2, courseOwnController.getCourseOwners(course1.getId()));
-        assertTrue(courseOwnController.getCourseOwners(course1.getId()).contains(user2));
+        courseOwnController.addCourseOwner(user2, course1, token1);
+        ArrayList<User> owners = courseOwnController.getCourseOwners(course1);
+        assertEquals(2, owners.size());
+        assertTrue(owners.stream().anyMatch(it -> it.getId().equals(user2)));
+        courseAndUserService.removeOwner(user1, course1);
+        courseAndUserService.removeOwner(user2, course1);
     }
 
     @Test
     public void removeCourseOwner() {
-        courseAndUserService.addOwner(user1.getId(), course1.getId());
-        courseAndUserService.addOwner(user2.getId(), course1.getId());
-        User user3 = testHelper.createTestUserObject();
-        String token3 = testHelper.logInUser(user3.getId());
+        courseAndUserService.addOwner(user1, course1);
+        courseAndUserService.addOwner(user2, course1);
+        Long user3 = testHelper.createTestUser();
+        String token3 = testHelper.logInUser(user3);
         assertThrows(MissingAuthorizationException.class, () -> {
-            courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), null);
+            courseOwnController.removeCourseOwner(user1, course1, null);
         });
         assertThrows(InvalidTokenException.class, () -> {
-            courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), "Unbearer: 123");
+            courseOwnController.removeCourseOwner(user1, course1, "Unbearer: 123");
         });
         assertThrows(AuthorizationException.class, () -> {
-            courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), token3);
+            courseOwnController.removeCourseOwner(user1, course1, token3);
         });
-        courseOwnController.removeCourseOwner(user2.getId(), course1.getId(), token2);
+        courseOwnController.removeCourseOwner(user2, course1, token2);
         // No har kurset kun éin eigar
         assertThrows(GazelleException.class, () -> {
-           courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), token1);
+            courseOwnController.removeCourseOwner(user1, course1, token1);
             // Dette vil vere den einaste eigaren
         });
+        courseAndUserService.removeOwner(user1, course1);
+        testHelper.deleteTestUser(user3);
     }
 
     @AfterAll
@@ -117,5 +132,4 @@ public class CourseOwnControllerTest {
         testHelper.deleteTestCourse(course1);
         testHelper.deleteTestCourse(course2);
     }
-
 }
