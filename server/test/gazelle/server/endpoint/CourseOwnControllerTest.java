@@ -4,6 +4,7 @@ import gazelle.model.Course;
 import gazelle.model.User;
 import gazelle.server.TestHelper;
 import gazelle.server.error.AuthorizationException;
+import gazelle.server.error.GazelleException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.service.CourseAndUserService;
@@ -68,11 +69,6 @@ public class CourseOwnControllerTest {
         assertFalse(owners.contains(user3));
     }
 
-    /**
-     * Potensielt problem(?):
-     * Eg / vi sjekkar forskjellige scenario av testdata i same metode
-     * Dermed; om ein ting failer, vil vi berre få den første erroren, sidan resten ikkje vil bli køyrt?
-     */
     @Test
     public void addCourseOwner() {
         courseAndUserService.addOwner(user1.getId(), course1.getId());
@@ -92,7 +88,25 @@ public class CourseOwnControllerTest {
 
     @Test
     public void removeCourseOwner() {
-
+        courseAndUserService.addOwner(user1.getId(), course1.getId());
+        courseAndUserService.addOwner(user2.getId(), course1.getId());
+        User user3 = testHelper.createTestUserObject();
+        String token3 = testHelper.logInUser(user3.getId());
+        assertThrows(MissingAuthorizationException.class, () -> {
+            courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), null);
+        });
+        assertThrows(InvalidTokenException.class, () -> {
+            courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), "Unbearer: 123");
+        });
+        assertThrows(AuthorizationException.class, () -> {
+            courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), token3);
+        });
+        courseOwnController.removeCourseOwner(user2.getId(), course1.getId(), token2);
+        // No har kurset kun éin eigar
+        assertThrows(GazelleException.class, () -> {
+           courseOwnController.removeCourseOwner(user1.getId(), course1.getId(), token1);
+            // Dette vil vere den einaste eigaren
+        });
     }
 
 }
