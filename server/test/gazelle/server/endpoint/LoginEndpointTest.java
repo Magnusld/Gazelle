@@ -5,10 +5,7 @@ import gazelle.auth.LogInResponse;
 import gazelle.auth.SignUpRequest;
 import gazelle.model.User;
 import gazelle.server.TestHelper;
-import gazelle.server.error.GazelleException;
-import gazelle.server.error.InvalidTokenException;
-import gazelle.server.error.LoginFailedException;
-import gazelle.server.error.MissingAuthorizationException;
+import gazelle.server.error.*;
 import gazelle.server.service.TokenAuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -36,17 +33,11 @@ public class LoginEndpointTest {
 
     @Test
     public void signup() {
-        GazelleException ex = assertThrows(GazelleException.class, () -> {
-            loginEndpoint.signup(new SignUpRequest("hal", "hal", "hal", "hal"));
+        UnprocessableEntityException uex = assertThrows(UnprocessableEntityException.class, () -> {
+            loginEndpoint.signup(
+                    new SignUpRequest("Hallvard", "Trætteberg",
+                            "hallemann@nrk.no", "123"));
         });
-        assertEquals("Email too short", ex.getReason());
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, ex.getStatusCode());
-
-        ex = assertThrows(GazelleException.class, () -> {
-            loginEndpoint.signup(new SignUpRequest("hall", "hal", "hell", "hal"));
-        });
-        assertEquals("Password too short", ex.getReason());
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, ex.getStatusCode());
 
         final String FIRSTNAME = "testfirst";
         final String LASTNAME = "testlast";
@@ -62,11 +53,11 @@ public class LoginEndpointTest {
         assertEquals(PASS, user.getPassword());
         assertEquals(user, tokenAuthService.getUserObjectFromToken(token));
 
-        ex = assertThrows(GazelleException.class, () -> {
+        GazelleException gex = assertThrows(GazelleException.class, () -> {
             loginEndpoint.signup(new SignUpRequest("dummy", "dummy", EMAIL, "dummy"));
         });
-        assertEquals("Email taken", ex.getReason());
-        assertEquals(HttpStatus.CONFLICT, ex.getStatusCode());
+        assertEquals("Email taken", gex.getReason());
+        assertEquals(HttpStatus.CONFLICT, gex.getStatusCode());
 
         testHelper.deleteTestUser(user);
     }
