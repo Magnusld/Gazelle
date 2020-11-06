@@ -9,22 +9,15 @@ import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.service.CourseAndUserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CourseOwnControllerTest {
-
-    @Autowired
-    private CourseOwnController courseOwnController;
-
-    @Autowired
-    private TestHelper testHelper;
-
-    @Autowired
-    private CourseAndUserService courseAndUserService;
 
     private Course course1;
     private Course course2;
@@ -33,14 +26,22 @@ public class CourseOwnControllerTest {
     private String token1;
     private String token2;
 
+    @Autowired
+    private CourseOwnController courseOwnController;
+
+    @Autowired
+    private CourseAndUserService courseAndUserService;
+    @Autowired
+    private TestHelper testHelper;
+
     @BeforeAll
     public void setup() {
-        course1 = testHelper.createTestCourseObject();
-        course2 = testHelper.createTestCourseObject();
         user1 = testHelper.createTestUserObject();
         user2 = testHelper.createTestUserObject();
         token1 = testHelper.logInUser(user1.getId());
         token2 = testHelper.logInUser(user2.getId());
+        course1 = testHelper.createTestCourseObject();
+        course2 = testHelper.createTestCourseObject();
     }
 
     @Test
@@ -67,23 +68,33 @@ public class CourseOwnControllerTest {
         assertFalse(owners.contains(user3));
     }
 
-    /**
-     * Støtt på eit problem med denne metoden sidan eg må ta inn ein authorization token
-     * Korleis?
-     */
     @Test
     public void addCourseOwner() {
-        courseAndUserService.addOwner(user1, course1);
+        courseAndUserService.addOwner(user1.getId(), course1.getId());
         assertThrows(MissingAuthorizationException.class, () -> {
             courseOwnController.addCourseOwner(user2.getId(), course1.getId(), null);
         });
         // Spørsmålet er no, kva er ein invalid token?
-        assertThrows(InvalidTokenException.class, )
+        // Svar: noko som ikkje startar på Bearer:
+        assertThrows(InvalidTokenException.class, () -> {
+            courseOwnController.addCourseOwner(user2.getId(), course1.getId(), "Unbearer: 123");
+        });
         assertThrows(AuthorizationException.class, () -> {
             courseOwnController.addCourseOwner(user2.getId(), course1.getId(), token2);
         });
+        courseOwnController.addCourseOwner(user2.getId(), course1.getId(), token1);
+        assertEquals(2, course1.getOwners().size());
+        assertTrue(course1.getOwners()
+                        .stream().anyMatch(u -> u.getId().equals(user2.getId())));
+    }
 
-        courseOwnController.addCourseOwner(user2.getId(), course1.getId(), token1); // Antek at det er tokenen til den som skal ha authorization som må vere her?
+    /**
+     * Potensielt problem(?):
+     * Eg / vi sjekkar forskjellige scenario av testdata i same metode
+     * Dermed; om ein ting failer, vil vi berre få den første errore, sidan resten ikkje vil bli køyrt?
+     */
+    @Test
+    public void removeCourseOwner() {
 
     }
 
