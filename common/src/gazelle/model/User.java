@@ -124,6 +124,23 @@ public class User {
         return Objects.equals(id, user.id);
     }
 
+    public void validate() throws ModelException {
+        if (this.password.length() < 4)
+            throw new ModelException("Passordet må være minst 4 tegn.");
+
+        if (this.firstname.length() < 2)
+            throw new ModelException("Fornavn må være minst 2 tegn.");
+
+        if (this.email.contains(" "))
+            throw new ModelException("E-post-adressen kan ikke inneholde mellomrom.");
+
+        if (!this.firstname.trim().equals(this.firstname))
+            throw new ModelException("Fornavn kan ikke starte eller slutte med mellomrom.");
+
+        if (!this.lastname.trim().equals(this.lastname))
+            throw new ModelException("Etternavn kan ikke starte eller slutte med mellomrom.");
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
