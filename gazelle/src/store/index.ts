@@ -5,15 +5,16 @@ import { User } from "@/types";
 
 Vue.use(Vuex);
 
+export type LogInStatus = "loggedOut" | "loggedIn" | "loading" | "error";
+
 export interface State {
-  status: string;
+  status: LogInStatus;
   token?: string;
   user?: User;
 }
 
 const defaultState = (): State => ({
-  status: "",
-  token: localStorage.getItem("token") || undefined
+  status: "loggedOut"
 });
 
 export default new Vuex.Store({
@@ -23,7 +24,7 @@ export default new Vuex.Store({
       state.status = "loading";
     },
     authSuccess(state: State, { token, user }: { token: string; user: User }) {
-      state.status = "success";
+      state.status = "loggedIn";
       state.token = token;
       state.user = user;
     },
@@ -31,8 +32,9 @@ export default new Vuex.Store({
       state.status = "error";
     },
     logout(state: State) {
-      state.status = "";
-      state.token = "";
+      state.status = "loggedOut";
+      state.token = undefined;
+      state.user = undefined;
     }
   },
   actions: {
@@ -110,6 +112,7 @@ export default new Vuex.Store({
   modules: {},
   getters: {
     isLoggedIn: state => !!state.token,
-    authStatus: state => state.status
+    authStatus: state => state.status,
+    loggedInUser: state => state.user
   }
 });
