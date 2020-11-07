@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
+import restClient, {RestError} from "@/client/RestClient";
 import { User } from "@/types";
 
 Vue.use(Vuex);
@@ -9,12 +9,13 @@ export type LogInStatus = "loggedOut" | "loggedIn" | "loading" | "error";
 
 export interface State {
   status: LogInStatus;
+  errorString?: string;
   token?: string;
   user?: User;
 }
 
 const defaultState = (): State => ({
-  status: "loggedOut"
+  status: "loading"
 });
 
 export default new Vuex.Store({
@@ -28,8 +29,9 @@ export default new Vuex.Store({
       state.token = token;
       state.user = user;
     },
-    authError(state: State) {
+    authError(state: State, errorString: string) {
       state.status = "error";
+      state.errorString = errorString;
     },
     logout(state: State) {
       state.status = "loggedOut";
@@ -38,12 +40,21 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login(
+    async login(
       { commit },
       { email, password }: { email: string; password: string }
     ) {
+
+      commit("authRequest");
+      try {
+        const response = await restClient.post("/login", {email, password})
+      } catch(e) {
+
+      }
+
+
       return new Promise((resolve, reject) => {
-        commit("authRequest");
+
         axios({
           url: "http://localhost:8088/login",
           data: { email, password },
@@ -113,6 +124,7 @@ export default new Vuex.Store({
   getters: {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
-    loggedInUser: state => state.user
+    loggedInUser: state => state.user,
+    token: state => state.token
   }
 });
