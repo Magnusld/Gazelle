@@ -1,5 +1,9 @@
 <template>
-  <md-content v-if="this.$store.getters.isLoggedIn" class="md-layout md-primary md-elevation-2" id="topBar">
+  <md-content
+    v-if="this.$store.getters.isLoggedIn"
+    class="md-layout md-primary md-elevation-2"
+    id="topBar"
+  >
     <div class="md-layout-item md-layout">
       <div class="buttonContainer">
         <md-button class="md-icon-button" to="/">
