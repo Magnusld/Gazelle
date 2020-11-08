@@ -29,6 +29,7 @@
           <md-input v-model="repeatedPassword" type="password"></md-input>
         </md-field>
       </div>
+      <div class="errorMessage" v-if="error">Error: {{ error }}</div>
       <md-button class="md-raised md-primary signUpButton" v-on:click="signUp">
         Opprett Bruker</md-button
       >
@@ -38,6 +39,9 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { signup } from "@/client/login";
+import router from "@/router";
+
 @Component
 export default class SignUpPage extends Vue {
   private firstname = "";
@@ -46,16 +50,23 @@ export default class SignUpPage extends Vue {
   private password = "";
   private repeatedPassword = "";
 
-  private signUp() {
-    console.log("Signing up");
+  private error = "";
+
+  private async signUp() {
+    this.error = "";
     const firstname: string = this.firstname;
     const lastname: string = this.lastname;
     const email: string = this.email;
     const password: string = this.password;
-    this.$store
-      .dispatch("register", { firstname, lastname, email, password })
-      .then(() => this.$router.push("/login"))
-      .catch(err => console.log(err));
+
+    try {
+      await signup({firstname, lastname, email, password});
+      await router.replace("/");
+    } catch(e) {
+      if (e.status == undefined)
+        this.error = `Klarte ikke koble til tjener: ${e.message}`;
+      else this.error = `${e.message} (${e.status})`;
+    }
   }
 }
 </script>
@@ -76,6 +87,11 @@ export default class SignUpPage extends Vue {
   justify-content: center;
   align-items: center;
   height: 90vh;
+}
+.errorMessage {
+  font-size: 1.2rem;
+  text-align: center;
+  color: red;
 }
 .signUpButton {
   display: flex;

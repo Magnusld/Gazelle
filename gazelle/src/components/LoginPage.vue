@@ -17,7 +17,7 @@
           autocomplete="password"
         ></md-input>
       </md-field>
-      <div class="errorMessage" v-if="error">{{ error }}</div>
+      <div class="errorMessage" v-if="error">Error: {{ error }}</div>
       <div class="buttonBar">
         <md-button
           class="md-raised md-primary"
@@ -33,20 +33,22 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import router from "@/router";
 import { login } from "@/client/login";
 
 @Component
 export default class LoginPage extends Vue {
   private email = "";
   private password = "";
-  private error?: string = "";
+  private error = "";
 
   private async login() {
-    this.error = undefined;
+    this.error = "";
     const email: string = this.email;
     const password: string = this.password;
     try {
       await login({ email, password });
+      await router.replace("/");
     } catch (e) {
       if (e.status == undefined)
         this.error = `Klarte ikke koble til tjener: ${e.message}`;
