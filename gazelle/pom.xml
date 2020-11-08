@@ -40,16 +40,6 @@
                         <phase>generate-resources</phase>
                     </execution>
                     <execution>
-                        <id>yarn build</id>
-                        <goals>
-                            <goal>yarn</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>build</arguments>
-                        </configuration>
-                        <phase>install</phase>
-                    </execution>
-                    <execution>
                         <id>yarn test:unit</id>
                         <goals>
                             <goal>yarn</goal>
@@ -68,6 +58,28 @@
                             <arguments>lint --no-fix --max-errors=0 --max-warnings=0</arguments>
                         </configuration>
                         <phase>verify</phase>
+                    </execution>
+
+                    <!-- These have to be run manually -->
+                    <execution>
+                        <id>yarn build</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>build</arguments>
+                        </configuration>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>yarn serve</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>serve</arguments>
+                        </configuration>
+                        <phase>none</phase>
                     </execution>
                 </executions>
                 <configuration>
