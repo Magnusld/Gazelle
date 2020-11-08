@@ -11,8 +11,13 @@
       </md-field>
       <md-field :md-toggle-password="true">
         <label>Passord:</label>
-        <md-input v-model="password" type="password" autocomplete="password"></md-input>
+        <md-input
+          v-model="password"
+          type="password"
+          autocomplete="password"
+        ></md-input>
       </md-field>
+      <div class="errorMessage" v-if="error">Error: {{ error }}</div>
       <div class="buttonBar">
         <md-button
           class="md-raised md-primary"
@@ -28,18 +33,27 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import router from "@/router";
+import { login } from "@/client/login";
+
 @Component
 export default class LoginPage extends Vue {
   private email = "";
   private password = "";
+  private error = "";
 
-  private login() {
+  private async login() {
+    this.error = "";
     const email: string = this.email;
     const password: string = this.password;
-    this.$store
-      .dispatch("login", { email, password })
-      .then(() => this.$router.push("/"))
-      .catch(err => console.log(err));
+    try {
+      await login({ email, password });
+      await router.replace("/");
+    } catch (e) {
+      if (e.status == undefined)
+        this.error = `Klarte ikke koble til tjener: ${e.message}`;
+      else this.error = `${e.message} (${e.status})`;
+    }
   }
 }
 </script>
@@ -59,6 +73,12 @@ export default class LoginPage extends Vue {
   justify-content: space-between;
   align-items: center;
   padding: 0 0 10px 10px;
+}
+
+.errorMessage {
+  font-size: 1.2rem;
+  text-align: center;
+  color: red;
 }
 
 .buttonBar {

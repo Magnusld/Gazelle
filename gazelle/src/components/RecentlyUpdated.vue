@@ -1,20 +1,20 @@
 <template>
-    <div class="md-scrollbar recentlyUpdated">
-      <div class="horizontalSeparator">
-        <span class="md-headline">Nylig oppdatert</span>
-        <md-button class="md-icon-button">
-          <md-icon>delete</md-icon>
-        </md-button>
-      </div>
-      <md-divider></md-divider>
-      <md-content class="courses">
-        <CourseListing
-            v-for="(course, index) in courses"
-            :key="index"
-            :course="course"
-        />
-      </md-content>
+  <div class="md-scrollbar recentlyUpdated">
+    <div class="horizontalSeparator">
+      <span class="md-headline">Nylig oppdatert</span>
+      <md-button class="md-icon-button">
+        <md-icon>delete</md-icon>
+      </md-button>
     </div>
+    <md-divider></md-divider>
+    <md-content class="courses">
+      <CourseListing
+        v-for="(course, index) in courses"
+        :key="index"
+        :course="course"
+      />
+    </md-content>
+  </div>
 </template>
 
 <script lang="ts">
@@ -43,9 +43,8 @@ export default class RecentlyUpdated extends Vue {
   max-height: 450px;
   overflow: auto;
 }
-.courses{
+.courses {
   width: 75%;
   align-content: center;
 }
-
 </style>
