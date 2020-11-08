@@ -121,11 +121,6 @@
                 <version>2.3.4.RELEASE</version>
             </plugin>
 
-            <!-- Site -->
-            <plugin>
-                <artifactId>maven-site-plugin</artifactId>
-            </plugin>
-
             <!-- Checkstyle code quality tool -->
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
