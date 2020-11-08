@@ -1,12 +1,16 @@
-import { shallowMount } from "@vue/test-utils";
-import HelloWorld from "@/components/HelloWorld.vue";
+import {createLocalVue, shallowMount} from "@vue/test-utils";
+import VueMaterial from "vue-material";
+import CourseListing from "@/components/CourseListing.vue";
 
-describe("HelloWorld.vue", () => {
-  it("renders props.msg when passed", () => {
-    const msg = "new message";
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg }
+const localVue = createLocalVue();
+localVue.use(VueMaterial);
+
+describe("CourseListing.vue", () => {
+  it("renders course name", () => {
+    const wrapper = shallowMount(CourseListing, {
+      localVue,
+      propsData: { course: {name: "Testløp"} }
     });
-    expect(wrapper.text()).toMatch(msg);
+    expect(wrapper.find(".title").html()).toContain("Testløp</a>")
   });
 });

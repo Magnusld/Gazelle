@@ -6,7 +6,9 @@ default:
   cache:
     key: maven-cache
     paths:
+      - gazelle/node
+      - gazelle/node_modules
       - .m2/repository
 
 test:
-  script: true || mvn verify
+  script: mvn verify

@@ -4,7 +4,7 @@
     <div class="courseListing">
       <div class="header">
         <div class="horizontalSeparator">
-          <a style="color:black" class="title">{{ course.name }}</a>
+          <a class="title">{{ course.name }}</a>
           <div>Neste frist: I dag</div>
         </div>
         <div class="subheader">Nå: Datastrukturer (4 dager igjen)</div>
@@ -51,6 +51,7 @@ export default class CourseListing extends Vue {
   color: gray;
 }
 .title {
+  color: black;
   font-size: 20px;
   font-weight: 500;
   letter-spacing: 0.005em;
