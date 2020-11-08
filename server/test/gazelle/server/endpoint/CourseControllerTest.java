@@ -27,9 +27,6 @@ public class CourseControllerTest {
     private CourseController courseController;
 
     @Autowired
-    private UserController userController;
-
-    @Autowired
     private CourseAndUserService courseAndUserService;
 
     @Autowired
@@ -48,7 +45,6 @@ public class CourseControllerTest {
     public void findAll() {
         List<Course> courses = new ArrayList<>();
         courseController.findAll().forEach(courses::add);
-        assertEquals(2, courses.size());
         assertTrue(courses.contains(course1));
         assertTrue(courses.contains(course2));
     }

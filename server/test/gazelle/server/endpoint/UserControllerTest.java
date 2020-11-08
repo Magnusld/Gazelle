@@ -43,7 +43,6 @@ public class UserControllerTest {
     public void findAll() {
         List<User> users = new ArrayList<>();
         userController.findAll().forEach(users::add);
-        assertEquals(2, users.size());
         assertTrue(users.contains(user1));
         assertTrue(users.contains(user2));
     }

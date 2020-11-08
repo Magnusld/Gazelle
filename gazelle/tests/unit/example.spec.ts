@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from "@vue/test-utils";
+import { createLocalVue, shallowMount } from "@vue/test-utils";
 import VueMaterial from "vue-material";
 import CourseListing from "@/components/CourseListing.vue";
 
@@ -9,8 +9,8 @@ describe("CourseListing.vue", () => {
   it("renders course name", () => {
     const wrapper = shallowMount(CourseListing, {
       localVue,
-      propsData: { course: {name: "Testløp"} }
+      propsData: { course: { name: "Testløp" } }
     });
-    expect(wrapper.find(".title").html()).toContain("Testløp</a>")
+    expect(wrapper.find(".title").html()).toContain("Testløp</a>");
   });
 });
