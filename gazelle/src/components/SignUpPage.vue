@@ -1,37 +1,37 @@
 <template>
   <form class="signUpPage">
-      <div class="horizontalSeparator">
-        <span class="md-headline">Opprett ny bruker:</span>
-      </div>
-      <md-divider></md-divider>
-      <div class="horizontalWrapper">
-        <md-field class="horizontalField">
-          <label>Fornavn:</label>
-          <md-input v-model="firstname" autocomplete="given-name"></md-input>
-        </md-field>
-        <md-field class="horizontalField">
-          <label>Etternavn:</label>
-          <md-input v-model="lastname" autocomplete="family-name"></md-input>
-        </md-field>
-      </div>
-      <md-field>
-        <label>E-post:</label>
-        <md-input v-model="email" type="email" autocomplete="email"></md-input>
+    <div class="horizontalSeparator">
+      <span class="md-headline">Opprett ny bruker:</span>
+    </div>
+    <md-divider></md-divider>
+    <div class="horizontalWrapper">
+      <md-field class="horizontalField">
+        <label>Fornavn:</label>
+        <md-input v-model="firstname" autocomplete="given-name"></md-input>
       </md-field>
-      <div class="horizontalWrapper">
-        <md-field :md-toggle-password="true" class="horizontalField">
-          <label>Passord:</label>
-          <md-input v-model="password" type="password"></md-input>
-        </md-field>
-        <md-field :md-toggle-password="false" class="horizontalField">
-          <label>Gjenta passord:</label>
-          <md-input v-model="repeatedPassword" type="password"></md-input>
-        </md-field>
-      </div>
-      <div class="errorMessage" v-if="error">Error: {{ error }}</div>
-      <md-button class="md-raised md-primary signUpButton" v-on:click="signUp">
-        Opprett Bruker</md-button
-      >
+      <md-field class="horizontalField">
+        <label>Etternavn:</label>
+        <md-input v-model="lastname" autocomplete="family-name"></md-input>
+      </md-field>
+    </div>
+    <md-field>
+      <label>E-post:</label>
+      <md-input v-model="email" type="email" autocomplete="email"></md-input>
+    </md-field>
+    <div class="horizontalWrapper">
+      <md-field :md-toggle-password="true" class="horizontalField">
+        <label>Passord:</label>
+        <md-input v-model="password" type="password"></md-input>
+      </md-field>
+      <md-field :md-toggle-password="false" class="horizontalField">
+        <label>Gjenta passord:</label>
+        <md-input v-model="repeatedPassword" type="password"></md-input>
+      </md-field>
+    </div>
+    <div class="errorMessage" v-if="error">Error: {{ error }}</div>
+    <md-button class="md-raised md-primary signUpButton" v-on:click="signUp">
+      Opprett Bruker</md-button
+    >
   </form>
 </template>
 
@@ -70,7 +70,7 @@ export default class SignUpPage extends Vue {
 </script>
 
 <style scoped>
-.signUpPage{
+.signUpPage {
   max-width: 500px;
   width: 90%;
 }
