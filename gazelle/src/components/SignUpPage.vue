@@ -60,9 +60,9 @@ export default class SignUpPage extends Vue {
     const password: string = this.password;
 
     try {
-      await signup({firstname, lastname, email, password});
+      await signup({ firstname, lastname, email, password });
       await router.replace("/");
-    } catch(e) {
+    } catch (e) {
       if (e.status == undefined)
         this.error = `Klarte ikke koble til tjener: ${e.message}`;
       else this.error = `${e.message} (${e.status})`;
