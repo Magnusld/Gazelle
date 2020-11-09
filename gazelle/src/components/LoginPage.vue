@@ -1,32 +1,30 @@
 <template>
-  <form class="wrapper">
-    <div class="loginPage">
-      <div class="horizontalSeparator">
-        <span class="md-headline">Innlogging</span>
-      </div>
-      <md-divider></md-divider>
-      <md-field md-clearable>
-        <label>E-post:</label>
-        <md-input v-model="email" type="email" autocomplete="email"></md-input>
-      </md-field>
-      <md-field :md-toggle-password="true">
-        <label>Passord:</label>
-        <md-input
-          v-model="password"
-          type="password"
-          autocomplete="password"
-        ></md-input>
-      </md-field>
-      <div class="errorMessage" v-if="error">Error: {{ error }}</div>
-      <div class="buttonBar">
-        <md-button
-          class="md-raised md-primary"
-          v-on:keyup.enter="login"
-          v-on:click="login"
-          >Logg inn</md-button
-        >
-        <md-button class="md-primary" to="/signup">Ny bruker</md-button>
-      </div>
+  <form class="loginPage">
+    <div class="horizontalSeparator">
+      <span class="md-headline">Innlogging</span>
+    </div>
+    <md-divider></md-divider>
+    <md-field md-clearable>
+      <label>E-post:</label>
+      <md-input v-model="email" type="email" autocomplete="email"></md-input>
+    </md-field>
+    <md-field :md-toggle-password="true">
+      <label>Passord:</label>
+      <md-input
+        v-model="password"
+        type="password"
+        autocomplete="password"
+      ></md-input>
+    </md-field>
+    <div class="errorMessage" v-if="error">Error: {{ error }}</div>
+    <div class="buttonBar">
+      <md-button
+        class="md-raised md-primary"
+        v-on:keyup.enter="login"
+        v-on:click="login"
+        >Logg inn</md-button
+      >
+      <md-button class="md-primary" to="/signup">Ny bruker</md-button>
     </div>
   </form>
 </template>
@@ -59,14 +57,9 @@ export default class LoginPage extends Vue {
 </script>
 
 <style scoped lang="scss">
-.wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 90vh;
-}
 .loginPage {
-  width: 30%;
+  max-width: 500px;
+  width: 90%;
 }
 .horizontalSeparator {
   display: flex;
@@ -78,7 +71,7 @@ export default class LoginPage extends Vue {
 .errorMessage {
   font-size: 1.2rem;
   text-align: center;
-  color: red;
+  color: #ff0000;
 }
 
 .buttonBar {

@@ -1,6 +1,5 @@
 <template>
-  <div class="wrapper">
-    <div class="signUpPage">
+  <form class="signUpPage">
       <div class="horizontalSeparator">
         <span class="md-headline">Opprett ny bruker:</span>
       </div>
@@ -33,8 +32,7 @@
       <md-button class="md-raised md-primary signUpButton" v-on:click="signUp">
         Opprett Bruker</md-button
       >
-    </div>
-  </div>
+  </form>
 </template>
 
 <script lang="ts">
@@ -72,6 +70,10 @@ export default class SignUpPage extends Vue {
 </script>
 
 <style scoped>
+.signUpPage{
+  max-width: 500px;
+  width: 90%;
+}
 .horizontalSeparator {
   display: flex;
   justify-content: space-between;
