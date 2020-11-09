@@ -12,8 +12,8 @@ public class AuthorizationException extends GazelleException {
     }
 
     public AuthorizationException(String message) {
-        super("Unauthorized",
+        super("Forbidden",
                 message,
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.FORBIDDEN);
     }
 }
