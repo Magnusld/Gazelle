@@ -1,20 +1,22 @@
 <template>
   <div id="wrapper">
     <img src="../assets/images/orangelogo.svg" alt="Orange logo" id="logo" />
-    <LoginPage />
+    <SignUpPage />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import LoginPage from "../components/LoginPage.vue";
+import SignUpPage from "@/components/SignUpPage.vue";
 
 @Component({
   components: {
+    SignUpPage,
     LoginPage
   }
 })
-export default class LoginView extends Vue {}
+export default class SignUpView extends Vue {}
 </script>
 
 <style scoped>

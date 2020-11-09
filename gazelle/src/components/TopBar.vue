@@ -26,13 +26,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { logout } from "@/client/login";
 
 @Component
 export default class TopBar extends Vue {
   private logout() {
-    this.$store.dispatch("logout").then(() => {
-      this.$router.push("/login");
-    });
+    logout();
   }
 }
 </script>
