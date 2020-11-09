@@ -42,6 +42,11 @@ export default class LoginPage extends Vue {
   private password = "";
   private error = "";
 
+  mounted() {
+    const reason = this.$route.query.reason;
+    if (reason == "invalidated") this.error = "Du har blitt logget ut";
+  }
+
   private async login() {
     this.error = "";
     const email: string = this.email;
