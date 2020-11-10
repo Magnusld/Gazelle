@@ -4,7 +4,15 @@
     class="md-layout md-primary md-elevation-2"
     id="topBar"
   >
-    <div class="md-layout-item md-layout">
+    <mq-layout mq="mobile">
+      <md-button class="md-icon-button" @click="showNavigation = true">
+        <md-icon>menu</md-icon>
+      </md-button>
+      <md-drawer :md-active.sync="showNavigation" md-swipeable>
+        Test
+      </md-drawer>
+    </mq-layout>
+    <mq-layout mq="tablet+" class="md-layout-item md-layout">
       <div class="buttonContainer">
         <md-button class="md-icon-button" to="/">
           <img src="../assets/applogo.svg" alt="applogo" />
@@ -14,7 +22,7 @@
         <md-tab md-label="Mine løp" to="/my-courses"></md-tab>
         <md-tab md-label="Fokuslista" to="/focus-list"></md-tab>
       </md-tabs>
-    </div>
+    </mq-layout>
     <div class="md-layout-item buttonContainer">
       <md-button class="md-secondary" v-on:click="logout">Logg ut</md-button>
       <md-button class="md-icon-button" id="userInfo" to="/user-settings">
@@ -33,6 +41,7 @@ export default class TopBar extends Vue {
   private logout() {
     logout();
   }
+  public showNavigation = false;
 }
 </script>
 
