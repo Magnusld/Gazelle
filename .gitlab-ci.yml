@@ -9,9 +9,10 @@ default:
       - gazelle/node
       - gazelle/node_modules
       - .m2/repository
-  workflow: #Only run for changes pushed to branches
-    rules:
-      - if: '$CI_COMMIT_BRANCH'
+
+workflow: #Only run for changes pushed to branches
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
 
 test:
   stage: test
