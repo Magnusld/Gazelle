@@ -4,7 +4,6 @@ import store from "@/store";
 
 export interface RestError {
   status?: number;
-  reason?: string;
   message?: string;
 }
 
@@ -16,7 +15,6 @@ export function wrapPromise<T>(axiosPromise: AxiosPromise<T>): Promise<T> {
         if (error.response) {
           const restError: RestError = {
             status: error.response.status,
-            reason: error.response.data.reason,
             message: error.response.data.message
           };
           if (restError.status == 401) {

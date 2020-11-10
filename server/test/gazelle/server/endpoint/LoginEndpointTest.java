@@ -56,7 +56,7 @@ public class LoginEndpointTest {
         GazelleException gex = assertThrows(GazelleException.class, () -> {
             loginEndpoint.signup(new SignUpRequest("dummy", "dummy", EMAIL, "dummy"));
         });
-        assertEquals("Email taken", gex.getReason());
+        assertEquals("Email taken", gex.getMessage());
         assertEquals(HttpStatus.CONFLICT, gex.getStatusCode());
 
         testHelper.deleteTestUser(user);

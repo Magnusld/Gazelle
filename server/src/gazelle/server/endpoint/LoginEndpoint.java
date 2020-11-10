@@ -90,7 +90,7 @@ public class LoginEndpoint {
         }
 
         if (userRepository.findByEmail(user.getEmail()).isPresent())
-            throw new GazelleException("Email taken", user.getEmail(), HttpStatus.CONFLICT);
+            throw new GazelleException("Email taken", HttpStatus.CONFLICT);
 
         userRepository.save(user);
         String token = tokenAuthService.createTokenForUser(user);

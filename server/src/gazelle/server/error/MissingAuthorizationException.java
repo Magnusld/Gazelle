@@ -11,6 +11,6 @@ import org.springframework.http.HttpStatus;
 public class MissingAuthorizationException extends GazelleException {
 
     public MissingAuthorizationException() {
-        super("Missing 'Authorization'-header", null, HttpStatus.UNAUTHORIZED);
+        super("Missing 'Authorization'-header", HttpStatus.UNAUTHORIZED);
     }
 }
