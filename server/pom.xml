@@ -12,6 +12,7 @@
 
     <artifactId>gazelle-server</artifactId>
     <name>Gazelle Server</name>
+    <packaging>jar</packaging>
 
     <properties>
         <app.profiles>dev</app.profiles>

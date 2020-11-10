@@ -27,7 +27,7 @@ deploy:
     - mvn frontend:yarn@"yarn build" -pl gazelle
   artifacts:
     paths:
-      - gazelle/public
+      - gazelle/dist
       - server/target/gazelle-server-0.1-SNAPSHOT.jar
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
