@@ -10,5 +10,24 @@ default:
       - gazelle/node_modules
       - .m2/repository
 
+workflow: #Only run for changes pushed to branches
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
 test:
+  stage: test
   script: mvn verify
+  rules:
+    - if: '$CI_COMMIT_BRANCH != "master"'
+
+deploy:
+  stage: deploy
+  script:
+    - mvn install
+    - mvn frontend:yarn@"yarn build" -pl gazelle
+  artifacts:
+    paths:
+      - gazelle/public
+      - server/target/gazelle-server-0.1-SNAPSHOT.jar
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
