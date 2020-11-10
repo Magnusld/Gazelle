@@ -25,6 +25,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String lastname;
 
+    @JsonIgnore
     @Column(nullable = false, unique = true)
     private String email;
 
