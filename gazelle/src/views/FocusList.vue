@@ -6,12 +6,10 @@
         <md-icon>delete</md-icon>
       </md-button>
     </div>
-    <FocusChore>
-      v-for="(course, index) in courses"
-      :key="index"
-      :course="course"
-    </FocusChore>
-    <md-divider />
+    <FocusChore
+        v-for="(chore, index) in chores"
+        :key="index"
+        :chore="chore" />
   </div>
 </template>
 
@@ -26,8 +24,9 @@ import {Chore} from "@/types";
   }
 })
 export default class FocusList extends Vue {
-  @Prop()
-  private chores!: Chore[];
+  private chores: Chore[] = [{key: 0, id: 1, name: "Gjøre øving 2", courseName: "TDT4120 - Algdat"},
+    {key: 1, id: 1, name: "Gjøre øving 3", courseName: "TDT4120 - Algdat"},
+    {key: 2, id: 1, name: "Følge @abakusmemes", courseName: "TDT6969 - Memes"}];
 }
 
 </script>

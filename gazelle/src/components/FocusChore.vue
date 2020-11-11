@@ -1,18 +1,21 @@
 <template>
   <div>
+    <md-divider />
     <div class="subheader">{{chore.courseName}}</div>
-    <md-checkbox v-model="checked" class="checkbox">{{chore.name}}</md-checkbox>
-    <md-divider/>
+    <md-checkbox v-model="checked" class="checkbox">
+      {{chore.name}}
+    </md-checkbox>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import {Chore} from "@/types";
 
 @Component
 export default class FocusChore extends Vue {
   @Prop()
-  private chore!: { name: string, courseName: string, courseId: number, postName: string, postId: number };
+  private chore!: Chore;
   private checked = false;
 }
 
@@ -22,6 +25,8 @@ export default class FocusChore extends Vue {
 
 .subheader {
   color: gray;
+  margin-bottom: -1%;
+  margin-top: 1%;
 }
 .checkbox {
   --md-theme-default-accent: #F29253
