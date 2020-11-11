@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 
 public class GazelleException extends RuntimeException {
 
-    private final String reason;
     private final HttpStatus statusCode;
 
     /**
@@ -18,22 +17,16 @@ public class GazelleException extends RuntimeException {
      * which means we must provide Spring with an object that can be serialized.
      * This object contains reason and message, unless they are null.
      *
-     * @param reason The reason given to the client for the failed request, or null
-     * @param message An additional message given to the client, or null
-     * @param statusCode The Http status code of the response
+     * @param message A message given to the client, or null
+     * @param statusCode The HTTP status code of the response
      */
-    public GazelleException(String reason, String message, HttpStatus statusCode) {
+    public GazelleException(String message, HttpStatus statusCode) {
         super(message);
-        this.reason = reason;
         this.statusCode = statusCode;
     }
 
-    public String getReason() {
-        return this.reason;
-    }
-
     public RestErrorObject buildErrorObject() {
-        return new RestErrorObject(getReason(), getMessage());
+        return new RestErrorObject(getMessage());
     }
 
     public HttpStatus getStatusCode() {

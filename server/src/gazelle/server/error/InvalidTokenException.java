@@ -17,6 +17,6 @@ public class InvalidTokenException extends GazelleException {
     }
 
     public InvalidTokenException(String message) {
-        super("invalid authorization token", message, HttpStatus.UNAUTHORIZED);
+        super("invalid authorization token", HttpStatus.UNAUTHORIZED);
     }
 }

@@ -121,7 +121,7 @@ public class CourseOwnController {
         courseAndUserService.removeOwner(userId, courseId);
 
         if (course.getOwners().isEmpty()) //This will revert the transaction
-            throw new GazelleException("No orphan Courses!",
+            throw new GazelleException(
                     "This is the last owner of the course",
                     HttpStatus.UNPROCESSABLE_ENTITY);
     }

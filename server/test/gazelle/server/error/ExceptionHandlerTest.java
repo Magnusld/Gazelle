@@ -19,19 +19,17 @@ public class ExceptionHandlerTest {
     @Autowired
     private RestExceptionHandler exceptionHandler;
 
-    private static final String REASON = "test - Reason";
     private static final String MESSAGE = "test - Message";
 
     @Test
     public void testRestErrorObject() {
         GazelleException e = assertThrows(GazelleException.class, () -> {
-            throw new GazelleException(REASON, MESSAGE, HttpStatus.CONFLICT);
+            throw new GazelleException(MESSAGE, HttpStatus.CONFLICT);
         });
         ResponseEntity<Object> response = exceptionHandler.handleGazelleException(e, null);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         RestErrorObject reo = (RestErrorObject) response.getBody();
         assertNotNull(reo);
-        assertEquals(REASON, reo.getReason());
         assertEquals(MESSAGE, reo.getMessage());
     }
 }

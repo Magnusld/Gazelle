@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 public class UnprocessableEntityException extends GazelleException {
 
     public UnprocessableEntityException(String message) {
-        super("Unprocessable entity", message, HttpStatus.UNPROCESSABLE_ENTITY);
+        super(message, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     public UnprocessableEntityException() {
