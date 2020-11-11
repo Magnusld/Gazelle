@@ -1,10 +1,15 @@
 <template>
   <div>
-    <md-divider/>
+    <md-divider />
     <div class="courseListing">
       <div class="header">
         <div class="horizontalSeparator">
-          <router-link style="color:black" class="title" :to="'/course/'+course.id">{{ course.name }}</router-link>
+          <router-link
+            style="color:black"
+            class="title"
+            :to="'/course/' + course.id"
+            >{{ course.name }}</router-link
+          >
           <div>Neste frist: I dag</div>
         </div>
         <div class="subheader">Nå: Datastrukturer (4 dager igjen)</div>
@@ -15,8 +20,8 @@
         <div>På fokuslista: 3</div>
       </div>
       <md-progress-bar
-          md-mode="determinate"
-          :md-value="68.75"
+        md-mode="determinate"
+        :md-value="68.75"
       ></md-progress-bar>
       <div class="subheader">Forrige: Kombinatorikk</div>
     </div>
@@ -44,16 +49,16 @@ export default class CourseListing extends Vue {
   width: 100%;
   padding: 10px;
 }
-.header{
+.header {
   margin-bottom: 5px;
 }
-.subheader{
+.subheader {
   color: gray;
 }
-.title{
+.title {
   font-size: 20px;
   font-weight: 500;
-  letter-spacing: .005em;
+  letter-spacing: 0.005em;
   line-height: 26px;
   cursor: pointer;
 }

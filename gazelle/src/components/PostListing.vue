@@ -1,10 +1,10 @@
 <template>
   <div>
-    <md-divider/>
+    <md-divider />
     <div class="courseListing">
       <div class="header">
         <div class="horizontalSeparator">
-          <a style="color:black" class="title">{{post.name}}</a>
+          <a style="color:black" class="title">{{ post.name }}</a>
           <md-menu md-direction="bottom-start">
             <md-button md-menu-trigger class="md-icon-button">
               <md-icon>more_horiz</md-icon>
@@ -29,42 +29,41 @@
         <div>Gjort: 3/5</div>
       </div>
       <md-progress-bar
-          md-mode="determinate"
-          :md-value="100*3/5"
+        md-mode="determinate"
+        :md-value="(100 * 3) / 5"
       ></md-progress-bar>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from "vue-property-decorator";
-import {Post} from "@/types";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { Post } from "@/types";
 
 @Component
-export default class PostListing extends Vue{
+export default class PostListing extends Vue {
   @Prop()
   private post!: Post;
 }
 </script>
 
 <style scoped lang="scss">
-.horizontalSeparator{
+.horizontalSeparator {
   display: flex;
   align-content: center;
   align-items: flex-end;
   justify-content: space-between;
 }
-.menu{
+.menu {
   display: flex;
   align-content: center;
   align-items: baseline;
 }
-.title{
+.title {
   font-size: 20px;
   font-weight: 500;
-  letter-spacing: .005em;
+  letter-spacing: 0.005em;
   line-height: 26px;
   cursor: pointer;
 }
-
 </style>

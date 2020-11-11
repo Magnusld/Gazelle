@@ -5,7 +5,6 @@
       Litt *deilig* **markdown**
     </vue-markdown>
   </div>
-
 </template>
 
 <script lang="ts">

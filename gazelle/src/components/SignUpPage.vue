@@ -29,10 +29,7 @@
           <md-input v-model="repeatedPassword" type="password"></md-input>
         </md-field>
       </div>
-      <md-button
-        class="md-raised md-primary signUpButton"
-        v-on:click="signUp"
-      >
+      <md-button class="md-raised md-primary signUpButton" v-on:click="signUp">
         Opprett Bruker</md-button
       >
     </div>
@@ -50,7 +47,7 @@ export default class SignUpPage extends Vue {
   private repeatedPassword = "";
 
   private signUp() {
-    console.log("Signing up")
+    console.log("Signing up");
     const firstname: string = this.firstname;
     const lastname: string = this.lastname;
     const email: string = this.email;

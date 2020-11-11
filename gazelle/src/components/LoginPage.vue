@@ -11,7 +11,11 @@
       </md-field>
       <md-field :md-toggle-password="true">
         <label>Passord:</label>
-        <md-input v-model="password" type="password" autocomplete="password"></md-input>
+        <md-input
+          v-model="password"
+          type="password"
+          autocomplete="password"
+        ></md-input>
       </md-field>
       <div class="buttonBar">
         <md-button
