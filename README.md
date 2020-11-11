@@ -62,10 +62,11 @@ mvn install -DskipTests
 
 For å kjøre tjeneren (port 8088), skriv
 ```
-mvn spring-boot:run -pl
+mvn spring-boot:run -pl server
 ```
+**Merk:** I GitPod må du gå til Åpne Porter og tykke "Make Public" for å gi tilgang til klientene.
 
-For å åpne webappen i nettleser (port 8080), skriv
+For å åpne webappen i nettleser (port 8080), åpne en ny terminal og skriv
 ```
 mvn frontend:yarn@"yarn serve" -pl gazelle
 ```
