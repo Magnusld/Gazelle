@@ -17,7 +17,7 @@ import PostEdit from "../components/PostEdit.vue";
   }
 })
 export default class PostView extends Vue {
-  private editing = false;
+  private editing = true;
 }
 </script>
 <style>
