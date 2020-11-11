@@ -1,7 +1,7 @@
 <template>
   <div>
-    <md-divider />
-    <div class="subheader">{{chore.courseName}}</div>
+    <md-divider v-if="!compact"/>
+    <div class="subheader" v-if="!compact">{{chore.courseName}}</div>
     <md-checkbox v-model="checked" class="checkbox">
       {{chore.name}}
     </md-checkbox>
@@ -17,6 +17,8 @@ export default class FocusChore extends Vue {
   @Prop()
   private chore!: Chore;
   private checked = false;
+  @Prop()
+  private compact!: boolean;
 }
 
 </script>
