@@ -38,6 +38,7 @@ export default class FocusList extends Vue {
 }
 .focusList {
   margin: auto;
-  width: 60%;
+  max-width: 800px;
+  width: 90%;
 }
 </style>

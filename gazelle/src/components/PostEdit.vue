@@ -50,9 +50,10 @@ export default class Post extends Vue {
   private tittel = "";
   private beskrivelse = "";
   private chores: Chore[] = [];
-  private headline: string = this.newPost ? "Opprett post" : "Rediger post";
   private startDate: Date | number | string | null = null;
   private endDate: Date | number | string | null = null;
+
+  private headline: string = this.newPost ? "Opprett post" : "Rediger post";
   private nextKey = 0;
 
   private addChore = (): void => {
@@ -74,6 +75,6 @@ export default class Post extends Vue {
   width: 48%;
 }
 .headline {
-  padding: 10px;
+  padding: 15px 10px;
 }
 </style>

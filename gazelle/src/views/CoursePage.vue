@@ -40,6 +40,7 @@ export default class CoursePage extends Vue {
 <style scoped lang="scss">
 .postList {
   margin: auto;
-  width: 60%;
+  max-width: 800px;
+  width: 90%;
 }
 </style>
