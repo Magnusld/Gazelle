@@ -8,6 +8,7 @@ import Home from "@/views/Home.vue";
 import SignUpPage from "@/components/SignUpPage.vue";
 import store from "@/store";
 import LoginView from "@/views/LoginView.vue";
+import CoursePage from "@/views/CoursePage.vue";
 
 Vue.use(VueRouter);
 
@@ -56,6 +57,11 @@ const routes: Array<RouteConfig> = [
     path: "/signUp",
     name: "Sign Up Page",
     component: SignUpPage
+  },
+  {
+    path: "/course/:id",
+    name: "Test Course",
+    component: CoursePage
   }
 ];
 
