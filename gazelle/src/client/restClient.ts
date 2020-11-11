@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosPromise } from "axios";
 
 import store from "@/store";
+import router from "@/router";
 
 export interface RestError {
   status?: number;
@@ -11,7 +12,7 @@ export function wrapPromise<T>(axiosPromise: AxiosPromise<T>): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     axiosPromise
       .then(it => resolve(it.data))
-      .catch(error => {
+      .catch(async error => {
         if (error.response) {
           const restError: RestError = {
             status: error.response.status,
@@ -20,6 +21,8 @@ export function wrapPromise<T>(axiosPromise: AxiosPromise<T>): Promise<T> {
           if (restError.status == 401) {
             //Unauthorized - token is invalid
             localStorage.removeItem("token");
+            store.commit("loading");
+            await router.replace("/login?reason=invalidated");
             store.commit("authFailed");
           }
           reject(restError);
