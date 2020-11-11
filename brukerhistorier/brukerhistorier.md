@@ -139,4 +139,19 @@ slik at jeg kan hjelpe faglærerer og studenter dersom de har problemer.
 
 * Redigere og slette løp og deltagere
 * Redigere og slette poster og gjøremål 
+
+## Fokuslista (us-8) &ndash; Middels prioritet
+
+Som student ønsker jeg enkel oversikt over frister og andre gjøremål som jeg 
+burde fokusere på, slik at jeg enkelt kan holde styr på egen fremgang.
+
+#### Viktig å kunne se
+
+* Oversikt over alle gjøremål
+* Oversikt over frister (dersom gjøremålet har en frist)
+
+#### Viktig å kunne gjøre
+
+* Huke av gjøremål etter det er gjort
+* Velge selv hvilke ting jeg har lyst å fokusere på og dermed legge til i fokuslista
   
