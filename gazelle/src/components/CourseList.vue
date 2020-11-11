@@ -39,6 +39,7 @@ export default class CourseList extends Vue {
 }
 .courseList {
   margin: auto;
-  width: 60%;
+  max-width: 800px;
+  width: 90%;
 }
 </style>
