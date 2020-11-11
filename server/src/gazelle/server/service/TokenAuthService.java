@@ -105,18 +105,6 @@ public class TokenAuthService {
     }
 
     /**
-     * Checks that the token is a valid credential for the userId
-     *
-     * @param user the user we want to be logged in as
-     * @param token the token we are authorized as (including Bearer-prefix)
-     * @throws InvalidTokenException if the token is invalid
-     * @throws AuthorizationException if the user is not the one we are logged in as
-     */
-    public void assertTokenForUser(User user, @Nullable String token) {
-        assertTokenForUser(user.getId(), token);
-    }
-
-    /**
      * Removes a token from the database, effectively logging the user out.
      *
      * @param token the token (including Bearer-prefix)
@@ -128,8 +116,7 @@ public class TokenAuthService {
         token = stripBearer(token);
         TokenLogIn row = tokenRepository.findByToken(token)
                 .orElseThrow(InvalidTokenException::new);
-        if (row.getUser() != null)
-            row.getUser().setToken(null);
+        row.getUser().setToken(null);
         tokenRepository.delete(row);
     }
 

@@ -6,7 +6,28 @@ default:
   cache:
     key: maven-cache
     paths:
+      - gazelle/node
+      - gazelle/node_modules
       - .m2/repository
 
+workflow: #Only run for changes pushed to branches
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
 test:
-  script: true || mvn verify
+  stage: test
+  script: mvn verify
+  rules:
+    - if: '$CI_COMMIT_BRANCH != "master"'
+
+deploy:
+  stage: deploy
+  script:
+    - mvn install
+    - mvn frontend:yarn@"yarn build" -pl gazelle
+  artifacts:
+    paths:
+      - gazelle/dist
+      - server/target/gazelle-server-0.1-SNAPSHOT.jar
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'

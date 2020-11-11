@@ -10,7 +10,9 @@ import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 public class CourseAndUserService {
@@ -94,7 +96,7 @@ public class CourseAndUserService {
 
     @Transactional
     public void addFollower(Long userId, Long courseId) {
-        removeOwner(
+        addFollower(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
                 courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
     }
@@ -132,7 +134,7 @@ public class CourseAndUserService {
 
     @Transactional
     public boolean isFollowing(Long userId, Long courseId) {
-        return isOwning(
+        return isFollowing(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new),
                 courseRepository.findById(courseId).orElseThrow(CourseNotFoundException::new));
     }

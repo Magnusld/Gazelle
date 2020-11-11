@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { tryLocalStorageLogin } from "@/client/login";
 import TopBar from "@/components/TopBar.vue";
 import CourseListing from "@/components/CourseListing.vue";
 import CourseList from "@/components/CourseList.vue";
@@ -18,7 +19,11 @@ import CourseList from "@/components/CourseList.vue";
     CourseListing
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted() {
+    tryLocalStorageLogin();
+  }
+}
 </script>
 
 <style lang="scss">

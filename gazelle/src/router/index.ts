@@ -1,14 +1,13 @@
 import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import VueRouter, { RawLocation, Route, RouteConfig } from "vue-router";
 import MyCourses from "@/views/MyCourses.vue";
 import FocusList from "@/views/FocusList.vue";
 import UserSettings from "@/views/UserSettings.vue";
-import LoginPage from "@/components/LoginPage.vue";
 import Home from "@/views/Home.vue";
-import SignUpPage from "@/components/SignUpPage.vue";
-import store from "@/store";
-import LoginView from "@/views/LoginView.vue";
+import store, { LogInStatus } from "@/store";
+import LoginView from "@/views/LoginView.vue";s
 import CoursePage from "@/views/CoursePage.vue";
+import SignUpView from "@/views/SignUpView.vue";
 
 Vue.use(VueRouter);
 
@@ -62,6 +61,10 @@ const routes: Array<RouteConfig> = [
     path: "/course/:id",
     name: "Test Course",
     component: CoursePage
+    component: SignUpView,
+    meta: {
+      requiresLoggedOut: true
+    }
   }
 ];
 
@@ -71,22 +74,47 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
-      next();
-      return;
-    }
-    next("/login");
-  } else if (to.matched.some(record => record.meta.requiresLoggedOut)) {
-    if (!store.getters.isLoggedIn) {
-      next();
-      return;
-    }
-    next("/");
-  } else {
-    next();
+/**
+ * Checks if the user can be on the current route, given the LogInStatus.
+ * If the user can't, it is redirected using redirect. If it can, true is returned
+ *
+ * @param route the current route / the route the user is trying to reach
+ * @param loginStatus the current logInStatus
+ * @param redirect the function used to change route
+ * @return true if the route is legal
+ */
+const checkLoggedInStateForPage = (
+  route: Route,
+  loginStatus: LogInStatus,
+  redirect: (loc: RawLocation) => void
+): boolean => {
+  if (loginStatus == "loading") return true;
+
+  if (route.matched.some(r => r.meta.requiresAuth)) {
+    if (loginStatus == "loggedIn") return true;
+    redirect("/login");
+    return false;
+  } else if (route.matched.some(r => r.meta.requiresLoggedOut)) {
+    if (loginStatus == "loggedOut") return true;
+    redirect("/");
+    return false;
   }
+  return true;
+};
+
+store.watch(
+  (state, getters) => getters.authStatus,
+  authStatus => {
+    checkLoggedInStateForPage(
+      router.currentRoute,
+      authStatus,
+      router.replace.bind(router)
+    );
+  }
+);
+
+router.beforeEach((to, from, next) => {
+  if (checkLoggedInStateForPage(to, store.getters.authStatus, next)) next();
 });
 
 export default router;

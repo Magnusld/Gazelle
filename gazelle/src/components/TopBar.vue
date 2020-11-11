@@ -4,7 +4,36 @@
     class="md-layout md-primary md-elevation-2"
     id="topBar"
   >
-    <div class="md-layout-item md-layout">
+    <mq-layout mq="mobile">
+      <div class="buttonContainer">
+        <md-button class="md-icon-button" @click="showNavigation = true">
+          <md-icon>menu</md-icon>
+        </md-button>
+      </div>
+      <md-drawer :md-active.sync="showNavigation" md-swipeable>
+        <md-toolbar class="md-transparent" md-elevation="0">
+          <span class="md-title">Gazelle</span>
+        </md-toolbar>
+
+        <md-list>
+          <md-list-item to="/">
+            <md-icon>home</md-icon>
+            <span class="md-list-item-text">Hjem</span>
+          </md-list-item>
+
+          <md-list-item to="/my-courses">
+            <md-icon>list</md-icon>
+            <span class="md-list-item-text">Mine løp</span>
+          </md-list-item>
+
+          <md-list-item to="/focus-list">
+            <md-icon>event_available</md-icon>
+            <span class="md-list-item-text">Fokuslista</span>
+          </md-list-item>
+        </md-list>
+      </md-drawer>
+    </mq-layout>
+    <mq-layout mq="tablet+" class="md-layout-item md-layout">
       <div class="buttonContainer">
         <md-button class="md-icon-button" to="/">
           <img src="../assets/applogo.svg" alt="applogo" />
@@ -14,10 +43,10 @@
         <md-tab md-label="Mine løp" to="/my-courses"></md-tab>
         <md-tab md-label="Fokuslista" to="/focus-list"></md-tab>
       </md-tabs>
-    </div>
-    <div class="md-layout-item buttonContainer">
+    </mq-layout>
+    <div class="md-layout-item buttonContainer" id="userInfo">
       <md-button class="md-secondary" v-on:click="logout">Logg ut</md-button>
-      <md-button class="md-icon-button" id="userInfo" to="/user-settings">
+      <md-button class="md-icon-button" to="/user-settings">
         <md-icon>person</md-icon>
       </md-button>
     </div>
@@ -26,21 +55,21 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { logout } from "@/client/login";
 
 @Component
 export default class TopBar extends Vue {
   private logout() {
-    this.$store.dispatch("logout").then(() => {
-      this.$router.push("/login");
-    });
+    logout();
   }
+  public showNavigation = false;
 }
 </script>
 
 <style scoped lang="scss">
 #navTabs {
   margin: 0;
-  width: 50%;
+  width: 70%;
 }
 #navLogo {
   height: 45px;
@@ -53,5 +82,9 @@ export default class TopBar extends Vue {
 }
 #userInfo {
   float: right;
+  width: 25%;
+}
+.md-list-item-text {
+  color: black;
 }
 </style>

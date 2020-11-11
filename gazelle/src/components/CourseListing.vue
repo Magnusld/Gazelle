@@ -56,6 +56,7 @@ export default class CourseListing extends Vue {
   color: gray;
 }
 .title {
+  color: black;
   font-size: 20px;
   font-weight: 500;
   letter-spacing: 0.005em;

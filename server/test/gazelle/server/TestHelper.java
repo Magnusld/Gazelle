@@ -1,13 +1,7 @@
 package gazelle.server;
 
-import gazelle.auth.LogInRequest;
-import gazelle.auth.LogInResponse;
 import gazelle.model.Course;
 import gazelle.model.User;
-import gazelle.server.endpoint.CourseController;
-import gazelle.server.endpoint.LoginEndpoint;
-import gazelle.server.error.CourseNotFoundException;
-import gazelle.server.error.UserNotFoundException;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
@@ -34,11 +28,11 @@ public class TestHelper {
     }
 
     public User createTestUserObject() {
-        User user = new User(makeRandomString(), makeRandomString(), makeRandomString(), makeRandomString());
+        User user = new User(makeRandomString(), makeRandomString(),
+                makeRandomString(), makeRandomString());
         return userRepository.save(user);
     }
 
-    @Transactional
     public Long createTestUser() {
         return createTestUserObject().getId();
     }
@@ -70,6 +64,10 @@ public class TestHelper {
     public Course createTestCourseObject() {
         Course course = new Course(makeRandomString());
         return courseRepository.save(course);
+    }
+
+    public Long createTestCourse() {
+        return createTestCourseObject().getId();
     }
 
     @Transactional
