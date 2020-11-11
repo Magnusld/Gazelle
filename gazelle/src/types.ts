@@ -3,6 +3,11 @@ export interface Course {
   name: string;
 }
 
+export interface Post {
+  id: number;
+  name: string;
+}
+
 export interface User {
   id: number;
   email?: string;

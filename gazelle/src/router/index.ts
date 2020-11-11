@@ -6,6 +6,7 @@ import UserSettings from "@/views/UserSettings.vue";
 import Home from "@/views/Home.vue";
 import store, { LogInStatus } from "@/store";
 import LoginView from "@/views/LoginView.vue";
+import CoursePage from "@/views/CoursePage.vue";
 import SignUpView from "@/views/SignUpView.vue";
 
 Vue.use(VueRouter);
@@ -58,6 +59,11 @@ const routes: Array<RouteConfig> = [
     meta: {
       requiresLoggedOut: true
     }
+  },
+  {
+    path: "/course/:id",
+    name: "Test Course",
+    component: CoursePage
   }
 ];
 

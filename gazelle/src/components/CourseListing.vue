@@ -4,7 +4,12 @@
     <div class="courseListing">
       <div class="header">
         <div class="horizontalSeparator">
-          <a class="title">{{ course.name }}</a>
+          <router-link
+            style="color:black"
+            class="title"
+            :to="'/course/' + course.id"
+            >{{ course.name }}</router-link
+          >
           <div>Neste frist: I dag</div>
         </div>
         <div class="subheader">Nå: Datastrukturer (4 dager igjen)</div>
