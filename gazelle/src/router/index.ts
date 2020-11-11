@@ -63,7 +63,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/course/:id",
     name: "Test Course",
-    component: CoursePage,
+    component: CoursePage
   }
 ];
 
