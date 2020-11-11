@@ -5,7 +5,7 @@ import FocusList from "@/views/FocusList.vue";
 import UserSettings from "@/views/UserSettings.vue";
 import Home from "@/views/Home.vue";
 import store, { LogInStatus } from "@/store";
-import LoginView from "@/views/LoginView.vue";s
+import LoginView from "@/views/LoginView.vue";
 import CoursePage from "@/views/CoursePage.vue";
 import SignUpView from "@/views/SignUpView.vue";
 
@@ -55,16 +55,15 @@ const routes: Array<RouteConfig> = [
   {
     path: "/signUp",
     name: "Sign Up Page",
-    component: SignUpPage
-  },
-  {
-    path: "/course/:id",
-    name: "Test Course",
-    component: CoursePage
     component: SignUpView,
     meta: {
       requiresLoggedOut: true
     }
+  },
+  {
+    path: "/course/:id",
+    name: "Test Course",
+    component: CoursePage,
   }
 ];
 
