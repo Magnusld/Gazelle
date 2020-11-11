@@ -11,6 +11,8 @@ import "vue-material/dist/theme/default.css";
 const baseURL =
   process.env.NODE_ENV == "production"
     ? "https://gazelle.haved.no/api"
+    : window.location.hostname.includes("gitpod")
+    ? `https://8088-${window.location.hostname.substr(5)}`
     : "http://localhost:8088";
 restClient.setBaseURL(baseURL);
 Vue.config.productionTip = false;

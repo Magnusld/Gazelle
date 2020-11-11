@@ -11,6 +11,6 @@ describe("CourseListing.vue", () => {
       localVue,
       propsData: { course: { name: "Testløp" } }
     });
-    expect(wrapper.find(".title").html()).toContain("Testløp</a>");
+    expect(wrapper.find(".title").text()).toContain("Testløp");
   });
 });

@@ -6,6 +6,7 @@ import UserSettings from "@/views/UserSettings.vue";
 import Home from "@/views/Home.vue";
 import store, { LogInStatus } from "@/store";
 import LoginView from "@/views/LoginView.vue";
+import CoursePage from "@/views/CoursePage.vue";
 import SignUpView from "@/views/SignUpView.vue";
 import PostView from "@/views/PostView.vue";
 
@@ -64,6 +65,9 @@ const routes: Array<RouteConfig> = [
     path: "/post",
     name: "Post",
     component: PostView
+    path: "/course/:id",
+    name: "Test Course",
+    component: CoursePage
   }
 ];
 
