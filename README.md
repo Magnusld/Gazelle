@@ -84,6 +84,9 @@ Mens tjeneren kjører, gå til `localhost:8088/h2`. Skriv inn følgende:
 
 Her får du tilgang til databasen, og kan legge til og fjerne elementer med SQL.
  
+##### I GitPod
+Gå til Åpne Porter, trykk "Open Browser" på port 8088, og legg til `/h2` bak URLen.
+ 
 ## Bidrag og utvikling
 
 Brukerhistorier ligger [her](/brukerhistorier/brukerhistorier.md).
