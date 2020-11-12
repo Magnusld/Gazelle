@@ -1,5 +1,5 @@
 <template>
-  <div class="courseList">
+  <div>
     <div class="horizontalSeparator">
       <span class="md-headline">Mine løp</span>
       <md-button class="md-icon-button">
@@ -36,10 +36,5 @@ export default class CourseList extends Vue {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0 10px 10px;
-}
-.courseList {
-  margin: auto;
-  max-width: 800px;
-  width: 90%;
 }
 </style>

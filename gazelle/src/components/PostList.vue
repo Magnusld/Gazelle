@@ -1,7 +1,7 @@
 <template>
   <div class="postList">
     <div class="horizontalSeparator">
-      <span class="md-headline">Nye Poster:</span>
+      <span class="md-headline">Poster</span>
     </div>
     <div class="posts">
       <PostListing v-for="(post, index) in posts" :key="index" :post="post" />
@@ -27,6 +27,6 @@ export default class PostList extends Vue {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0 10px 10px;
+  padding: 15px 10px;
 }
 </style>

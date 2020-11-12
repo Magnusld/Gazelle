@@ -1,5 +1,6 @@
 <template>
   <CourseList
+    class="courseList"
     v-bind:courses="[
       {
         id: 5,
@@ -42,3 +43,11 @@ import CourseListing from "@/components/CourseListing.vue";
 })
 export default class MyCourses extends Vue {}
 </script>
+
+<style>
+.courseList {
+  margin: auto;
+  max-width: 800px;
+  width: 90%;
+}
+</style>
