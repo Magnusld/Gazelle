@@ -45,7 +45,14 @@
       </md-tabs>
     </mq-layout>
     <div class="md-layout-item buttonContainer" id="userInfo">
-      <md-button class="md-secondary" v-on:click="logout">Logg ut</md-button>
+      <md-button
+        class="md-secondary"
+        v-on:click="
+          logout();
+          reloadPage();
+        "
+        >Logg ut</md-button
+      >
       <md-button class="md-icon-button" to="/user-settings">
         <md-icon>person</md-icon>
       </md-button>
@@ -63,6 +70,10 @@ export default class TopBar extends Vue {
     logout();
   }
   public showNavigation = false;
+
+  private reloadPage() {
+    window.location.reload();
+  }
 }
 </script>
 

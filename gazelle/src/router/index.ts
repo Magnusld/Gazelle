@@ -9,6 +9,7 @@ import LoginView from "@/views/LoginView.vue";
 import CoursePage from "@/views/CoursePage.vue";
 import SignUpView from "@/views/SignUpView.vue";
 import ErrorPage from "@/views/ErrorPage.vue";
+import PostView from "@/views/PostView.vue";
 
 Vue.use(VueRouter);
 
@@ -60,6 +61,11 @@ const routes: Array<RouteConfig> = [
     meta: {
       requiresLoggedOut: true
     }
+  },
+  {
+    path: "/post",
+    name: "Post",
+    component: PostView
   },
   {
     path: "/course/:id",
