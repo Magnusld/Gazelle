@@ -8,6 +8,7 @@ import store, { LogInStatus } from "@/store";
 import LoginView from "@/views/LoginView.vue";
 import CoursePage from "@/views/CoursePage.vue";
 import SignUpView from "@/views/SignUpView.vue";
+import ErrorPage from "@/views/ErrorPage.vue";
 import PostView from "@/views/PostView.vue";
 
 Vue.use(VueRouter);
@@ -70,6 +71,11 @@ const routes: Array<RouteConfig> = [
     path: "/course/:id",
     name: "Test Course",
     component: CoursePage
+  },
+  {
+    path: "/*",
+    name: "404 Page Not Found",
+    component: ErrorPage
   }
 ];
 
