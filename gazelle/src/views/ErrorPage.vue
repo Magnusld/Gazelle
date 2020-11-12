@@ -1,7 +1,7 @@
 <template>
   <div class="errorPage">
     <md-card>
-      <md-card-media-cover>
+      <md-card-media-cover class="md-solid">
         <md-card-media>
           <img
             src="../assets/images/ErrorImg.jpg"
@@ -9,10 +9,15 @@
             class="image"
           />
         </md-card-media>
-        <md-card-area>
-          <span class="imgText md-display-3">
-            404 Page not found
-          </span>
+        <md-card-area class="textArea">
+          <md-card-header>
+            <span class="imgText md-title">
+              Error 404 Page not found
+            </span>
+            <span class="md-subhead">
+              Det ser ut til at den siden du ser etter har blitt spist :(
+            </span>
+          </md-card-header>
         </md-card-area>
       </md-card-media-cover>
     </md-card>
@@ -34,10 +39,15 @@ export default class ErrorPage extends Vue {}
 }
 
 .imgText {
-  float: left;
+  font-size: 50px;
 }
+
+.image {
+  height: auto;
+  max-width: 575px;
+}
+
 .md-card {
-  height: 650px;
   margin: 4px;
   display: inline-block;
   vertical-align: top;
