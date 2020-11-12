@@ -9,6 +9,9 @@
       v-on:click="toggleFocus"
     >
       <md-icon>event_available</md-icon>
+      <md-tooltip md-direction="right">
+        {{isFocused ? "Fjern fra fokusliste" : "Legg til i fokusliste"}}
+      </md-tooltip>
     </md-button>
   </div>
 </template>
