@@ -9,6 +9,7 @@ import gazelle.server.error.CourseNotFoundException;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.PostRepository;
 import gazelle.server.service.TokenAuthService;
+import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,17 +39,22 @@ public class PostController {
     }
 
     /**
-     * Makes a serializable object with post data, as well as info about relationships between the post and
-     * @param post
-     * @param user
-     * @return
+     * Makes a serializable object with post data,
+     * as well as info about relationships between the post and course / user.
+     * The user is optional.
+     *
+     * <p>Note: The full content of the post is not included.
+     *
+     * @param post the post
+     * @param user an optional user object
+     * @return PostResponse for the given post
      */
     public PostResponse makePostResponse(Post post, @Nullable User user) {
         PostResponse.Builder builder = new PostResponse.Builder();
         builder.id(post.getId())
                 .title(post.getTitle())
-                .startDate(post.getStartDate())
-                .endDate(post.getEndDate())
+                .startDate(DateHelper.localDateOfDate(post.getStartDate()))
+                .endDate(DateHelper.localDateOfDate(post.getEndDate()))
                 .courseName(post.getCourse().getName())
                 .courseId(post.getCourse().getId());
 
@@ -67,8 +73,9 @@ public class PostController {
 
     @GetMapping("/courses/{courseId}/posts")
     @Transactional
-    public List<PostResponse> getPostsForCourse(@PathVariable("courseId") Long courseId,
-                                                @RequestHeader("Authorization") @Nullable String auth) {
+    public List<PostResponse> getPostsForCourse(
+            @PathVariable("courseId") Long courseId,
+            @RequestHeader("Authorization") @Nullable String auth) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
         Iterable<Post> posts = postRepository.findByCourseOrderByStartDateAsc(course);

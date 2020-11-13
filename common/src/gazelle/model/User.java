@@ -1,8 +1,5 @@
 package gazelle.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import gazelle.api.auth.SignUpRequest;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;

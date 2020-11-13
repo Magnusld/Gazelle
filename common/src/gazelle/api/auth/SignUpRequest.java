@@ -53,8 +53,7 @@ public class SignUpRequest {
     }
 
     public User buildUser() {
-        User user = new User(this.firstname, this.lastname, this.email, this.password);
-        return user;
+        return new User(this.firstname, this.lastname, this.email, this.password);
     }
 
     @Override

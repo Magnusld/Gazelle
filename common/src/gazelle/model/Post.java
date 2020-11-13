@@ -3,7 +3,7 @@ package gazelle.model;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -22,10 +22,10 @@ public class Post {
     private String description;
 
     @Temporal(TemporalType.DATE)
-    private LocalDate startDate;
+    private Date startDate;
 
     @Temporal(TemporalType.DATE)
-    private LocalDate endDate;
+    private Date endDate;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
@@ -66,19 +66,19 @@ public class Post {
         this.description = description;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

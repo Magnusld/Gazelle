@@ -1,16 +1,16 @@
 package gazelle.api.auth;
 
-import gazelle.model.User;
+import gazelle.api.UserResponse;
 
 import java.util.Objects;
 
 public class LogInResponse {
     private String token;
-    private User user;
+    private UserResponse user;
 
     protected LogInResponse() {}
 
-    public LogInResponse(String token, User user) {
+    public LogInResponse(String token, UserResponse user) {
         this.token = token;
         this.user = user;
     }
@@ -23,11 +23,11 @@ public class LogInResponse {
         this.token = token;
     }
 
-    public User getUser() {
+    public UserResponse getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserResponse user) {
         this.user = user;
     }
 

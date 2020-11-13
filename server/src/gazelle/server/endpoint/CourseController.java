@@ -5,21 +5,24 @@ import gazelle.api.NewCourseRequest;
 import gazelle.api.PostResponse;
 import gazelle.model.Course;
 import gazelle.model.ModelException;
-import gazelle.model.Post;
 import gazelle.model.User;
-import gazelle.server.error.*;
+import gazelle.server.error.AuthorizationException;
+import gazelle.server.error.CourseNotFoundException;
+import gazelle.server.error.InvalidTokenException;
+import gazelle.server.error.UnprocessableEntityException;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.PostRepository;
 import gazelle.server.service.CourseAndUserService;
 import gazelle.server.service.TokenAuthService;
+import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -60,7 +63,7 @@ public class CourseController {
             isFollower = courseAndUserService.isFollowing(user, course);
         }
 
-        LocalDate today = LocalDate.now();
+        Date today = DateHelper.today();
 
         PostResponse currentPost = postRepository.findCurrentPostInCourse(course, today)
                 .map(it -> postController.makePostResponse(it, user))
@@ -69,7 +72,8 @@ public class CourseController {
                 .map(it -> postController.makePostResponse(it, user))
                 .orElse(null);
 
-        return new CourseResponse(course.getId(), course.getName(), isOwner, isFollower, currentPost, nextPost);
+        return new CourseResponse(course.getId(), course.getName(), isOwner,
+                isFollower, currentPost, nextPost);
     }
 
     /**
@@ -104,7 +108,8 @@ public class CourseController {
      */
     @GetMapping("/{id}")
     @Transactional
-    public CourseResponse findById(@PathVariable Long id, @RequestHeader("Authorization") @Nullable String auth) {
+    public CourseResponse findById(@PathVariable Long id,
+                                   @RequestHeader("Authorization") @Nullable String auth) {
         Course course = courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
         User user = null;
         if (auth != null)

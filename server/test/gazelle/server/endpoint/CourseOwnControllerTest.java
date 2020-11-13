@@ -1,7 +1,7 @@
 package gazelle.server.endpoint;
 
-import gazelle.model.Course;
-import gazelle.model.User;
+import gazelle.api.CourseResponse;
+import gazelle.api.UserResponse;
 import gazelle.server.TestHelper;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.GazelleException;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +56,7 @@ public class CourseOwnControllerTest {
     public void getOwnedCourses() {
         courseAndUserService.addOwner(user1, course1);
         courseAndUserService.addOwner(user1, course2);
-        ArrayList<Course> courses = courseOwnController.getOwnedCourses(user1);
+        List<CourseResponse> courses = courseOwnController.getOwnedCourses(user1);
         assertEquals(2, courses.size());
         assertTrue(courses.stream().anyMatch(it -> it.getId().equals(course1)));
         assertTrue(courses.stream().anyMatch(it -> it.getId().equals(course2)));
@@ -66,15 +66,15 @@ public class CourseOwnControllerTest {
 
     @Test
     public void getCourseOwners() {
-        final User user3 = testHelper.createTestUserObject();
+        final Long user3 = testHelper.createTestUser();
         courseAndUserService.addOwner(user1, course1);
         courseAndUserService.addOwner(user2, course1);
         assertTrue(courseOwnController.getCourseOwners(course2).isEmpty());
-        ArrayList<User> owners = courseOwnController.getCourseOwners(course1);
+        List<UserResponse> owners = courseOwnController.getCourseOwners(course1);
         assertEquals(2, owners.size());
         assertTrue(owners.stream().anyMatch(it -> it.getId().equals(user1)));
         assertTrue(owners.stream().anyMatch(it -> it.getId().equals(user2)));
-        assertFalse(owners.contains(user3));
+        assertFalse(owners.stream().anyMatch(it -> it.getId().equals(user3)));
         courseAndUserService.removeOwner(user1, course1);
         courseAndUserService.removeOwner(user2, course1);
         testHelper.deleteTestUser(user3);
@@ -93,7 +93,7 @@ public class CourseOwnControllerTest {
             courseOwnController.addCourseOwner(user2, course1, token2);
         });
         courseOwnController.addCourseOwner(user2, course1, token1);
-        ArrayList<User> owners = courseOwnController.getCourseOwners(course1);
+        List<UserResponse> owners = courseOwnController.getCourseOwners(course1);
         assertEquals(2, owners.size());
         assertTrue(owners.stream().anyMatch(it -> it.getId().equals(user2)));
         courseAndUserService.removeOwner(user1, course1);

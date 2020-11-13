@@ -1,6 +1,7 @@
 package gazelle.server.endpoint;
 
 import gazelle.api.CourseResponse;
+import gazelle.api.UserResponse;
 import gazelle.model.Course;
 import gazelle.model.User;
 import gazelle.server.error.*;
@@ -25,18 +26,21 @@ public class CourseFollowController {
     private final CourseAndUserService courseAndUserService;
     private final TokenAuthService tokenAuthService;
     private final CourseController courseController;
+    private final UserController userController;
 
     @Autowired
     public CourseFollowController(CourseRepository courseRepository,
                                   UserRepository userRepository,
                                   CourseAndUserService courseAndUserService,
                                   TokenAuthService tokenAuthService,
-                                  CourseController courseController) {
+                                  CourseController courseController,
+                                  UserController userController) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
         this.courseAndUserService = courseAndUserService;
         this.tokenAuthService = tokenAuthService;
         this.courseController = courseController;
+        this.userController = userController;
     }
 
     /**
@@ -54,7 +58,8 @@ public class CourseFollowController {
     @GetMapping("/users/{userId}/followedCourses")
     @Transactional
     public List<CourseResponse> getFollowedCourses(@PathVariable Long userId,
-                                                   @RequestHeader("Authorization") @Nullable String auth) {
+                                                   @RequestHeader("Authorization")
+                                                   @Nullable String auth) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         tokenAuthService.assertTokenForUser(userId, auth);
@@ -78,14 +83,17 @@ public class CourseFollowController {
      */
     @GetMapping("/courses/{courseId}/followers")
     @Transactional
-    public List<User> getCourseFollowers(@PathVariable Long courseId,
-                                           @RequestHeader("Authorization") @Nullable String auth) {
+    public List<UserResponse> getCourseFollowers(
+            @PathVariable Long courseId, @RequestHeader("Authorization") @Nullable String auth) {
         User user = tokenAuthService.getUserObjectFromToken(auth);
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
         if (!courseAndUserService.isOwning(user, course))
             throw new AuthorizationException("You do not own the course");
-        return new ArrayList<>(course.getFollowers());
+        List<UserResponse> result = new ArrayList<>();
+        for (User u : course.getFollowers())
+            result.add(userController.makeUserResponse(u));
+        return result;
     }
 
     /**

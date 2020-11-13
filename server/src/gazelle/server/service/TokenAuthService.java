@@ -41,14 +41,15 @@ public class TokenAuthService {
      * @param user the user to create a token for
      * @return the token created for the user (excluding Bearer-prefix)
      */
+    @Transactional
     public String createTokenForUser(User user) {
-        TokenLogIn previous = user.getToken();
-        if (previous != null)
-            tokenRepository.delete(previous);
-
         String token = UUID.randomUUID().toString();
-        TokenLogIn tokenLogIn = new TokenLogIn(user, token);
-        user.setToken(tokenLogIn);
+
+        TokenLogIn tokenLogIn = user.getToken();
+        if (tokenLogIn != null)
+            tokenLogIn.setToken(token);
+        else
+            user.setToken(new TokenLogIn(user, token));
         return token;
     }
 

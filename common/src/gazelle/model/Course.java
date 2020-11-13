@@ -1,9 +1,5 @@
 package gazelle.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import gazelle.api.NewCourseRequest;
-import org.jetbrains.annotations.Nullable;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -41,7 +37,7 @@ public class Course {
             throw new ModelException("Løpsnavn kan ikke starte eller slutte med tomrom");
     }
 
-    public @Nullable Long getId() {
+    public Long getId() {
         return id;
     }
 
