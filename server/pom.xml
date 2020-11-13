@@ -120,6 +120,13 @@
                 <configuration>
                     <profiles>${app.profiles}</profiles>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Checkstyle code quality tool -->
