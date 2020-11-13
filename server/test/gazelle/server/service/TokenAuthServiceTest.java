@@ -11,8 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -116,5 +119,23 @@ public class TokenAuthServiceTest {
         assertEquals(userId, tokenAuthService.getUserIdFromToken(token2));
 
         testHelper.deleteTestUser(userId);
+    }
+
+    @Test
+    @Transactional
+    public void removeTokenTransactional() {
+        final Long user = testHelper.createTestUser();
+        final String token = testHelper.logInUser(user);
+
+        tokenAuthService.removeToken(token);
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+
+        TestTransaction.start();
+        String newToken = tokenAuthService.createTokenForUser(user);
+        newToken = TokenAuthService.addBearer(newToken);
+        assertEquals(user, tokenAuthService.getUserIdFromToken(newToken));
+
+        testHelper.deleteTestUser(user);
     }
 }

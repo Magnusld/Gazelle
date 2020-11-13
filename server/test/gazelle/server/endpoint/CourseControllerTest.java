@@ -1,8 +1,13 @@
 package gazelle.server.endpoint;
 
+import gazelle.api.CourseResponse;
+import gazelle.api.NewCourseRequest;
 import gazelle.model.Course;
 import gazelle.server.TestHelper;
-import gazelle.server.error.*;
+import gazelle.server.error.AuthorizationException;
+import gazelle.server.error.CourseNotFoundException;
+import gazelle.server.error.InvalidTokenException;
+import gazelle.server.error.MissingAuthorizationException;
 import gazelle.server.service.CourseAndUserService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,86 +38,105 @@ public class CourseControllerTest {
 
     private Course course1;
     private Course course2;
+    private Long user1;
+    private String token1;
 
     @BeforeAll
     public void setup() {
         course1 = testHelper.createTestCourseObject();
         course2 = testHelper.createTestCourseObject();
+        user1 = testHelper.createTestUser();
+        token1 = testHelper.logInUser(user1);
+        courseAndUserService.addOwner(user1, course2.getId());
     }
 
     @Test
     public void findAll() {
-        List<Course> courses = new ArrayList<>();
-        courseController.findAll().forEach(courses::add);
-        assertTrue(courses.contains(course1));
-        assertTrue(courses.contains(course2));
+        List<CourseResponse> courses = courseController.findAll(null);
+        assertTrue(courses.stream().anyMatch(it -> it.getId().equals(course1.getId())));
+        assertTrue(courses.stream().anyMatch(it -> it.getId().equals(course2.getId())));
     }
 
     @Test
     public void findById() {
-        assertEquals(course1, courseController.findById(course1.getId()));
         assertThrows(CourseNotFoundException.class, () -> {
-            courseController.findById(5000L);
+            courseController.findById(5000L, null);
         });
+
+        CourseResponse response = courseController.findById(course1.getId(), null);
+        assertEquals(course1.getId(), response.getId());
+        assertNull(response.isOwner());
+
+        response = courseController.findById(course1.getId(), token1);
+        assertEquals(course1.getId(), response.getId());
+        assertEquals(course1.getName(), response.getName());
+        assertEquals(false, response.isOwner());
+
+        response = courseController.findById(course2.getId(), token1);
+        assertEquals(course2.getId(), response.getId());
+        assertEquals(course2.getName(), response.getName());
+        assertEquals(true, response.isOwner());
     }
 
     @Test
     public void addNewCourse() {
         Long user = testHelper.createTestUser();
         String token = testHelper.logInUser(user);
-        assertThrows(ExistingEntityException.class, () -> {
-            courseController.addNewCourse(course1, token);
-        });
 
-        Course course = new Course("Testname");
+        NewCourseRequest course = new NewCourseRequest("Testname");
         assertThrows(InvalidTokenException.class, () -> {
             courseController.addNewCourse(course, "Bearer: dummy");
         });
-        courseController.addNewCourse(course, token);
-        assertNotNull(course.getId());
+        CourseResponse response = courseController.addNewCourse(course, token);
+        assertNotNull(response.getId());
+        assertEquals(course.getName(), response.getName());
+        assertEquals(true, response.isOwner());
+        assertEquals(false, response.isFollower());
+        assertNull(response.getCurrentPost());
+        assertNull(response.getNextPost());
 
         //Check that user is an owner
-        assertTrue(courseAndUserService.isOwning(user, course.getId()));
-        testHelper.deleteTestCourse(course);
+        assertTrue(courseAndUserService.isOwning(user, response.getId()));
+        testHelper.deleteTestCourse(response.getId());
         testHelper.deleteTestUser(user);
     }
 
     @Test
     public void deleteCourse() {
-        final Long user = testHelper.createTestUser();
-        final String token = testHelper.logInUser(user);
-        final Long user2 = testHelper.createTestUser();
-        final String token2 = testHelper.logInUser(user2);
+        final Long localUser = testHelper.createTestUser();
+        final String localToken = testHelper.logInUser(localUser);
 
         assertThrows(CourseNotFoundException.class, () -> {
-            courseController.deleteCourse(5000L, token);
+            courseController.deleteCourse(5000L, localToken);
         });
 
-        Course course = new Course("Testname");
-        courseController.addNewCourse(course, token);
+        NewCourseRequest course = new NewCourseRequest("Testname");
+        CourseResponse response = courseController.addNewCourse(course, localToken);
+
+        assertEquals(true, response.isOwner());
 
         assertThrows(MissingAuthorizationException.class, () -> {
-            courseController.deleteCourse(course.getId(), null);
+            courseController.deleteCourse(response.getId(), null);
         });
         assertThrows(InvalidTokenException.class, () -> {
-            courseController.deleteCourse(course.getId(), "Bearer: dummy");
+            courseController.deleteCourse(response.getId(), "Bearer: dummy");
         });
         assertThrows(AuthorizationException.class, () -> {
-            courseController.deleteCourse(course.getId(), token2);
+            courseController.deleteCourse(response.getId(), token1);
         });
-        courseController.deleteCourse(course.getId(), token);
+        courseController.deleteCourse(response.getId(), localToken);
 
         assertThrows(CourseNotFoundException.class, () -> {
-            courseAndUserService.isOwning(user, course.getId());
+            courseAndUserService.isOwning(localUser, response.getId());
         });
 
-        testHelper.deleteTestUser(user);
-        testHelper.deleteTestUser(user2);
+        testHelper.deleteTestUser(localUser);
     }
 
     @AfterAll
     public void cleanup() {
         testHelper.deleteTestCourse(course1);
         testHelper.deleteTestCourse(course2);
+        testHelper.deleteTestUser(user1);
     }
 }

@@ -1,5 +1,7 @@
 package gazelle.server.endpoint;
 
+import gazelle.api.CourseResponse;
+import gazelle.api.UserResponse;
 import gazelle.model.Course;
 import gazelle.model.User;
 import gazelle.server.error.*;
@@ -14,23 +16,29 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 public class CourseOwnController {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final UserController userController;
+    private final CourseController courseController;
     private final CourseAndUserService courseAndUserService;
     private final TokenAuthService tokenAuthService;
 
     @Autowired
     public CourseOwnController(CourseRepository courseRepository,
                                   UserRepository userRepository,
+                                  UserController userController,
+                                  CourseController courseController,
                                   CourseAndUserService courseAndUserService,
                                   TokenAuthService tokenAuthService) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.userController = userController;
+        this.courseController = courseController;
         this.courseAndUserService = courseAndUserService;
         this.tokenAuthService = tokenAuthService;
     }
@@ -43,10 +51,13 @@ public class CourseOwnController {
      */
     @GetMapping("/users/{userId}/ownedCourses")
     @Transactional
-    public ArrayList<Course> getOwnedCourses(@PathVariable Long userId) {
+    public List<CourseResponse> getOwnedCourses(@PathVariable Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        return new ArrayList<>(user.getOwning());
+        List<CourseResponse> result = new ArrayList<>();
+        for (Course c : user.getOwning())
+            result.add(courseController.makeCourseResponse(c, user));
+        return result;
     }
 
     /**
@@ -57,10 +68,13 @@ public class CourseOwnController {
      */
     @GetMapping("/courses/{courseId}/owners")
     @Transactional
-    public ArrayList<User> getCourseOwners(@PathVariable Long courseId) {
+    public List<UserResponse> getCourseOwners(@PathVariable Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
-        return new ArrayList<>(course.getOwners());
+        List<UserResponse> result = new ArrayList<>();
+        for (User u : course.getOwners())
+            result.add(userController.makeUserResponse(u));
+        return result;
     }
 
     /**

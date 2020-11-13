@@ -1,8 +1,9 @@
 package gazelle.server.endpoint;
 
-import gazelle.auth.LogInRequest;
-import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
+import gazelle.api.UserResponse;
+import gazelle.api.auth.LogInRequest;
+import gazelle.api.auth.LogInResponse;
+import gazelle.api.auth.SignUpRequest;
 import gazelle.model.ModelException;
 import gazelle.model.User;
 import gazelle.server.error.GazelleException;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.*;
 public class LoginEndpoint {
 
     private final UserRepository userRepository;
-
+    private final UserController userController;
     private final TokenAuthService tokenAuthService;
 
     @Autowired
-    public LoginEndpoint(UserRepository userRepository, TokenAuthService tokenAuthService) {
+    public LoginEndpoint(UserRepository userRepository, UserController userController,
+                         TokenAuthService tokenAuthService) {
         this.userRepository = userRepository;
+        this.userController = userController;
         this.tokenAuthService = tokenAuthService;
     }
 
@@ -54,7 +57,7 @@ public class LoginEndpoint {
             throw new LoginFailedException();
 
         String token = tokenAuthService.createTokenForUser(user);
-        return new LogInResponse(token, user);
+        return new LogInResponse(token, userController.makeUserResponse(user));
     }
 
     /**
@@ -68,8 +71,8 @@ public class LoginEndpoint {
      */
     @GetMapping("/login")
     @Transactional
-    public User loginWithToken(@RequestHeader("Authorization") @Nullable String auth) {
-        return tokenAuthService.getUserObjectFromToken(auth);
+    public UserResponse loginWithToken(@RequestHeader("Authorization") @Nullable String auth) {
+        return userController.makeUserResponse(tokenAuthService.getUserObjectFromToken(auth));
     }
 
     /**
@@ -94,7 +97,7 @@ public class LoginEndpoint {
 
         userRepository.save(user);
         String token = tokenAuthService.createTokenForUser(user);
-        return new LogInResponse(token, user);
+        return new LogInResponse(token, userController.makeUserResponse(user));
     }
 
     /**

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -41,19 +42,21 @@ public class TokenAuthService {
      * @param user the user to create a token for
      * @return the token created for the user (excluding Bearer-prefix)
      */
+    @Transactional(propagation = Propagation.MANDATORY)
     public String createTokenForUser(User user) {
-        TokenLogIn previous = user.getToken();
-        if (previous != null)
-            tokenRepository.delete(previous);
-
         String token = UUID.randomUUID().toString();
-        TokenLogIn tokenLogIn = new TokenLogIn(user, token);
-        user.setToken(tokenLogIn);
+
+        TokenLogIn tokenLogIn = user.getToken();
+        if (tokenLogIn != null)
+            tokenLogIn.setToken(token);
+        else
+            user.setToken(new TokenLogIn(user, token));
         return token;
     }
 
     /**
-     * Creates an authorization token for a user
+     * Creates an authorization token for a user.
+     *
      * @param userId the is of the user to create a token for
      * @return the created token (excluding Bearer-prefix)
      */
@@ -106,6 +109,8 @@ public class TokenAuthService {
 
     /**
      * Removes a token from the database, effectively logging the user out.
+     *
+     * <p>Warning: you can not remove a token and create a token in the same transaction!
      *
      * @param token the token (including Bearer-prefix)
      * @throws InvalidTokenException if the token is malformed or doesn't belong to a user

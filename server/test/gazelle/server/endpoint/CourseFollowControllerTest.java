@@ -1,7 +1,7 @@
 package gazelle.server.endpoint;
 
-import gazelle.model.Course;
-import gazelle.model.User;
+import gazelle.api.CourseResponse;
+import gazelle.api.UserResponse;
 import gazelle.server.TestHelper;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.service.CourseAndUserService;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,7 +60,7 @@ public class CourseFollowControllerTest {
         assertThrows(AuthorizationException.class, () -> {
             courseFollowController.getFollowedCourses(user1, token2);
         });
-        ArrayList<Course> followed = courseFollowController.getFollowedCourses(user1, token1);
+        List<CourseResponse> followed = courseFollowController.getFollowedCourses(user1, token1);
         assertTrue(followed.stream().anyMatch(course -> course.getId().equals(course1)));
         assertTrue(followed.stream().anyMatch(course -> course.getId().equals(course2)));
         assertEquals(2, followed.size());
@@ -71,7 +71,7 @@ public class CourseFollowControllerTest {
         assertThrows(AuthorizationException.class, () -> {
             courseFollowController.getCourseFollowers(course1, token1);
         });
-        ArrayList<User> followers = courseFollowController.getCourseFollowers(course1, token2);
+        List<UserResponse> followers = courseFollowController.getCourseFollowers(course1, token2);
         assertTrue(followers.stream().anyMatch(user -> user.getId().equals(user1)));
         assertTrue(courseAndUserService.isFollowing(user1, course1));
         assertFalse(courseAndUserService.isFollowing(user2, course1));

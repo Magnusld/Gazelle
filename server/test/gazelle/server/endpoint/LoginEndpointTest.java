@@ -1,8 +1,9 @@
 package gazelle.server.endpoint;
 
-import gazelle.auth.LogInRequest;
-import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
+import gazelle.api.UserResponse;
+import gazelle.api.auth.LogInRequest;
+import gazelle.api.auth.LogInResponse;
+import gazelle.api.auth.SignUpRequest;
 import gazelle.model.User;
 import gazelle.server.TestHelper;
 import gazelle.server.error.*;
@@ -15,7 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -46,12 +48,10 @@ public class LoginEndpointTest {
 
         LogInResponse response = loginEndpoint.signup(
                 new SignUpRequest(FIRSTNAME, LASTNAME, EMAIL, PASS));
-        User user = response.getUser();
+        UserResponse user = response.getUser();
         String token = TokenAuthService.addBearer(response.getToken());
 
-        assertEquals(EMAIL, user.getEmail());
-        assertEquals(PASS, user.getPassword());
-        assertEquals(user, tokenAuthService.getUserObjectFromToken(token));
+        assertEquals(user.getId(), tokenAuthService.getUserIdFromToken(token));
 
         GazelleException gex = assertThrows(GazelleException.class, () -> {
             loginEndpoint.signup(new SignUpRequest("dummy", "dummy", EMAIL, "dummy"));
@@ -59,7 +59,7 @@ public class LoginEndpointTest {
         assertEquals("Email taken", gex.getMessage());
         assertEquals(HttpStatus.CONFLICT, gex.getStatusCode());
 
-        testHelper.deleteTestUser(user);
+        testHelper.deleteTestUser(user.getId());
     }
 
     @Test
@@ -75,21 +75,21 @@ public class LoginEndpointTest {
         LogInResponse response = loginEndpoint.login(
                 new LogInRequest(user.getEmail(), user.getPassword()));
 
-        assertEquals(user, response.getUser());
+        assertEquals(user.getId(), response.getUser().getId());
         String token = TokenAuthService.addBearer(response.getToken());
-        assertEquals(user, tokenAuthService.getUserObjectFromToken(token));
+        assertEquals(user.getId(), tokenAuthService.getUserIdFromToken(token));
 
         testHelper.deleteTestUser(user);
     }
 
     @Test
     public void loginWithToken() {
-        User user = testHelper.createTestUserObject();
-        String token = testHelper.logInUser(user.getId());
+        Long user = testHelper.createTestUser();
+        String token = testHelper.logInUser(user);
         assertThrows(InvalidTokenException.class, () -> {
             loginEndpoint.loginWithToken("Bearer: dummy");
         });
-        assertEquals(user, loginEndpoint.loginWithToken(token));
+        assertEquals(user, loginEndpoint.loginWithToken(token).getId());
         testHelper.deleteTestUser(user);
     }
 
