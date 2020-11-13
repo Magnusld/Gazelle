@@ -1,4 +1,4 @@
-package gazelle.auth;
+package gazelle.api.auth;
 
 import java.util.Objects;
 

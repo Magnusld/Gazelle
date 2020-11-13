@@ -1,6 +1,8 @@
 package gazelle.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gazelle.api.NewCourseRequest;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,12 +20,13 @@ public class Course {
     private String name;
 
     @ManyToMany(mappedBy = "following")
-    @JsonIgnore
     private Set<User> followers = new HashSet<>();
 
     @ManyToMany(mappedBy = "owning")
-    @JsonIgnore
     private Set<User> owners = new HashSet<>();
+
+    @OneToMany(mappedBy = "course", cascade = {CascadeType.ALL})
+    private Set<Post> posts = new HashSet<>();
 
     protected Course() {}
 
@@ -31,7 +34,14 @@ public class Course {
         this.name = name;
     }
 
-    public Long getId() {
+    public void validate() throws ModelException {
+        if (name.length() < 4)
+            throw new ModelException("Løpsnavn må være minst 4 bokstaver");
+        if (!name.trim().equals(name))
+            throw new ModelException("Løpsnavn kan ikke starte eller slutte med tomrom");
+    }
+
+    public @Nullable Long getId() {
         return id;
     }
 
@@ -61,6 +71,14 @@ public class Course {
 
     public void setOwners(Set<User> owners) {
         this.owners = owners;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 
     @PreRemove

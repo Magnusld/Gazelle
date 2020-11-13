@@ -1,13 +1,13 @@
-package gazelle.auth;
+package gazelle.api.auth;
 
 import java.util.Objects;
 
-public class LogOutRequest {
+public class UserFromTokenRequest {
     private String token;
 
-    protected LogOutRequest() {}
+    protected UserFromTokenRequest() {}
 
-    public LogOutRequest(String token) {
+    public UserFromTokenRequest(String token) {
         this.token = token;
     }
 
@@ -23,7 +23,7 @@ public class LogOutRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LogOutRequest that = (LogOutRequest) o;
+        UserFromTokenRequest that = (UserFromTokenRequest) o;
         return Objects.equals(token, that.token);
     }
 

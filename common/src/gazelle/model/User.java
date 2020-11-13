@@ -1,6 +1,7 @@
 package gazelle.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gazelle.api.auth.SignUpRequest;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,7 +26,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String lastname;
 
-    @JsonIgnore
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -37,7 +37,6 @@ public class User {
             name = "user_course_follow",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    @JsonIgnore
     private Set<Course> following = new HashSet<>();
 
     @ManyToMany
@@ -45,11 +44,9 @@ public class User {
             name = "user_course_own",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    @JsonIgnore
     private Set<Course> owning = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    @JsonIgnore
     private TokenLogIn token;
     
     protected User() {}
@@ -59,6 +56,26 @@ public class User {
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+    }
+
+    public void validate() throws ModelException {
+        if (this.password.length() < 4)
+            throw new ModelException("Passordet må være minst 4 tegn.");
+
+        if (this.firstname.length() < 2)
+            throw new ModelException("Fornavn må være minst 2 tegn.");
+
+        if (this.lastname.length() < 2)
+            throw new ModelException("Etternavn må være minst 2 tegn");
+
+        if (this.email.contains(" "))
+            throw new ModelException("E-post-adressen kan ikke inneholde mellomrom.");
+
+        if (!this.firstname.trim().equals(this.firstname))
+            throw new ModelException("Fornavn kan ikke starte eller slutte med mellomrom.");
+
+        if (!this.lastname.trim().equals(this.lastname))
+            throw new ModelException("Etternavn kan ikke starte eller slutte med mellomrom.");
     }
 
     public Long getId() {
@@ -105,8 +122,16 @@ public class User {
         return following;
     }
 
+    public void setFollowing(Set<Course> following) {
+        this.following = following;
+    }
+
     public Set<Course> getOwning() {
         return owning;
+    }
+
+    public void setOwning(Set<Course> owning) {
+        this.owning = owning;
     }
 
     public TokenLogIn getToken() {
@@ -123,23 +148,6 @@ public class User {
         if (!(o instanceof User)) return false;
         User user = (User) o;
         return Objects.equals(id, user.id);
-    }
-
-    public void validate() throws ModelException {
-        if (this.password.length() < 4)
-            throw new ModelException("Passordet må være minst 4 tegn.");
-
-        if (this.firstname.length() < 2)
-            throw new ModelException("Fornavn må være minst 2 tegn.");
-
-        if (this.email.contains(" "))
-            throw new ModelException("E-post-adressen kan ikke inneholde mellomrom.");
-
-        if (!this.firstname.trim().equals(this.firstname))
-            throw new ModelException("Fornavn kan ikke starte eller slutte med mellomrom.");
-
-        if (!this.lastname.trim().equals(this.lastname))
-            throw new ModelException("Etternavn kan ikke starte eller slutte med mellomrom.");
     }
 
     @Override

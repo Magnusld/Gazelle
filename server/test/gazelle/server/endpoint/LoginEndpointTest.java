@@ -1,8 +1,8 @@
 package gazelle.server.endpoint;
 
-import gazelle.auth.LogInRequest;
-import gazelle.auth.LogInResponse;
-import gazelle.auth.SignUpRequest;
+import gazelle.api.auth.LogInRequest;
+import gazelle.api.auth.LogInResponse;
+import gazelle.api.auth.SignUpRequest;
 import gazelle.model.User;
 import gazelle.server.TestHelper;
 import gazelle.server.error.*;

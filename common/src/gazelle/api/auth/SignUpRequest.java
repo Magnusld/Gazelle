@@ -1,7 +1,6 @@
-package gazelle.auth;
+package gazelle.api.auth;
 
 
-import gazelle.model.ModelException;
 import gazelle.model.User;
 
 import java.util.Objects;

@@ -1,5 +1,6 @@
 package gazelle.server.endpoint;
 
+import gazelle.api.CourseResponse;
 import gazelle.model.Course;
 import gazelle.model.User;
 import gazelle.server.error.*;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class CourseFollowController {
@@ -22,16 +24,19 @@ public class CourseFollowController {
     private final UserRepository userRepository;
     private final CourseAndUserService courseAndUserService;
     private final TokenAuthService tokenAuthService;
+    private final CourseController courseController;
 
     @Autowired
     public CourseFollowController(CourseRepository courseRepository,
                                   UserRepository userRepository,
                                   CourseAndUserService courseAndUserService,
-                                  TokenAuthService tokenAuthService) {
+                                  TokenAuthService tokenAuthService,
+                                  CourseController courseController) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
         this.courseAndUserService = courseAndUserService;
         this.tokenAuthService = tokenAuthService;
+        this.courseController = courseController;
     }
 
     /**
@@ -48,12 +53,15 @@ public class CourseFollowController {
      */
     @GetMapping("/users/{userId}/followedCourses")
     @Transactional
-    public ArrayList<Course> getFollowedCourses(@PathVariable Long userId,
-                                    @RequestHeader("Authorization") @Nullable String auth) {
+    public List<CourseResponse> getFollowedCourses(@PathVariable Long userId,
+                                                   @RequestHeader("Authorization") @Nullable String auth) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         tokenAuthService.assertTokenForUser(userId, auth);
-        return new ArrayList<>(user.getFollowing());
+        List<CourseResponse> result = new ArrayList<>();
+        for (Course c : user.getFollowing())
+            result.add(courseController.makeCourseResponse(c, user));
+        return result;
     }
 
     /**
@@ -70,7 +78,7 @@ public class CourseFollowController {
      */
     @GetMapping("/courses/{courseId}/followers")
     @Transactional
-    public ArrayList<User> getCourseFollowers(@PathVariable Long courseId,
+    public List<User> getCourseFollowers(@PathVariable Long courseId,
                                            @RequestHeader("Authorization") @Nullable String auth) {
         User user = tokenAuthService.getUserObjectFromToken(auth);
         Course course = courseRepository.findById(courseId)

@@ -1,6 +1,6 @@
 @startuml
 component common {
-	package gazelle.auth
+	package gazelle.api.auth
 	package gazelle.model
 }
 
@@ -36,7 +36,7 @@ component h2database {
 
 spring ..> h2database
 
-server ..> gazelle.auth
+server ..> gazelle.api.auth
 server ..> gazelle.model
 
 server ..> spring
