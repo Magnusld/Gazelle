@@ -1,5 +1,6 @@
 package gazelle.model;
 
+import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Chore {
     private String text;
 
     @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
     private Date dueDate;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -33,7 +35,7 @@ public class Chore {
     public Chore(Long key, String text, @Nullable Date dueDate, Post post) {
         this.key = key;
         this.text = text;
-        this.dueDate = dueDate;
+        this.dueDate = DateHelper.clone(dueDate);
         this.post = post;
     }
 
@@ -62,11 +64,11 @@ public class Chore {
     }
 
     public @Nullable Date getDueDate() {
-        return dueDate;
+        return DateHelper.clone(dueDate);
     }
 
     public void setDueDate(@Nullable Date dueDate) {
-        this.dueDate = dueDate;
+        this.dueDate = DateHelper.clone(dueDate);
     }
 
     public Post getPost() {

@@ -87,9 +87,10 @@ public class CourseResponse {
         if (this == o) return true;
         if (!(o instanceof CourseResponse)) return false;
         CourseResponse that = (CourseResponse) o;
-        return isOwner == that.isOwner
-                && Objects.equals(id, that.id)
+        return Objects.equals(id, that.id)
                 && Objects.equals(name, that.name)
+                && Objects.equals(isOwner, that.isOwner)
+                && Objects.equals(isFollower, that.isFollower)
                 && Objects.equals(currentPost, that.currentPost)
                 && Objects.equals(nextPost, that.nextPost);
     }

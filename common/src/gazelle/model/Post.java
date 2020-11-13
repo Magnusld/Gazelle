@@ -1,5 +1,6 @@
 package gazelle.model;
 
+import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -22,9 +23,11 @@ public class Post {
     private String description;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date endDate;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -36,10 +39,12 @@ public class Post {
 
     protected Post() {}
 
-    public Post(String title, String description, Course course) {
+    public Post(String title, String description, Course course, Date startDate, Date endDate) {
         this.title = title;
         this.description = description;
         this.course = course;
+        this.startDate = DateHelper.clone(startDate);
+        this.endDate = DateHelper.clone(endDate);
     }
 
     public @Nullable Long getId() {
@@ -67,19 +72,19 @@ public class Post {
     }
 
     public Date getStartDate() {
-        return startDate;
+        return DateHelper.clone(startDate);
     }
 
     public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+        this.startDate = DateHelper.clone(startDate);
     }
 
     public Date getEndDate() {
-        return endDate;
+        return DateHelper.clone(endDate);
     }
 
     public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+        this.endDate = DateHelper.clone(endDate);
     }
 
     public Course getCourse() {

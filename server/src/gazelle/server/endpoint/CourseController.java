@@ -92,7 +92,8 @@ public class CourseController {
         if (auth != null)
             user = tokenAuthService.getUserObjectFromToken(auth);
         List<CourseResponse> result = new ArrayList<>();
-        courseRepository.findAll().forEach(it -> result.add(makeCourseResponse(it, null)));
+        for (Course c : courseRepository.findAll())
+            result.add(makeCourseResponse(c, user));
         return result;
     }
 

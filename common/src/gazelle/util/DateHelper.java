@@ -1,10 +1,19 @@
 package gazelle.util;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
 public class DateHelper {
+
+    public static Date clone(@Nullable Date date) {
+        if (date == null)
+            return null;
+        return new Date(date.getTime());
+    }
+
     public static Date today() {
         return dateOfLocalDate(LocalDate.now());
     }
