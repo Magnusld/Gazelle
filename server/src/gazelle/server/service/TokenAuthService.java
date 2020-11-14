@@ -108,6 +108,22 @@ public class TokenAuthService {
     }
 
     /**
+     * Checks that the token is a valid credential for the userId,
+     * and also returns a User object for the userId
+     *
+     * @param userId the id of the user
+     * @param token the token used to authenticate
+     * @return User the object for the user with the given id
+     * @throws AuthorizationException if the token doesn't authenticate for userId
+     */
+    public User assertTokenForUserAndGet(Long userId, @Nullable String token) {
+        User user = getUserObjectFromToken(token);
+        if (!user.getId().equals(userId))
+            throw new AuthorizationException();
+        return user;
+    }
+
+    /**
      * Removes a token from the database, effectively logging the user out.
      *
      * <p>Warning: you can not remove a token and create a token in the same transaction!
