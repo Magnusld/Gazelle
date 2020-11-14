@@ -7,6 +7,7 @@ import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class UserController {
      * @param user the user object
      * @return UserResponse for the user object
      */
+    @Transactional(propagation = Propagation.MANDATORY)
     public UserResponse makeUserResponse(User user) {
         UserResponse.Builder builder = new UserResponse.Builder();
         builder.id(user.getId())

@@ -12,6 +12,7 @@ import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,14 +50,13 @@ public class PostController {
      * @param user an optional user object
      * @return PostResponse for the given post
      */
+    @Transactional(propagation = Propagation.MANDATORY)
     public PostResponse makePostResponse(Post post, @Nullable User user) {
         PostResponse.Builder builder = new PostResponse.Builder();
         builder.id(post.getId())
                 .title(post.getTitle())
                 .startDate(DateHelper.localDateOfDate(post.getStartDate()))
-                .endDate(DateHelper.localDateOfDate(post.getEndDate()))
-                .courseName(post.getCourse().getName())
-                .courseId(post.getCourse().getId());
+                .endDate(DateHelper.localDateOfDate(post.getEndDate()));
 
         Set<Chore> chores = post.getChores();
         builder.choresCount(chores.size());

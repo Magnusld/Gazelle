@@ -12,8 +12,6 @@ public class PostResponse {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String courseName;
-    private Long courseId;
     @Nullable
     private Integer choresDone;
     @Nullable
@@ -49,16 +47,6 @@ public class PostResponse {
 
         public Builder endDate(LocalDate endDate) {
             built.setEndDate(endDate);
-            return this;
-        }
-
-        public Builder courseName(String courseName) {
-            built.setCourseName(courseName);
-            return this;
-        }
-
-        public Builder courseId(Long courseId) {
-            built.setCourseId(courseId);
             return this;
         }
 
@@ -112,22 +100,6 @@ public class PostResponse {
         this.endDate = endDate;
     }
 
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
-    }
-
     public @Nullable Integer getChoresDone() {
         return choresDone;
     }
@@ -156,8 +128,6 @@ public class PostResponse {
         Objects.requireNonNull(title);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
-        Objects.requireNonNull(courseName);
-        Objects.requireNonNull(courseId);
     }
 
     @Override
@@ -169,15 +139,12 @@ public class PostResponse {
                 && Objects.equals(title, that.title)
                 && Objects.equals(startDate, that.startDate)
                 && Objects.equals(endDate, that.endDate)
-                && Objects.equals(courseName, that.courseName)
-                && Objects.equals(courseId, that.courseId)
                 && Objects.equals(choresDone, that.choresDone)
                 && Objects.equals(choresFocused, that.choresFocused);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, startDate, endDate, courseName, courseId,
-                choresDone, choresFocused, choresCount);
+        return Objects.hash(title, startDate, endDate, choresDone, choresFocused, choresCount);
     }
 }

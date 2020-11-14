@@ -14,10 +14,8 @@ public class CourseResponse {
     private Boolean isOwner;
     @Nullable
     private Boolean isFollower;
-    @JsonIgnoreProperties({ "courseName", "courseId" })
     @Nullable
     private PostResponse currentPost;
-    @JsonIgnoreProperties({ "courseName", "courseId" })
     @Nullable
     private PostResponse nextPost;
 

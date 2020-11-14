@@ -18,6 +18,7 @@ import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,7 @@ public class CourseController {
      * @param user the user object, or null
      * @return CourseResponse object
      */
+    @Transactional(propagation = Propagation.MANDATORY)
     public CourseResponse makeCourseResponse(Course course, @Nullable User user) {
         Boolean isOwner = null;
         Boolean isFollower = null;
