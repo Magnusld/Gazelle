@@ -2,6 +2,8 @@ package gazelle.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import gazelle.model.Course;
+import gazelle.model.Post;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -18,6 +20,49 @@ public class CourseResponse {
     private PostResponse currentPost;
     @Nullable
     private PostResponse nextPost;
+
+    public static class Builder {
+        private final CourseResponse built;
+
+        public Builder() {
+            built = new CourseResponse();
+        }
+
+        public CourseResponse build() {
+            built.validate();
+            return built;
+        }
+
+        public Builder id(Long id) {
+            built.setId(id);
+            return this;
+        }
+
+        public Builder name(String name) {
+            built.setName(name);
+            return this;
+        }
+
+        public Builder isOwner(@Nullable Boolean owner) {
+            built.setIsOwner(owner);
+            return this;
+        }
+
+        public Builder isFollower(@Nullable Boolean follower) {
+            built.setIsFollower(follower);
+            return this;
+        }
+
+        public Builder currentPost(@Nullable PostResponse currentPost) {
+            built.setCurrentPost(currentPost);
+            return this;
+        }
+
+        public Builder nextPost(@Nullable PostResponse nextPost) {
+            built.setNextPost(nextPost);
+            return this;
+        }
+    }
 
     protected CourseResponse() {}
 
@@ -78,6 +123,11 @@ public class CourseResponse {
 
     public void setNextPost(@Nullable PostResponse nextPost) {
         this.nextPost = nextPost;
+    }
+
+    public void validate() {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(name);
     }
 
     @Override
