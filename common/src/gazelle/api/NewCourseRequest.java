@@ -1,7 +1,5 @@
 package gazelle.api;
 
-import gazelle.model.Course;
-
 import java.util.Objects;
 
 public class NewCourseRequest {
@@ -11,10 +9,6 @@ public class NewCourseRequest {
 
     public NewCourseRequest(String name) {
         this.name = name;
-    }
-
-    public Course buildCourse() {
-        return new Course(name);
     }
 
     public String getName() {

@@ -1,12 +1,14 @@
 package gazelle.server.endpoint;
 
 import gazelle.api.ChoreResponse;
+import gazelle.api.NewChoreRequest;
 import gazelle.model.Chore;
+import gazelle.model.Post;
 import gazelle.model.User;
 import gazelle.model.UserChoreProgress;
 import gazelle.server.error.ChoreNotFoundException;
 import gazelle.server.repository.ChoreRepository;
-import gazelle.server.repository.UserChoreProgressRepository;
+import gazelle.server.service.ChoreProgressService;
 import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
@@ -14,21 +16,21 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Optional;
+import java.util.Objects;
 
 @RestController
 public class ChoreController {
 
     private final ChoreRepository choreRepository;
-    private final UserChoreProgressRepository userChoreProgressRepository;
+    private final ChoreProgressService choreProgressService;
+
     private final TokenAuthService tokenAuthService;
 
     public ChoreController(ChoreRepository choreRepository,
-                           UserChoreProgressRepository userChoreProgressRepository,
+                           ChoreProgressService choreProgressService,
                            TokenAuthService tokenAuthService) {
         this.choreRepository = choreRepository;
-        this.userChoreProgressRepository = userChoreProgressRepository;
+        this.choreProgressService = choreProgressService;
         this.tokenAuthService = tokenAuthService;
     }
 
@@ -48,10 +50,40 @@ public class ChoreController {
                 .dueDate(DateHelper.localDateOfDate(chore.getDueDate()));
 
         if (user != null)
-            userChoreProgressRepository.findUserChoreProgressByUserAndChore(user, chore)
-                    .map(UserChoreProgress::getProgress).ifPresent(builder::progress);
+            builder.progress(choreProgressService.getProgress(user, chore));
 
         return builder.build();
+    }
+
+    /**
+     * Creates a new Chore based on a NewChoreRequest
+     *
+     * @param r the NewChoreRequest
+     * @param post the post the chore will belong to
+     * @return Chore the created Chore object
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public Chore buildChore(NewChoreRequest r, Post post) {
+        r.validate();
+        if (r.getId() != null)
+            throw new IllegalArgumentException();
+        return new Chore(r.getKey(), r.getText(), DateHelper.dateOfLocalDate(r.getDueDate()), post);
+    }
+
+    /**
+     * Updates an existing chore based on a NewChoreRequest
+     *
+     * @param r the NewChorRequest
+     * @param chore the Chore object
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void updateChore(NewChoreRequest r, Chore chore) {
+        r.validate();
+        if (!Objects.equals(chore.getId(), r.getId()))
+            throw new IllegalArgumentException();
+        chore.setKey(r.getKey());
+        chore.setText(r.getText());
+        chore.setDueDate(DateHelper.dateOfLocalDate(r.getDueDate()));
     }
 
     @PutMapping("/users/{userId}/chores/{choreId}/progress")
@@ -62,11 +94,6 @@ public class ChoreController {
                               @RequestHeader("Authorization") @Nullable String auth) {
         User user = tokenAuthService.assertTokenForUserAndGet(userId, auth);
         Chore chore = choreRepository.findById(choreId).orElseThrow(ChoreNotFoundException::new);
-
-        Optional<UserChoreProgress> progressOpt = userChoreProgressRepository
-                .findUserChoreProgressByUserAndChore(user, chore);
-
-        progressOpt.ifPresentOrElse(it -> it.setProgress(value),
-                () -> userChoreProgressRepository.save(new UserChoreProgress(user, chore, value)));
+        choreProgressService.setProgress(user, chore, value);
     }
 }
