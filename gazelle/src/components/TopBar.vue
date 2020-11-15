@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { logout } from "@/client/login";
 
 @Component
@@ -73,6 +73,11 @@ export default class TopBar extends Vue {
 
   private reloadPage() {
     window.location.reload();
+  }
+
+  @Watch("$route")
+  onRouteChange(): void {
+    this.showNavigation = false;
   }
 }
 </script>
