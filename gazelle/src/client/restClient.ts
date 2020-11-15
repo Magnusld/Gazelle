@@ -44,6 +44,10 @@ export const validPost = (code: number) =>
 // Only 200 (OK) has content in the post response
 export const validPostWithResponseBody = (code: number) => code == 200;
 
+// 200 (OK), 202 (Accepted) and 204 (No Content)
+export const validDelete = (code: number) =>
+  code == 200 || code == 202 || code == 204;
+
 export class RestClient {
   private readonly http: AxiosInstance;
   private readonly unwatchToken: Function;
@@ -82,6 +86,10 @@ export class RestClient {
     return wrapPromise(
       this.http.post(path, data, { validateStatus: validPostWithResponseBody })
     );
+  }
+
+  public delete(path: string): Promise<void> {
+    return wrapPromise(this.http.delete(path, { validateStatus: validDelete }));
   }
 }
 

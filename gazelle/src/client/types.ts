@@ -27,12 +27,8 @@ export interface PostResponse {
   choresCount: number;
 }
 
-export interface PostRequest {
-
-}
-
-export interface CourseRequest {
-
+export interface NewCourseRequest {
+  name: string;
 }
 
 export interface CourseResponse {

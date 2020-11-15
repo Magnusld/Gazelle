@@ -30,12 +30,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import type { Course } from "@/types";
+import { CourseResponse } from "@/client/types";
 
 @Component
 export default class CourseListing extends Vue {
   @Prop()
-  private course!: Course;
+  private course!: CourseResponse;
 }
 </script>
 
