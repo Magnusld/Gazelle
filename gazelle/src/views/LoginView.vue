@@ -1,18 +1,27 @@
 <template>
   <div>
     <mq-layout :mq="['mobile', 'tablet']" id="vertical">
-      <img src="../assets/images/orangelogo.svg" alt="Orange logo" class="logo logoVertical" />
+      <img
+        src="../assets/images/orangelogo.svg"
+        alt="Orange logo"
+        class="logo logoVertical"
+      />
       <LoginPage />
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">
-        <img src="../assets/images/orangelogo.svg" alt="Orange logo" class="logo logoHorizontal" />
+        <img
+          src="../assets/images/orangelogo.svg"
+          alt="Orange logo"
+          class="logo logoHorizontal"
+        />
         <div class="text">
           <div class="md-title">
             Gjør studiehverdagen effektiv
           </div>
           <div>
-            Med Gazelle får du enkel tilgang til gjøremål og egen fremgang i alle fag.
+            Med Gazelle får du enkel tilgang til gjøremål og egen fremgang i
+            alle fag.
           </div>
         </div>
       </div>
@@ -20,7 +29,6 @@
       <div class="wrapper">
         <LoginPage />
       </div>
-
     </mq-layout>
   </div>
 </template>
@@ -77,5 +85,6 @@ export default class LoginView extends Vue {}
   position: absolute;
   top: 10%;
 }
-.logoHorizontal {}
+.logoHorizontal {
+}
 </style>
