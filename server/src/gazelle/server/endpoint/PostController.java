@@ -1,5 +1,7 @@
 package gazelle.server.endpoint;
 
+import gazelle.api.ChoreResponse;
+import gazelle.api.PostContentResponse;
 import gazelle.api.PostResponse;
 import gazelle.model.Chore;
 import gazelle.model.Course;
@@ -29,22 +31,24 @@ public class PostController {
     private final PostRepository postRepository;
     private final TokenAuthService tokenAuthService;
     private final CourseRepository courseRepository;
+    private final ChoreController choreController;
 
     @Autowired
     public PostController(PostRepository postRepository,
                           TokenAuthService tokenAuthService,
-                          CourseRepository courseRepository) {
+                          CourseRepository courseRepository,
+                          ChoreController choreController) {
         this.postRepository = postRepository;
         this.tokenAuthService = tokenAuthService;
         this.courseRepository = courseRepository;
+        this.choreController = choreController;
     }
 
     /**
-     * Makes a serializable object with post data,
+     * Makes a serializable object with post metadata,
      * as well as info about relationships between the post and course / user.
-     * The user is optional.
-     *
-     * <p>Note: The full content of the post is not included.
+     * Does not contain the full content of the post.
+     * The user is optional. If not supplied, fields about progress are omitted.
      *
      * @param post the post
      * @param user an optional user object
@@ -68,6 +72,32 @@ public class PostController {
             }
             builder.choresDone(choresDone).choresFocused(choresFocused);
         }
+        return builder.build();
+    }
+
+    /**
+     * Makes a serializable object containing the post content.
+     * If a User is supplied, the ChoreResponses will contain the current progress for that user.
+     *
+     * @param post the post
+     * @param user the user, or null
+     * @return PostContentResponse for the given post
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public PostContentResponse makePostContentResponse(Post post, @Nullable User user) {
+        PostContentResponse.Builder builder = new PostContentResponse.Builder();
+        builder.id(post.getId());
+        builder.title(post.getTitle());
+        builder.description(post.getDescription());
+        builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
+        builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
+
+        List<ChoreResponse> chores = new ArrayList<ChoreResponse>();
+        for (Chore c : post.getChores())
+            chores.add(choreController.makeChoreResponse(c, user));
+
+        builder.chores(chores);
+
         return builder.build();
     }
 

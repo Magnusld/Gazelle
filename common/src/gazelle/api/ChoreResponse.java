@@ -1,23 +1,76 @@
 package gazelle.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import gazelle.model.UserChoreProgress;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChoreResponse {
+    private Long id;
+    private Long key;
     private String text;
     @Nullable
     private LocalDate dueDate;
     @Nullable
     private UserChoreProgress.Progress progress;
 
-    public ChoreResponse(String text, @Nullable LocalDate dueDate,
-                         @Nullable UserChoreProgress.Progress progress) {
-        this.text = text;
-        this.dueDate = dueDate;
-        this.progress = progress;
+    public static class Builder {
+        private final ChoreResponse built;
+
+        public Builder() {
+            built = new ChoreResponse();
+        }
+
+        public ChoreResponse build() {
+            built.validate();
+            return built;
+        }
+
+        public Builder id(Long id) {
+            built.setId(id);
+            return this;
+        }
+
+        public Builder key(Long key) {
+            built.setKey(key);
+            return this;
+        }
+
+        public Builder text(String text) {
+            built.setText(text);
+            return this;
+        }
+
+        public Builder dueDate(LocalDate dueDate) {
+            built.setDueDate(dueDate);
+            return this;
+        }
+
+        public Builder progress(UserChoreProgress.Progress progress) {
+            built.setProgress(progress);
+            return this;
+        }
+    }
+
+    protected ChoreResponse() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getKey() {
+        return key;
+    }
+
+    public void setKey(Long key) {
+        this.key = key;
     }
 
     public String getText() {
@@ -42,6 +95,12 @@ public class ChoreResponse {
 
     public void setProgress(@Nullable UserChoreProgress.Progress progress) {
         this.progress = progress;
+    }
+
+    public void validate() {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(text);
     }
 
     @Override

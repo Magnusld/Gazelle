@@ -41,12 +41,17 @@ public class ChoreController {
      */
     @Transactional(propagation = Propagation.MANDATORY)
     public ChoreResponse makeChoreResponse(Chore chore, @Nullable User user) {
-        UserChoreProgress.Progress progress = user == null ? null
-                : userChoreProgressRepository.findUserChoreProgressByUserAndChore(user, chore)
-                .map(UserChoreProgress::getProgress).orElse(null);
+        ChoreResponse.Builder builder = new ChoreResponse.Builder();
+        builder.id(chore.getId())
+                .key(chore.getKey())
+                .text(chore.getText())
+                .dueDate(DateHelper.localDateOfDate(chore.getDueDate()));
 
-        LocalDate dueDate = DateHelper.localDateOfDate(chore.getDueDate());
-        return new ChoreResponse(chore.getText(), dueDate, progress);
+        if (user != null)
+            userChoreProgressRepository.findUserChoreProgressByUserAndChore(user, chore)
+                    .map(UserChoreProgress::getProgress).ifPresent(builder::progress);
+
+        return builder.build();
     }
 
     @PutMapping("/users/{userId}/chores/{choreId}/progress")

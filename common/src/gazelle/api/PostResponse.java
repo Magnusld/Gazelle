@@ -125,6 +125,7 @@ public class PostResponse {
     }
 
     public void validate() {
+        Objects.requireNonNull(id);
         Objects.requireNonNull(title);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
