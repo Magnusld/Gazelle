@@ -65,15 +65,19 @@ public class CourseController {
 
         Date today = DateHelper.today();
 
-        PostResponse currentPost = postRepository.findCurrentPostInCourse(course, today)
-                .map(it -> postController.makePostResponse(it, user))
-                .orElse(null);
-        PostResponse nextPost = postRepository.findNextPostInCourse(course, today)
-                .map(it -> postController.makePostResponse(it, user))
-                .orElse(null);
+        CourseResponse.Builder builder = new CourseResponse.Builder();
+        builder.id(course.getId())
+                .name(course.getName())
+                .isOwner(isOwner)
+                .isFollower(isFollower)
+                .currentPost(postRepository.findCurrentPostInCourse(course, today)
+                        .map(it -> postController.makePostResponse(it, user))
+                        .orElse(null))
+                .nextPost(postRepository.findNextPostInCourse(course, today)
+                        .map(it -> postController.makePostResponse(it, user))
+                        .orElse(null));
 
-        return new CourseResponse(course.getId(), course.getName(), isOwner,
-                isFollower, currentPost, nextPost);
+        return builder.build();
     }
 
     /**

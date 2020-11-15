@@ -130,11 +130,6 @@ public class CourseResponse {
     public void validate() {
         Objects.requireNonNull(id);
         Objects.requireNonNull(name);
-        Objects.requireNonNull(isOwner);
-        Objects.requireNonNull(isFollower);
-        Objects.requireNonNull(currentPost);
-        Objects.requireNonNull(nextPost);
-
     }
 
     @Override
