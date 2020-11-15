@@ -8,6 +8,7 @@ import gazelle.model.Course;
 import gazelle.model.Post;
 import gazelle.model.User;
 import gazelle.server.error.CourseNotFoundException;
+import gazelle.server.error.PostNotFoundException;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.PostRepository;
 import gazelle.server.service.TokenAuthService;
@@ -116,5 +117,19 @@ public class PostController {
         for (Post p : posts)
             responses.add(makePostResponse(p, user));
         return responses;
+    }
+
+    @GetMapping("/posts/{postId}")
+    @Transactional
+    public PostContentResponse getPostContent(
+            @PathVariable("postId") Long postId,
+            @RequestHeader("Authorization") @Nullable String auth) {
+        User user = null;
+        if (auth != null)
+            user = tokenAuthService.getUserObjectFromToken(auth);
+
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+
+        return makePostContentResponse(post, user);
     }
 }
