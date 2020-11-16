@@ -1,6 +1,7 @@
 import restClient from "./restClient";
 import store from "@/store";
 import { LogInRequest, LogInResponse, SignUpRequest } from "@/client/types";
+import router from "@/router";
 
 /**
  * Logs in with email and password. Updates store when starting and if successful.
@@ -38,14 +39,19 @@ export async function tryGetRealUser() {
   if (!store.getters.isFakeLoggedIn) return;
 
   try {
-    const response: LogInResponse = await restClient.get("/login");
-    store.commit("authSuccess", response);
-    localStorage.setItem("userId", `${response.user.id}`);
+    const user: any = await restClient.get("/login");
+    store.commit("userObjectFound", user);
+    localStorage.setItem("userId", `${user.id}`);
   } catch (e) {
-    //Don't do anything to e, if we failed, the restClient is already logging us out
+    if (e.status != 401)
+      throw e;
   }
 }
 
+/**
+ * If a request failed with 401, and we are logged in we assume the token is invalid.
+ * This will send the user to the login-page due to the router listening.
+ */
 export async function onTokenInvalid(): Promise<void> {
   localStorage.removeItem("token");
   localStorage.removeItem("userId");
@@ -61,16 +67,13 @@ export async function onTokenInvalid(): Promise<void> {
 export async function logout(): Promise<void> {
   if (!store.getters.isLoggedIn) throw { message: "Not logged in" };
 
-  try {
-    await restClient.post("/logout");
-  } catch (e) {
-    if (e.status != 401)
-      //If the token was invalid, we don't really care
-      throw e;
-  }
+  // If the token is already invalid, this will throw a 401 which will log ut out either way
+  await restClient.post("/logout");
 
   localStorage.removeItem("token");
   localStorage.removeItem("userId");
+  store.commit("authRequest");
+  await router.replace("/login");
   store.commit("logout");
 }
 

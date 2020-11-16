@@ -47,10 +47,7 @@
     <div class="md-layout-item buttonContainer" id="userInfo">
       <md-button
         class="md-secondary"
-        v-on:click="
-          logout();
-          reloadPage();
-        "
+        v-on:click="logout"
         >Logg ut</md-button
       >
       <md-button class="md-icon-button" to="/user-settings">
