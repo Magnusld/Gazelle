@@ -28,7 +28,7 @@
         <md-input v-model="repeatedPassword" type="password"></md-input>
       </md-field>
     </div>
-    <div class="errorMessage" v-if="error">Error: {{ error }}</div>
+    <div class="errorMessage" v-if="error">{{ error }}</div>
     <md-button class="md-raised md-primary signUpButton" v-on:click="signUp">
       Opprett Bruker</md-button
     >
@@ -63,7 +63,7 @@ export default class SignUpPage extends Vue {
     } catch (e) {
       if (e.status == undefined)
         this.error = `Klarte ikke koble til tjener: ${e.message}`;
-      else this.error = `${e.message} (${e.status})`;
+      else this.error = `${e.message}`;
     }
   }
 }

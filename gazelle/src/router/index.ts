@@ -100,10 +100,9 @@ const checkLoggedInStateForPage = (
   redirect: (loc: RawLocation) => void
 ): boolean => {
   if (loginStatus == "loading") return true;
-
   if (route.matched.some(r => r.meta.requiresAuth)) {
-    if (loginStatus == "loggedIn") return true;
-    redirect("/login");
+    if (loginStatus == "loggedIn" || loginStatus == "fakeLoggedIn") return true;
+    redirect("/login?reason=invalidated");
     return false;
   } else if (route.matched.some(r => r.meta.requiresLoggedOut)) {
     if (loginStatus == "loggedOut") return true;
