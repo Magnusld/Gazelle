@@ -17,8 +17,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { Chore } from "@/types";
+import {Component, Prop, Vue} from "vue-property-decorator";
 import {ChoreProgress, ChoreResponse} from "@/client/types";
 import {setChoreState} from "@/client/chore";
 
@@ -33,12 +32,12 @@ export default class FocusChore extends Vue {
     this.isFocused = !this.isFocused;
     let progress: ChoreProgress;
     if (this.isFocused){
-      progress = "focused";
+      progress = ChoreProgress.FOCUSED;
     }
     else {
-      progress = "undone";
+      progress = ChoreProgress.UNDONE;
     }
-    setChoreState(this.chore.id, progress);
+    setChoreState(this.chore.id, this.$store.getters.loggedInUser, progress);
   }
 }
 </script>
