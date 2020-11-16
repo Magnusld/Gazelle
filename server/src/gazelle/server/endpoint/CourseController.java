@@ -1,6 +1,7 @@
 package gazelle.server.endpoint;
 
 import gazelle.api.CourseResponse;
+import gazelle.api.NewChoreRequest;
 import gazelle.api.NewCourseRequest;
 import gazelle.api.PostResponse;
 import gazelle.model.Course;
@@ -83,6 +84,18 @@ public class CourseController {
     }
 
     /**
+     * Creates a new Course object from a NewCourseRequest.
+     * Does not persist the new Course.
+     *
+     * @param r the NewCourseRequest
+     * @return Course the new Course
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public Course buildCourse(NewCourseRequest r) {
+        return new Course(r.getName());
+    }
+
+    /**
      * Gets a list of all courses.
      * Does not require the Authorization header.
      * If none is supplied, isOwning will be null for all courses,
@@ -136,7 +149,7 @@ public class CourseController {
                                        @RequestHeader("Authorization") String auth) {
         User user = tokenAuthService.getUserObjectFromToken(auth);
 
-        Course course = newCourse.buildCourse();
+        Course course = buildCourse(newCourse);
         try {
             course.validate();
         } catch (ModelException e) {
