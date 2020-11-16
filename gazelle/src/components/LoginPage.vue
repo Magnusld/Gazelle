@@ -16,7 +16,7 @@
         autocomplete="password"
       ></md-input>
     </md-field>
-    <div class="errorMessage" v-if="error">Error: {{ error }}</div>
+    <div class="errorMessage" v-if="error">{{ error }}</div>
     <div class="buttonBar">
       <md-button
         class="md-raised md-primary"
@@ -55,6 +55,7 @@ export default class LoginPage extends Vue {
     } catch (e) {
       if (e.status == undefined)
         this.error = `Klarte ikke koble til tjener: ${e.message}`;
+      if (e.status == 401) this.error = "Brukernavn eller passord er feil";
       else this.error = `${e.message} (${e.status})`;
     }
   }

@@ -1,6 +1,5 @@
 import restClient from "./restClient";
 import store from "@/store";
-import { User } from "@/types";
 import { LogInRequest, LogInResponse, SignUpRequest } from "@/client/types";
 
 /**
@@ -20,6 +19,7 @@ export async function login(loginRequest: LogInRequest): Promise<void> {
       loginRequest
     );
     localStorage.setItem("token", response.token);
+    localStorage.setItem("userId", `${response.user.id}`);
     store.commit("authSuccess", response);
   } catch (e) {
     store.commit("authFailed");
@@ -28,46 +28,28 @@ export async function login(loginRequest: LogInRequest): Promise<void> {
 }
 
 /**
- * Try using a previously acquired token to log in again.
- * Does not save to or load from localStorage.
+ * When we are already logged in, the token and userId is in localStorage.
+ * Here we ask the server for the rest of the user object.
+ * If we fail, the restClient will trigger automatic logout.
  *
- * @param token
- * @throws RestError if the request fails
+ * If we are not logged in, this function is a NOP
  */
-export async function loginWithToken(token: string): Promise<void> {
-  if (store.getters.isLoggedIn) throw { message: "Already logged in" };
-  store.commit("authRequest");
+export async function tryGetRealUser() {
+  if (!store.getters.isFakeLoggedIn) return;
 
   try {
-    //Make an ad-hoc header
-    const headers = {
-      Authorization: `Bearer ${token}`
-    };
-    const user: User = await restClient.get("/login", { headers });
-    store.commit("authSuccess", { user, token });
+    const response: LogInResponse = await restClient.get("/login");
+    store.commit("authSuccess", response);
+    localStorage.setItem("userId", `${response.user.id}`);
   } catch (e) {
-    store.commit("authFailed");
-    throw e;
+    //Don't do anything to e, if we failed, the restClient is already logging us out
   }
 }
 
-/**
- * Tries using the localStorage token to log in.
- * If it doesn't exist, goes to loggedOut state.
- * If it exists but doesn't work, deletes it.
- */
-export async function tryLocalStorageLogin(): Promise<void> {
-  const token = localStorage.getItem("token");
-  if (token == undefined) {
-    store.commit("logout");
-    return;
-  }
-
-  try {
-    await loginWithToken(token);
-  } catch (e) {
-    localStorage.removeItem("token");
-  }
+export async function onTokenInvalid(): Promise<void> {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userId");
+  store.commit("authFailed");
 }
 
 /**
@@ -88,6 +70,7 @@ export async function logout(): Promise<void> {
   }
 
   localStorage.removeItem("token");
+  localStorage.removeItem("userId");
   store.commit("logout");
 }
 
@@ -107,6 +90,7 @@ export async function signup(signupRequest: SignUpRequest): Promise<void> {
       signupRequest
     );
     localStorage.setItem("token", response.token);
+    localStorage.setItem("userId", `${response.user.id}`);
     store.commit("authSuccess", response);
   } catch (e) {
     store.commit("authFailed");
