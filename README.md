@@ -52,8 +52,12 @@ Testdekning på webappen ligger i TODO.
 Alle grener testes automatisk i en GitLab Pipeline, for å hindre fletting av utestet kode.
 Feil i kodestil og kodekvalitet får også Pipelinen til å feile.
 
-Ved vellykket kompilering og testing på hovedgrenen blir tjeneren pakket til en jar, og
-webappen kompilert for nettleser. Filene lastes opp på [produksjonstjeneren](https://gazelle.haved.no).
+På hovedgrenen brukes en Pipeline for å pakke tjeneren til en jar, og
+webappen kompileres for nettleser. Ved vellykket testing og kompilering blir
+en WebHook sendt til en DigitalOcean-droplet, som laster ned artifaktene fra Pipelinen.
+Der blir gazelle-tjeneren kjørt, og webappen servert. Se [produksjonstjeneren](https://gazelle.haved.no).
+
+Produksjonstjeneren kjører en [hjemmelaget tjener](https://github.com/haved/DropletManager) for å håndtere WebHooks.
 Vi skulle gjerne hatt en testtjener òg, men slik har vi ikke råd til.
 
 ## Kjøring av app
