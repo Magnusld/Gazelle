@@ -6,11 +6,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import TopBar from "@/components/TopBar.vue";
 import CourseListing from "@/components/CourseListing.vue";
 import CourseList from "@/components/CourseList.vue";
 import { tryGetRealUser } from "@/client/login";
+import restClient from "@/client/restClient";
 
 @Component({
   components: {
@@ -21,9 +22,14 @@ import { tryGetRealUser } from "@/client/login";
 })
 export default class App extends Vue {
   mounted() {
-    console.log("Trying to get real user", this.$store.getters.authStatus);
+    restClient.setToken(this.$store.getters.token);
     //If we are "fake logged in", make an actual request to the server
     tryGetRealUser();
+  }
+
+  @Watch("$store.getters.token")
+  onTokenChange(newToken: string) {
+    restClient.setToken(newToken);
   }
 }
 </script>

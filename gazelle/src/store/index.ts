@@ -36,6 +36,10 @@ export default new Vuex.Store({
       state.token = token;
       state.user = user;
     },
+    userObjectFound(state: State, user: User) {
+      state.status = "loggedIn";
+      state.user = user;
+    },
     authFailed(state: State) {
       state.status = "loggedOut";
       state.token = undefined;
