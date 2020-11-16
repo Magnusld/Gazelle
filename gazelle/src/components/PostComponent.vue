@@ -19,7 +19,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import ChoreListing from "@/components/ChoreListing.vue";
 import VueMarkdown from "vue-markdown";
 import PostChore from "@/components/PostChore.vue";
-import {PostContentResponse} from "@/client/types";
+import { PostContentResponse } from "@/client/types";
 
 @Component({
   components: {

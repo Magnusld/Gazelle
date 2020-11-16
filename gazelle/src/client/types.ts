@@ -53,12 +53,12 @@ export interface PostContentResponse {
 }
 
 export enum ChoreProgress {
-  UNDONE = ("undone"),
-  FOCUSED = ("focused"),
-  DONE = ("done")
+  UNDONE = "undone",
+  FOCUSED = "focused",
+  DONE = "done"
 }
 
-export interface ChoreResponse{
+export interface ChoreResponse {
   id: number;
   key: number;
   text: string;
