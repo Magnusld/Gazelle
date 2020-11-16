@@ -1,4 +1,5 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.idi.ntnu.no/#https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2010/gr2010) 
+[![pipeline status](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2010/gr2010/badges/master/pipeline.svg)](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2010/gr2010/-/commits/master)
 
 # Gazelle
 
@@ -6,6 +7,8 @@
 
 Dette er prosjektet til gruppe 10 i faget IT1901 høsten 2020.
 For en komplett beskrivelse av prosjektet se [her](gazelle/README.md).
+For å se aller siste versjon av prosjeket, se [gazelle.haved.no](https://gazelle.haved.no).
+For å bygge og teste prosjektet selv, fortsett å lese!
 
 ## Organisering
 Appen er delt inn i flere moduler: Webklient, JavaFX-klient, tjener og delt logikk.
@@ -49,8 +52,12 @@ Testdekning på webappen ligger i TODO.
 Alle grener testes automatisk i en GitLab Pipeline, for å hindre fletting av utestet kode.
 Feil i kodestil og kodekvalitet får også Pipelinen til å feile.
 
-Ved vellykket kompilering og testing på hovedgrenen blir tjeneren pakket til en jar, og
-webappen kompilert for nettleser. Filene lastes opp på produksjonstjeneren.
+På hovedgrenen brukes en Pipeline for å pakke tjeneren til en jar, og
+webappen kompileres for nettleser. Ved vellykket testing og kompilering blir
+en WebHook sendt til en DigitalOcean-droplet, som laster ned artifaktene fra Pipelinen.
+Der blir gazelle-tjeneren kjørt, og webappen servert. Se [produksjonstjeneren](https://gazelle.haved.no).
+
+Produksjonstjeneren kjører en [hjemmelaget tjener](https://github.com/haved/DropletManager) for å håndtere WebHooks.
 Vi skulle gjerne hatt en testtjener òg, men slik har vi ikke råd til.
 
 ## Kjøring av app
