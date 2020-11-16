@@ -61,7 +61,8 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id,
-                           @RequestHeader("Authorization") @Nullable String auth) {
+                           @RequestHeader(name = "Authorization", required = false)
+                           @Nullable String auth) {
         tokenAuthService.assertTokenForUser(id, auth);
         userRepository.deleteById(id);
     }

@@ -106,7 +106,8 @@ public class CourseController {
      */
     @GetMapping
     @Transactional
-    public List<CourseResponse> findAll(@RequestHeader("Authorization") @Nullable String auth) {
+    public List<CourseResponse> findAll(@RequestHeader(name = "Authorization", required = false)
+                                            @Nullable String auth) {
         User user = null;
         if (auth != null)
             user = tokenAuthService.getUserObjectFromToken(auth);
@@ -129,7 +130,8 @@ public class CourseController {
     @GetMapping("/{id}")
     @Transactional
     public CourseResponse findById(@PathVariable Long id,
-                                   @RequestHeader("Authorization") @Nullable String auth) {
+                                   @RequestHeader(name = "Authorization", required = false)
+                                   @Nullable String auth) {
         Course course = courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
         User user = null;
         if (auth != null)
@@ -146,7 +148,8 @@ public class CourseController {
     @PostMapping
     @Transactional
     public CourseResponse addNewCourse(@RequestBody NewCourseRequest newCourse,
-                                       @RequestHeader("Authorization") String auth) {
+                                       @RequestHeader(name = "Authorization", required = false)
+                                       @Nullable String auth) {
         User user = tokenAuthService.getUserObjectFromToken(auth);
 
         Course course = buildCourse(newCourse);
@@ -174,7 +177,9 @@ public class CourseController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void deleteCourse(@PathVariable Long id, @RequestHeader("Authorization") String auth) {
+    public void deleteCourse(@PathVariable Long id,
+                             @RequestHeader(name = "Authorization", required = false)
+                             @Nullable String auth) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(CourseNotFoundException::new);
 

@@ -91,7 +91,8 @@ public class ChoreController {
     public void setChoreState(@PathVariable("choreId") Long choreId,
                               @PathVariable("userId") Long userId,
                               @RequestBody UserChoreProgress.Progress value,
-                              @RequestHeader("Authorization") @Nullable String auth) {
+                              @RequestHeader(name = "Authorization", required = false)
+                                  @Nullable String auth) {
         User user = tokenAuthService.assertTokenForUserAndGet(userId, auth);
         Chore chore = choreRepository.findById(choreId).orElseThrow(ChoreNotFoundException::new);
         choreProgressService.setProgress(user, chore, value);
