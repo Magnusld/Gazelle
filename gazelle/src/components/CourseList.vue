@@ -25,9 +25,7 @@
         md-label="Ingen løp å vise"
         md-description="Akkurat nå eier du ingen løp."
       >
-        <md-button
-          class="md-primary md-raised"
-          v-on:click="showDialog = true"
+        <md-button class="md-primary md-raised" v-on:click="showDialog = true"
           >Lag løp</md-button
         >
       </md-empty-state>

@@ -17,6 +17,21 @@ export interface LogInResponse {
   token: string;
 }
 
+export interface NewChoreRequest {
+  id: number;
+  key: number;
+  text: string;
+  dueDate: Date;
+}
+
+export interface NewPostRequest {
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  chores: NewChoreRequest[];
+}
+
 export interface PostResponse {
   id: number;
   title: string;
