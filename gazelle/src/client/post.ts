@@ -1,5 +1,5 @@
 import restClient from "./restClient";
-import { NewPostRequest, PostResponse } from "@/client/types";
+import {NewPostRequest, PostContentResponse, PostResponse} from "@/client/types";
 
 export async function addNewPost(
   courseId: number,
@@ -21,7 +21,7 @@ export async function updateExistingPost(
   );
 }
 
-export async function getPostContent(postId: number): Promise<PostResponse> {
+export async function getPostContent(postId: number): Promise<PostContentResponse> {
   return await restClient.get("/posts/" + postId);
 }
 

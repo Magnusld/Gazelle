@@ -42,6 +42,30 @@ export interface PostResponse {
   choresCount: number;
 }
 
+export interface PostContentResponse {
+  id: number;
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  courseId: number;
+  chores: ChoreResponse;
+}
+
+export enum ChoreProgress {
+  UNDONE = ("undone"),
+  FOCUSED = ("focused"),
+  DONE = ("done")
+}
+
+export interface ChoreResponse{
+  id: number;
+  key: number;
+  text: string;
+  dueDate: Date;
+  progress: ChoreProgress;
+}
+
 export interface NewCourseRequest {
   name: string;
 }
