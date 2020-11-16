@@ -180,7 +180,7 @@ public class PostController {
     @Transactional
     public List<PostResponse> getPostsForCourse(
             @PathVariable("courseId") Long courseId,
-            @RequestHeader("Authorization") @Nullable String auth) {
+            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
         Iterable<Post> posts = postRepository.findByCourseOrderByStartDateAsc(course);
@@ -197,7 +197,7 @@ public class PostController {
     @Transactional
     public PostContentResponse getPostContent(
             @PathVariable("postId") Long postId,
-            @RequestHeader("Authorization") @Nullable String auth) {
+            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
         User user = null;
         if (auth != null)
             user = tokenAuthService.getUserObjectFromToken(auth);
@@ -212,7 +212,7 @@ public class PostController {
     public PostContentResponse addNewPost(
             @PathVariable("courseId") Long courseId,
             @RequestBody NewPostRequest request,
-            @RequestHeader("Authorization") @Nullable String auth) {
+            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
         User user = tokenAuthService.getUserObjectFromToken(auth);
@@ -230,7 +230,7 @@ public class PostController {
     public PostContentResponse updateExistingPost(
             @PathVariable("postId") Long postId,
             @RequestBody NewPostRequest request,
-            @RequestHeader("Authorization") @Nullable String auth) {
+            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         Course course = post.getCourse();
         User user = tokenAuthService.getUserObjectFromToken(auth);
