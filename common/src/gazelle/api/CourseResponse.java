@@ -1,6 +1,5 @@
 package gazelle.api;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import gazelle.model.Course;
 import gazelle.model.Post;
