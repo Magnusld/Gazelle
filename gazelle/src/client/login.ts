@@ -1,6 +1,7 @@
 import restClient from "./restClient";
 import store from "@/store";
 import { LogInRequest, LogInResponse, SignUpRequest } from "@/client/types";
+import { User } from "@/types";
 import router from "@/router";
 
 /**
@@ -39,12 +40,11 @@ export async function tryGetRealUser() {
   if (!store.getters.isFakeLoggedIn) return;
 
   try {
-    const user: any = await restClient.get("/login");
+    const user: User = await restClient.get("/login");
     store.commit("userObjectFound", user);
     localStorage.setItem("userId", `${user.id}`);
   } catch (e) {
-    if (e.status != 401)
-      throw e;
+    if (e.status != 401) throw e;
   }
 }
 
