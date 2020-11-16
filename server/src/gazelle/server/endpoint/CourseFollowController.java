@@ -57,9 +57,10 @@ public class CourseFollowController {
      */
     @GetMapping("/users/{userId}/followedCourses")
     @Transactional
-    public List<CourseResponse> getFollowedCourses(@PathVariable Long userId,
-                                                   @RequestHeader("Authorization")
-                                                   @Nullable String auth) {
+    public List<CourseResponse> getFollowedCourses(
+            @PathVariable Long userId,
+            @RequestHeader(name = "Authorization", required = false)
+            @Nullable String auth) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         tokenAuthService.assertTokenForUser(userId, auth);
@@ -84,7 +85,9 @@ public class CourseFollowController {
     @GetMapping("/courses/{courseId}/followers")
     @Transactional
     public List<UserResponse> getCourseFollowers(
-            @PathVariable Long courseId, @RequestHeader("Authorization") @Nullable String auth) {
+            @PathVariable Long courseId,
+            @RequestHeader(name = "Authorization", required = false)
+            @Nullable String auth) {
         User user = tokenAuthService.getUserObjectFromToken(auth);
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
@@ -112,8 +115,10 @@ public class CourseFollowController {
      */
     @PostMapping("/users/{userId}/followedCourses")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addCourseFollower(@PathVariable Long userId, @RequestBody Long courseId,
-                             @RequestHeader("Authorization") @Nullable String auth) {
+    public void addCourseFollower(@PathVariable Long userId,
+                                  @RequestBody Long courseId,
+                                  @RequestHeader(name = "Authorization", required = false)
+                                  @Nullable String auth) {
         tokenAuthService.assertTokenForUser(userId, auth);
         courseAndUserService.addFollower(userId, courseId);
     }
@@ -135,7 +140,8 @@ public class CourseFollowController {
     @DeleteMapping("/users/{userId}/followedCourses/{courseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCourseFollower(@PathVariable Long userId, @PathVariable Long courseId,
-                             @RequestHeader("Authorization") @Nullable String auth) {
+                                     @RequestHeader(name = "Authorization", required = false)
+                                     @Nullable String auth) {
         tokenAuthService.assertTokenForUser(userId, auth);
         courseAndUserService.removeFollower(userId, courseId);
     }

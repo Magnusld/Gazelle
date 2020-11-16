@@ -71,7 +71,9 @@ public class LoginEndpoint {
      */
     @GetMapping("/login")
     @Transactional
-    public UserResponse loginWithToken(@RequestHeader("Authorization") @Nullable String auth) {
+    public UserResponse loginWithToken(
+            @RequestHeader(name = "Authorization", required = false)
+            @Nullable String auth) {
         return userController.makeUserResponse(tokenAuthService.getUserObjectFromToken(auth));
     }
 
@@ -107,7 +109,9 @@ public class LoginEndpoint {
      */
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@RequestHeader("Authorization") @Nullable String auth) {
+    public void logout(
+            @RequestHeader(name = "Authorization", required = false)
+            @Nullable String auth) {
         tokenAuthService.removeToken(auth);
     }
 }

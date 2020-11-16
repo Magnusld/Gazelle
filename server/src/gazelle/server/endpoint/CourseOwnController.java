@@ -95,7 +95,8 @@ public class CourseOwnController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void addCourseOwner(@PathVariable Long userId, @RequestBody Long courseId,
-                                   @RequestHeader("Authorization") @Nullable String auth) {
+                                   @RequestHeader(name = "Authorization", required = false)
+                                   @Nullable String auth) {
         User caller = tokenAuthService.getUserObjectFromToken(auth);
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
@@ -125,7 +126,8 @@ public class CourseOwnController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void removeCourseOwner(@PathVariable Long userId, @PathVariable Long courseId,
-                                      @RequestHeader("Authorization") @Nullable String auth) {
+                                  @RequestHeader(name = "Authorization", required = false)
+                                  @Nullable String auth) {
         User caller = tokenAuthService.getUserObjectFromToken(auth);
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(CourseNotFoundException::new);
