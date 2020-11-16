@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosPromise } from "axios";
 
 import store from "@/store";
-import router from "@/router";
+import { onTokenInvalid } from "@/client/login";
 
 export interface RestError {
   status?: number;
@@ -18,12 +18,9 @@ export function wrapPromise<T>(axiosPromise: AxiosPromise<T>): Promise<T> {
             status: error.response.status,
             message: error.response.data.message
           };
-          if (restError.status == 401) {
+          if (restError.status == 401 && store.getters.isLoggedIn) {
             //Unauthorized - token is invalid
-            localStorage.removeItem("token");
-            store.commit("loading");
-            await router.replace("/login?reason=invalidated");
-            store.commit("authFailed");
+            await onTokenInvalid();
           }
           reject(restError);
         } else
@@ -57,12 +54,16 @@ export class RestClient {
 
   public constructor() {
     this.http = axios.create();
+    this.http.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${store.getters.token}`;
 
     // Whenever the token changes, change the default header
     this.unwatchToken = store.watch(
       (state, getters) => getters.token,
-      token =>
-        (this.http.defaults.headers.common["Authorization"] = `Bearer ${token}`)
+      token => {
+        this.http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      }
     );
   }
 

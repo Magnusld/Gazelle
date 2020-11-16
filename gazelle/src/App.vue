@@ -7,10 +7,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { tryLocalStorageLogin } from "@/client/login";
 import TopBar from "@/components/TopBar.vue";
 import CourseListing from "@/components/CourseListing.vue";
 import CourseList from "@/components/CourseList.vue";
+import { tryGetRealUser } from "@/client/login";
 
 @Component({
   components: {
@@ -21,7 +21,9 @@ import CourseList from "@/components/CourseList.vue";
 })
 export default class App extends Vue {
   mounted() {
-    tryLocalStorageLogin();
+    console.log("Trying to get real user", this.$store.getters.authStatus);
+    //If we are "fake logged in", make an actual request to the server
+    tryGetRealUser();
   }
 }
 </script>
