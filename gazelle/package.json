@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "jest",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -78,6 +78,18 @@
     "not dead"
   ],
   "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+
+    "testURL": "http://localhost/",
     "preset": "@vue/cli-plugin-unit-jest/presets/typescript-and-babel"
   },
   "gitHooks": {
