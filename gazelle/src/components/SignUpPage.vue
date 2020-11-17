@@ -58,7 +58,7 @@ export default class SignUpPage extends Vue {
     const password: string = this.password;
 
     if (this.repeatedPassword !== this.password) {
-      this.error = 'Passordene er ikke like.';
+      this.error = "Passordene er ikke like.";
       return;
     }
     try {
