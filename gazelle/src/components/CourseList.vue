@@ -6,16 +6,18 @@
         <md-button class="md-icon-button" @click="showNewCourseDialog">
           <md-icon>add</md-icon>
         </md-button>
-        <md-button class="md-icon-button">
+        <md-button class="md-icon-button" @click="deleteCourses">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
     </div>
     <div class="courses">
       <CourseListing
-        v-for="(course, index) in courses"
-        :key="index"
+        v-for="course in courses"
+        :key="course.id"
         :course="course"
+        :deletable="deletable"
+        @coursesToDelete="addCourseToDelete"
       />
     </div>
     <div v-if="this.courses.length === 0">
@@ -31,7 +33,7 @@
       </md-empty-state>
     </div>
     <md-dialog :md-active.sync="showDialog">
-      <md-field>
+      <md-field class="input">
         <label>Navn på løp</label>
         <md-input v-model="name"></md-input>
       </md-field>
@@ -47,7 +49,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import CourseListing from "./CourseListing.vue";
 import { CourseResponse } from "@/client/types";
-import { addNewCourse } from "@/client/course";
+import { addNewCourse, deleteCourse } from "@/client/course";
 
 @Component({
   components: { CourseListing }
@@ -58,6 +60,36 @@ export default class CourseList extends Vue {
   private showDialog = false;
   private error = "";
   private name = "";
+  private deletable = false;
+  private coursesToDelete: CourseResponse[] = [];
+
+  private async deleteCourses() {
+    if (this.deletable && this.coursesToDelete.length > 0) {
+      for (const course of this.coursesToDelete) {
+        await deleteCourse(course.id);
+      }
+      this.coursesToDelete = [];
+      this.$emit("updated");
+    }
+    this.deletable = !this.deletable;
+  }
+
+  private addCourseToDelete(course: {
+    courseResponse: CourseResponse;
+    isChecked: boolean;
+  }) {
+    if (
+      course.isChecked &&
+      !this.coursesToDelete.includes(course.courseResponse)
+    ) {
+      this.coursesToDelete.push(course.courseResponse);
+    } else {
+      this.coursesToDelete.splice(
+        this.coursesToDelete.indexOf(course.courseResponse),
+        1
+      );
+    }
+  }
 
   private showNewCourseDialog() {
     this.error = "";
@@ -78,6 +110,10 @@ export default class CourseList extends Vue {
 </script>
 
 <style scoped lang="scss">
+.input{
+  width: 95%;
+  margin: auto;
+}
 .centered {
   display: flex;
   justify-content: center;
