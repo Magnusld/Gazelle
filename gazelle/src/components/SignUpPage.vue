@@ -57,6 +57,10 @@ export default class SignUpPage extends Vue {
     const email: string = this.email;
     const password: string = this.password;
 
+    if (this.repeatedPassword !== this.password) {
+      this.error = "Passordene er ikke like.";
+      return;
+    }
     try {
       await signup({ firstname, lastname, email, password });
       await router.replace("/");
