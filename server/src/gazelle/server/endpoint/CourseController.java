@@ -11,6 +11,7 @@ import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.CourseNotFoundException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.UnprocessableEntityException;
+import gazelle.server.repository.ChoreRepository;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.PostRepository;
 import gazelle.server.service.CourseAndUserService;
@@ -36,18 +37,24 @@ public class CourseController {
     private final CourseAndUserService courseAndUserService;
     private final PostRepository postRepository;
     private final PostController postController;
+    private final ChoreController choreController;
+    private final ChoreRepository choreRepository;
 
     @Autowired
     public CourseController(CourseRepository courseRepository,
                             TokenAuthService tokenAuthService,
                             CourseAndUserService courseAndUserService,
                             PostRepository postRepository,
-                            PostController postController) {
+                            PostController postController,
+                            ChoreController choreController,
+                            ChoreRepository choreRepository) {
         this.courseRepository = courseRepository;
         this.tokenAuthService = tokenAuthService;
         this.courseAndUserService = courseAndUserService;
         this.postRepository = postRepository;
         this.postController = postController;
+        this.choreController = choreController;
+        this.choreRepository = choreRepository;
     }
 
     /**
@@ -78,6 +85,12 @@ public class CourseController {
                         .orElse(null))
                 .nextPost(postRepository.findNextPostInCourse(course, today)
                         .map(it -> postController.makePostResponse(it, user))
+                        .orElse(null))
+                .previousPost(postRepository.findPreviousPostInCourse(course, today)
+                        .map(it -> postController.makePostResponse(it, user))
+                        .orElse(null))
+                .nextChoreDue(choreRepository.findNextDueDateInCourse(course, today)
+                        .map(it -> choreController.makeChoreResponse(it, user))
                         .orElse(null));
 
         return builder.build();

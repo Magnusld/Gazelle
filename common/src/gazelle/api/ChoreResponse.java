@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChoreResponse {
     private Long id;
     private Long key;

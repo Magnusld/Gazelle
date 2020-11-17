@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CourseResponse {
     private Long id;
     private String name;
@@ -19,6 +18,10 @@ public class CourseResponse {
     private PostResponse currentPost;
     @Nullable
     private PostResponse nextPost;
+    @Nullable
+    private PostResponse previousPost;
+    @Nullable
+    private ChoreResponse nextChoreDue;
 
     public static class Builder {
         private final CourseResponse built;
@@ -61,20 +64,19 @@ public class CourseResponse {
             built.setNextPost(nextPost);
             return this;
         }
+
+        public Builder previousPost(@Nullable PostResponse nextPost) {
+            built.setPreviousPost(nextPost);
+            return this;
+        }
+
+        public Builder nextChoreDue(@Nullable ChoreResponse nextChoreDue) {
+            built.setNextChoreDue(nextChoreDue);
+            return this;
+        }
     }
 
     protected CourseResponse() {}
-
-    public CourseResponse(Long id, String name,
-                          @Nullable Boolean isOwner, @Nullable Boolean isFollower,
-                          @Nullable PostResponse currentPost, @Nullable PostResponse nextPost) {
-        this.id = id;
-        this.name = name;
-        this.isOwner = isOwner;
-        this.isFollower = isFollower;
-        this.currentPost = currentPost;
-        this.nextPost = nextPost;
-    }
 
     public Long getId() {
         return id;
@@ -122,6 +124,22 @@ public class CourseResponse {
 
     public void setNextPost(@Nullable PostResponse nextPost) {
         this.nextPost = nextPost;
+    }
+
+    public @Nullable PostResponse getPreviousPost() {
+        return previousPost;
+    }
+
+    public void setPreviousPost(@Nullable PostResponse previousPost) {
+        this.previousPost = previousPost;
+    }
+
+    public @Nullable ChoreResponse getNextChoreDue() {
+        return nextChoreDue;
+    }
+
+    public void setNextChoreDue(@Nullable ChoreResponse nextChoreDue) {
+        this.nextChoreDue = nextChoreDue;
     }
 
     public void validate() {
