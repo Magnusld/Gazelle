@@ -50,25 +50,19 @@ export const validDelete = (code: number) =>
 
 export class RestClient {
   private readonly http: AxiosInstance;
-  private readonly unwatchToken: Function;
 
   public constructor() {
     this.http = axios.create();
-    this.http.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${store.getters.token}`;
-
-    // Whenever the token changes, change the default header
-    this.unwatchToken = store.watch(
-      (state, getters) => getters.token,
-      token => {
-        this.http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      }
-    );
   }
 
   public setBaseURL(baseURL: string) {
     this.http.defaults.baseURL = baseURL;
+  }
+
+  public setToken(token?: string) {
+    if (token == undefined)
+      delete this.http.defaults.headers.common["Authorization"];
+    else this.http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
   public get<T>(
