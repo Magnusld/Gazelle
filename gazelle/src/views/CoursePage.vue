@@ -1,21 +1,5 @@
 <template>
-  <PostList
-    class="postList"
-    v-bind:posts="[
-      {
-        id: 9,
-        name: 'Test Post'
-      },
-      {
-        id: 10,
-        name: 'Test Post 2.0'
-      },
-      {
-        id: 11,
-        name: 'Test Post 3.0'
-      }
-    ]"
-  />
+  <PostList class="postList" v-bind:posts="this.posts" />
 </template>
 
 <script lang="ts">
@@ -24,6 +8,8 @@ import PostList from "@/components/PostList.vue";
 import CourseList from "@/components/CourseList.vue";
 import CourseListing from "@/components/CourseListing.vue";
 import Post from "@/components/PostListing.vue";
+import { PostResponse } from "@/client/types";
+import { getPostsForCourse } from "@/client/post";
 @Component({
   components: {
     PostList,
@@ -34,6 +20,19 @@ import Post from "@/components/PostListing.vue";
 })
 export default class CoursePage extends Vue {
   private id = this.$route.params.id;
+  private posts: PostResponse[] = [];
+
+  async mounted() {
+    await this.listUpdate();
+  }
+
+  async listUpdate() {
+    try {
+      this.posts = await getPostsForCourse(+this.id);
+    } catch (e) {
+      console.log("Failed to get owned courses:", e.message, e.status);
+    }
+  }
 }
 </script>
 
