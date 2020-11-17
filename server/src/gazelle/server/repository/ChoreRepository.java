@@ -21,7 +21,7 @@ public interface ChoreRepository extends CrudRepository<Chore, Long> {
      * @return the next Chore with a deadline, today or later
      */
     @Query("SELECT c FROM Chore c WHERE c.post.course = :course AND "
-            + "c.dueDate IS NOT NULL AND c.dueDate >= :date ORDER BY d.dueDate ASC")
+            + "c.dueDate IS NOT NULL AND c.dueDate >= :date ORDER BY c.dueDate ASC")
     Optional<Chore> findNextDueDateInCourse(@Param("course") Course course,
                                             @Param("date") Date date);
 
