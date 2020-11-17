@@ -21,7 +21,9 @@
         md-label="Ingen poster å vise"
         md-description="Akkurat nå har løpet ingen poster."
       >
-        <md-button class="md-primary md-raised" :to="'/courses/' + courseId + '/posts/newPost'"
+        <md-button
+          class="md-primary md-raised"
+          :to="'/courses/' + courseId + '/posts/newPost'"
           >Opprett post</md-button
         >
       </md-empty-state>
