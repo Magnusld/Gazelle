@@ -8,7 +8,7 @@ export async function addNewCourse(
 }
 
 export async function deleteCourse(id: number): Promise<void> {
-  return await restClient.delete("/course/" + id);
+  return await restClient.delete("/courses/" + id);
 }
 
 export async function findCourseById(id: number): Promise<CourseResponse> {

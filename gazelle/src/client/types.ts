@@ -81,6 +81,6 @@ export interface CourseResponse {
   name: string;
   isOwner: boolean;
   isFollower: boolean;
-  currentPost: PostResponse;
-  nextPost: PostResponse;
+  currentPost?: PostResponse;
+  nextPost?: PostResponse;
 }
