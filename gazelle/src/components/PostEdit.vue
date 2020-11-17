@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="headline">
-      <span class="md-headline">{{ this.headline }}</span>
+      <span class="md-headline">{{ headline }}</span>
     </div>
     <md-divider />
     <md-field>
@@ -27,10 +27,12 @@
       v-on:remove="removeChore"
     />
     <div class="horizontalSeparator">
-      <md-button class="md-primary" v-on:click="this.addChore"
+      <md-button class="md-primary" v-on:click="addChore"
         >Legg til gjøremål</md-button
       >
-      <md-button class="md-raised md-primary">Lagre</md-button>
+      <md-button class="md-raised md-primary" v-on:click="sendPost"
+        >Lagre</md-button
+      >
     </div>
   </div>
 </template>
@@ -38,7 +40,8 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import ChoreListing from "@/components/ChoreListing.vue";
-import { Chore } from "@/types";
+import { addNewPost, updateExistingPost } from "@/client/post";
+import { NewChoreRequest } from "@/client/types";
 
 @Component({
   components: {
@@ -46,23 +49,48 @@ import { Chore } from "@/types";
   }
 })
 export default class Post extends Vue {
-  private newPost = false;
+  private newPost = true;
   private tittel = "";
   private beskrivelse = "";
-  private chores: Chore[] = [];
-  private startDate: Date | number | string | null = null;
-  private endDate: Date | number | string | null = null;
+  private chores: NewChoreRequest[] = [];
+  private startDate: Date = new Date();
+  private endDate: Date = new Date();
 
   private headline: string = this.newPost ? "Opprett post" : "Rediger post";
   private nextKey = 0;
 
   private addChore = (): void => {
-    this.chores.push({ key: this.nextKey++, id: null });
+    this.chores.push({
+      key: this.nextKey++,
+      id: 0,
+      text: "",
+      dueDate: new Date()
+    });
   };
 
-  private removeChore = (chore: Chore): void => {
+  private removeChore = (chore: NewChoreRequest): void => {
     this.chores.splice(this.chores.indexOf(chore), 1);
   };
+
+  private sendPost() {
+    if (this.newPost) {
+      addNewPost(1, {
+        title: this.tittel,
+        description: this.beskrivelse,
+        startDate: new Date(this.startDate),
+        endDate: new Date(this.endDate),
+        chores: this.chores
+      });
+    } else {
+      updateExistingPost(1, {
+        title: this.tittel,
+        description: this.beskrivelse,
+        startDate: new Date(this.startDate),
+        endDate: new Date(this.endDate),
+        chores: this.chores
+      });
+    }
+  }
 }
 </script>
 

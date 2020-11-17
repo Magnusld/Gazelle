@@ -1,39 +1,13 @@
 <template>
-  <CourseList
-    class="courseList"
-    v-bind:courses="[
-      {
-        id: 5,
-        name: 'TNT6969 - Boom'
-      },
-      {
-        id: 6,
-        name: 'TNT6970 - Kaboom'
-      },
-      {
-        id: 7,
-        name: 'TDT4120 - Algoritmer og datastrukturer'
-      },
-      {
-        id: 8,
-        name: 'TDT4120 - Algoritmer og datastrukturer'
-      },
-      {
-        id: 9,
-        name: 'TDT4120 - Algoritmer og datastrukturer'
-      },
-      {
-        id: 10,
-        name: 'TDT4120 - Algoritmer og datastrukturer'
-      }
-    ]"
-  />
+  <CourseList class="courseList" :courses="courses" @updated="listUpdate" />
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CourseList from "@/components/CourseList.vue";
 import CourseListing from "@/components/CourseListing.vue";
+import { getOwnedCourses } from "@/client/course";
+import { CourseResponse } from "@/client/types";
 
 @Component({
   components: {
@@ -41,7 +15,21 @@ import CourseListing from "@/components/CourseListing.vue";
     CourseListing
   }
 })
-export default class MyCourses extends Vue {}
+export default class MyCourses extends Vue {
+  private courses: CourseResponse[] = [];
+
+  async mounted() {
+    await this.listUpdate();
+  }
+
+  async listUpdate() {
+    try {
+      this.courses = await getOwnedCourses(this.$store.getters.loggedInUserId);
+    } catch (e) {
+      console.log("Failed to get owned courses:", e.message, e.status);
+    }
+  }
+}
 </script>
 
 <style>

@@ -38,8 +38,15 @@ export const validGet = (code: number) => code == 200;
 export const validPost = (code: number) =>
   code == 200 || code == 201 || code == 204;
 
+// 200 (OK), 201 (Created) and 204 (No content)
+export const validPut = (code: number) => code == 200 || code == 204;
+
 // Only 200 (OK) has content in the post response
 export const validPostWithResponseBody = (code: number) => code == 200;
+
+// 200 (OK), 202 (Accepted) and 204 (No Content)
+export const validDelete = (code: number) =>
+  code == 200 || code == 202 || code == 204;
 
 export class RestClient {
   private readonly http: AxiosInstance;
@@ -52,8 +59,8 @@ export class RestClient {
     this.http.defaults.baseURL = baseURL;
   }
 
-  public setToken(token?: string) {
-    if (token == undefined)
+  public setToken(token: string | null) {
+    if (token == null)
       delete this.http.defaults.headers.common["Authorization"];
     else this.http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
@@ -73,10 +80,18 @@ export class RestClient {
     );
   }
 
+  public put(path: string, data?: object): Promise<void> {
+    return wrapPromise(this.http.put(path, data, { validateStatus: validPut }));
+  }
+
   public postWithResponse<T>(path: string, data?: object): Promise<T> {
     return wrapPromise(
       this.http.post(path, data, { validateStatus: validPostWithResponseBody })
     );
+  }
+
+  public delete(path: string): Promise<void> {
+    return wrapPromise(this.http.delete(path, { validateStatus: validDelete }));
   }
 }
 

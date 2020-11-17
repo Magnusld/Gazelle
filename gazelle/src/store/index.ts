@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { User } from "@/types";
+import { UserResponse } from "@/client/types";
 
 Vue.use(Vuex);
 
@@ -8,8 +8,8 @@ export type LogInStatus = "loggedOut" | "loggedIn" | "fakeLoggedIn" | "loading";
 
 export interface State {
   status: LogInStatus;
-  token?: string;
-  user?: User;
+  token: string | null;
+  user: UserResponse | null;
 }
 
 const defaultState = (): State => {
@@ -19,10 +19,10 @@ const defaultState = (): State => {
     return {
       status: "fakeLoggedIn",
       token,
-      user: { id: +userId }
+      user: { id: +userId, firstname: "", lastname: "" }
     };
   }
-  return { status: "loggedOut" };
+  return { status: "loggedOut", token: null, user: null };
 };
 
 export default new Vuex.Store({
@@ -31,24 +31,27 @@ export default new Vuex.Store({
     authRequest(state: State) {
       state.status = "loading";
     },
-    authSuccess(state: State, { token, user }: { token: string; user: User }) {
+    authSuccess(
+      state: State,
+      { token, user }: { token: string; user: UserResponse }
+    ) {
       state.status = "loggedIn";
       state.token = token;
       state.user = user;
     },
-    userObjectFound(state: State, user: User) {
+    userObjectFound(state: State, user: UserResponse) {
       state.status = "loggedIn";
       state.user = user;
     },
     authFailed(state: State) {
       state.status = "loggedOut";
-      state.token = undefined;
-      state.user = undefined;
+      state.token = null;
+      state.user = null;
     },
     logout(state: State) {
       state.status = "loggedOut";
-      state.token = undefined;
-      state.user = undefined;
+      state.token = null;
+      state.user = null;
     }
   },
   actions: {},

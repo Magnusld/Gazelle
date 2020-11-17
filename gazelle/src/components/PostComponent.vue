@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="headline">
-      <span class="md-headline">{{ post.name }}</span>
+      <span class="md-headline">{{ post.title }}</span>
     </div>
     <md-divider />
-    <vue-markdown class="md-subheading">{{ post.content }}</vue-markdown>
+    <vue-markdown class="md-subheading">{{ post.description }}</vue-markdown>
     <PostChore
       v-for="(chore, index) in post.chores"
       v-bind:key="index"
@@ -18,8 +18,8 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import ChoreListing from "@/components/ChoreListing.vue";
 import VueMarkdown from "vue-markdown";
-import { Post } from "@/types";
 import PostChore from "@/components/PostChore.vue";
+import { PostContentResponse } from "@/client/types";
 
 @Component({
   components: {
@@ -29,16 +29,7 @@ import PostChore from "@/components/PostChore.vue";
   }
 })
 export default class PostComponent extends Vue {
-  @Prop()
-  private post: Post = {
-    id: 1,
-    name: "Lineær regresjon",
-    content: "Litt **deilig** markdown",
-    chores: [
-      { key: 0, id: 1, name: "Gjøre oppgave 1" },
-      { key: 1, id: 2, name: "Lese kapittel 1-5" }
-    ]
-  };
+  @Prop() private post!: PostContentResponse;
 }
 </script>
 
