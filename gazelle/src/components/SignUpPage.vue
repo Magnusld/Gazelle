@@ -61,7 +61,6 @@ export default class SignUpPage extends Vue {
       this.error = 'Passordene er ikke like.';
       return;
     }
-
     try {
       await signup({ firstname, lastname, email, password });
       await router.replace("/");
