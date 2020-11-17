@@ -73,6 +73,16 @@ const routes: Array<RouteConfig> = [
     component: CoursePage
   },
   {
+    path: "/courses/:id/posts/:postId",
+    name: "Post",
+    component: PostView
+  },
+  {
+    path: "/courses/:id/posts/newPost",
+    name: "Post",
+    component: PostView
+  },
+  {
     path: "/*",
     name: "404 Page Not Found",
     component: ErrorPage

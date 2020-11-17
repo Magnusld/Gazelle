@@ -1,8 +1,5 @@
 <template>
-  <PostList
-    class="postList"
-    v-bind:posts="this.posts"
-  />
+  <PostList class="postList" v-bind:posts="this.posts" />
 </template>
 
 <script lang="ts">
@@ -11,8 +8,8 @@ import PostList from "@/components/PostList.vue";
 import CourseList from "@/components/CourseList.vue";
 import CourseListing from "@/components/CourseListing.vue";
 import Post from "@/components/PostListing.vue";
-import {PostResponse} from "@/client/types";
-import {getPostsForCourse} from "@/client/post";
+import { PostResponse } from "@/client/types";
+import { getPostsForCourse } from "@/client/post";
 @Component({
   components: {
     PostList,

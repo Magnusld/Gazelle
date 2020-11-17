@@ -110,7 +110,7 @@ export default class CourseList extends Vue {
 </script>
 
 <style scoped lang="scss">
-.input{
+.input {
   width: 95%;
   margin: auto;
 }

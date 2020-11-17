@@ -15,17 +15,27 @@
             >
             <div>Neste frist: I dag</div>
           </div>
-          <div v-if="course.currentPost != undefined" class="subheader">Nå: {{course.currentPost.title}} (Antall dager igjen)</div>
+          <div v-if="course.currentPost != undefined" class="subheader">
+            Nå: {{ course.currentPost.title }} (Antall dager igjen)
+          </div>
         </div>
 
         <div v-if="course.currentPost != undefined">
           <div class="horizontalSeparator">
-            <div>Gjort: {{course.currentPost.choresDone}}/{{course.currentPost.choresCount}}</div>
-            <div>På fokuslista: {{course.currentPost.choresFocused}}</div>
+            <div>
+              Gjort: {{ course.currentPost.choresDone }}/{{
+                course.currentPost.choresCount
+              }}
+            </div>
+            <div>På fokuslista: {{ course.currentPost.choresFocused }}</div>
           </div>
           <md-progress-bar
-              md-mode="determinate"
-              :md-value="((course.currentPost.choresCount / course.currentPost.choresDone) - 1) * 100"
+            md-mode="determinate"
+            :md-value="
+              (course.currentPost.choresCount / course.currentPost.choresDone -
+                1) *
+                100
+            "
           ></md-progress-bar>
           <div class="subheader">Forrige: Kombinatorikk</div>
         </div>
@@ -33,7 +43,6 @@
         <div v-if="course.currentPost === undefined">
           Ingen poster å vise
         </div>
-
       </div>
     </div>
   </div>
