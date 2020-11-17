@@ -3,7 +3,7 @@
     <div class="horizontalSeparator" v-if="courses.length > 0">
       <span class="md-headline">Mine løp</span>
       <div>
-        <md-button class="md-icon-button" v-on:click="showDialog = true">
+        <md-button class="md-icon-button" @click="showNewCourseDialog">
           <md-icon>add</md-icon>
         </md-button>
         <md-button class="md-icon-button">
@@ -18,14 +18,14 @@
         :course="course"
       />
     </div>
-    <div v-if="this.courses.length == 0">
+    <div v-if="this.courses.length === 0">
       <md-empty-state
         class="centered"
         md-icon="error"
         md-label="Ingen løp å vise"
         md-description="Akkurat nå eier du ingen løp."
       >
-        <md-button class="md-primary md-raised" v-on:click="showDialog = true"
+        <md-button class="md-primary md-raised" @click="showNewCourseDialog"
           >Lag løp</md-button
         >
       </md-empty-state>
@@ -35,6 +35,7 @@
         <label>Navn på løp</label>
         <md-input v-model="name"></md-input>
       </md-field>
+      <div class="errorMessage" v-if="error">{{ error }}</div>
       <md-button class="md-primary md-raised" v-on:click="addCourse"
         >Lag løp</md-button
       >
@@ -55,11 +56,23 @@ export default class CourseList extends Vue {
   @Prop() private courses!: CourseResponse[];
 
   private showDialog = false;
+  private error = "";
   private name = "";
 
+  private showNewCourseDialog() {
+    this.error = "";
+    this.name = "";
+    this.showDialog = true;
+  }
+
   private async addCourse() {
-    this.showDialog = false;
-    await addNewCourse({ name: this.name });
+    try {
+      await addNewCourse({ name: this.name });
+      this.showDialog = false;
+      this.$emit("updated");
+    } catch (e) {
+      this.error = e.message;
+    }
   }
 }
 </script>
@@ -76,5 +89,10 @@ export default class CourseList extends Vue {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0 10px 10px;
+}
+.errorMessage {
+  text-align: center;
+  color: red;
+  font-size: 1.2rem;
 }
 </style>

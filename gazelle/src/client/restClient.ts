@@ -59,8 +59,8 @@ export class RestClient {
     this.http.defaults.baseURL = baseURL;
   }
 
-  public setToken(token?: string) {
-    if (token == undefined)
+  public setToken(token: string | null) {
+    if (token == null)
       delete this.http.defaults.headers.common["Authorization"];
     else this.http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }

@@ -1,5 +1,5 @@
 <template>
-  <CourseList class="courseList" v-bind:courses="this.courses" />
+  <CourseList class="courseList" :courses="courses" @updated="listUpdate" />
 </template>
 
 <script lang="ts">
@@ -19,8 +19,14 @@ export default class MyCourses extends Vue {
   private courses: CourseResponse[] = [];
 
   async mounted() {
-    if (this.$store.getters.isLoggedIn) {
-      this.courses = await getOwnedCourses(this.$store.getters.loggedInUser.id);
+    await this.listUpdate();
+  }
+
+  async listUpdate() {
+    try {
+      this.courses = await getOwnedCourses(this.$store.getters.loggedInUserId);
+    } catch (e) {
+      console.log("Failed to get owned courses:", e.message, e.status);
     }
   }
 }

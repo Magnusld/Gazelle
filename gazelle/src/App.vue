@@ -22,13 +22,15 @@ import restClient from "@/client/restClient";
 })
 export default class App extends Vue {
   mounted() {
+    console.log("Setting initial token:", this.$store.getters.token);
     restClient.setToken(this.$store.getters.token);
     //If we are "fake logged in", make an actual request to the server
     tryGetRealUser();
   }
 
   @Watch("$store.getters.token")
-  onTokenChange(newToken: string) {
+  onTokenChange(newToken: string | null) {
+    console.log("Setting token:", newToken);
     restClient.setToken(newToken);
   }
 }

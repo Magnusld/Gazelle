@@ -17,6 +17,12 @@ export interface LogInResponse {
   token: string;
 }
 
+export interface UserResponse {
+  id: number;
+  firstname: string;
+  lastname: string;
+}
+
 export interface NewChoreRequest {
   id: number;
   key: number;
