@@ -22,6 +22,10 @@ export async function updateExistingPost(
   return await restClient.put("/posts/" + postId, newCourseRequest);
 }
 
+export async function deletePost(postId: number): Promise<void> {
+  return await restClient.delete("/posts/" + postId);
+}
+
 export async function getPostContent(
   postId: number
 ): Promise<PostContentResponse> {

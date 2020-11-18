@@ -31,12 +31,13 @@
           <md-progress-bar
             md-mode="determinate"
             :md-value="
-              (course.currentPost.choresCount / course.currentPost.choresDone -
-                1) *
-                100
+              (100 * course.currentPost.choresDone) /
+                course.currentPost.choresCount
             "
           ></md-progress-bar>
-          <div class="subheader">Forrige: Kombinatorikk</div>
+          <div v-if="course.previousPost" class="subheader">
+            Forrige: {{ course.previousPost.title }}
+          </div>
         </div>
 
         <div v-if="course.currentPost === null">

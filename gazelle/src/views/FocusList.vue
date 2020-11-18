@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import FocusChore from "@/components/FocusChore.vue";
-import { Chore } from "@/types";
+import { ChoreResponse } from "@/client/types";
 
 @Component({
   components: {
@@ -21,11 +21,7 @@ import { Chore } from "@/types";
   }
 })
 export default class FocusList extends Vue {
-  private chores: Chore[] = [
-    { key: 0, id: 1, name: "Gjøre øving 2", courseName: "TDT4120 - Algdat" },
-    { key: 1, id: 1, name: "Gjøre øving 3", courseName: "TDT4120 - Algdat" },
-    { key: 2, id: 1, name: "Følge @abakusmemes", courseName: "TDT6969 - Memes" }
-  ];
+  private chores: ChoreResponse[] = [];
 }
 </script>
 

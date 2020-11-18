@@ -3,7 +3,7 @@
     <md-divider />
     <div class="verticalCenter">
       <md-checkbox v-if="deletable" v-model="checked"> </md-checkbox>
-      <div class="courseListing">
+      <div class="postListing">
         <div class="header">
           <div class="horizontalSeparator">
             <router-link
@@ -17,13 +17,16 @@
         <div class="md-body-1">
           {{ post.description }}
         </div>
-        <div class="horizontalSeparator">
-          <div>Gjort: 3/5</div>
+        <div v-if="post.choresCount > 0">
+          <div class="horizontalSeparator">
+            <div>Gjort: {{ post.choresDone }}/{{ post.choresCount }}</div>
+          </div>
+          <md-progress-bar
+            md-mode="determinate"
+            :md-value="(100 * post.choresDone) / post.choresCount"
+          ></md-progress-bar>
         </div>
-        <md-progress-bar
-          md-mode="determinate"
-          :md-value="(100 * 3) / 5"
-        ></md-progress-bar>
+        <div v-else>Ingen gjøremål i {{ post.title }}</div>
       </div>
     </div>
   </div>
@@ -43,7 +46,7 @@ export default class PostListing extends Vue {
 
   @Watch("checked")
   onCheckedChange() {
-    this.$emit("coursesToDelete", {
+    this.$emit("postsToDelete", {
       postResponse: this.post,
       isChecked: this.checked
     });
@@ -74,5 +77,9 @@ export default class PostListing extends Vue {
   letter-spacing: 0.005em;
   line-height: 26px;
   cursor: pointer;
+}
+.postListing {
+  width: 100%;
+  padding: 10px;
 }
 </style>
