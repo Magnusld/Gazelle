@@ -22,7 +22,8 @@
         class="md-raised md-primary"
         v-on:keyup.enter="login"
         v-on:click="login"
-        >Logg inn</md-button>
+        >Logg inn</md-button
+      >
       <md-button class="md-primary" to="/signup">Ny bruker</md-button>
     </div>
   </form>
