@@ -6,7 +6,7 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage />
+      <LoginPage :invalidated="invalidated"/>
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">
@@ -27,14 +27,14 @@
       </div>
       <div id="divider"></div>
       <div class="wrapper">
-        <LoginPage />
+        <LoginPage :invalidated="invalidated"/>
       </div>
     </mq-layout>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import LoginPage from "../components/LoginPage.vue";
 
 @Component({
@@ -42,7 +42,10 @@ import LoginPage from "../components/LoginPage.vue";
     LoginPage
   }
 })
-export default class LoginView extends Vue {}
+export default class LoginView extends Vue {
+  @Prop({ default: false })
+  private invalidated!:boolean;
+}
 </script>
 
 <style scoped>

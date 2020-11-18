@@ -50,6 +50,9 @@ const routes: Array<RouteConfig> = [
     path: "/login",
     name: "Login Page",
     component: LoginView,
+    props: route => ({
+      invalidated: route.query.reason === "invalidated"
+    }),
     meta: {
       requiresLoggedOut: true
     }

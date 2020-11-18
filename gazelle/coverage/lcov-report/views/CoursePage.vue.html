@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/8</span>
+                <span class='fraction'>8/14</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">53.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>7/13</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -106,26 +106,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,6 +123,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,23 +147,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;template&gt;
-  &lt;PostList
-    class="postList"
-    v-bind:posts="[
-      {
-        id: 9,
-        name: 'Test Post'
-      },
-      {
-        id: 10,
-        name: 'Test Post 2.0'
-      },
-      {
-        id: 11,
-        name: 'Test Post 3.0'
-      }
-    ]"
-  /&gt;
+  &lt;PostList class="postList" v-bind:posts="this.posts" /&gt;
 &lt;/template&gt;
 &nbsp;
 &lt;script lang="ts"&gt;
@@ -172,6 +156,8 @@ import PostList from "@/components/PostList.vue";
 import CourseList from "@/components/CourseList.vue";
 import CourseListing from "@/components/CourseListing.vue";
 import Post from "@/components/PostListing.vue";
+import { PostResponse } from "@/client/types";
+import { getPostsForCourse } from "@/client/post";
 @Component({
   components: {
     PostList,
@@ -182,13 +168,27 @@ import Post from "@/components/PostListing.vue";
 })
 <span class="fstat-no" title="function not covered" >export default class CoursePage extends Vue {</span>
 <span class="cstat-no" title="statement not covered" >  private id = this.$route.params.id;</span>
+<span class="cstat-no" title="statement not covered" >  private posts: PostResponse[] = [];</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" >  async mounted() {</span>
+<span class="cstat-no" title="statement not covered" >    await this.listUpdate();</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  async listUpdate() {</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      this.posts = await getPostsForCourse(+this.id);</span>
+    } catch (e) {
+<span class="cstat-no" title="statement not covered" >      console.log("Failed to get owned courses:", e.message, e.status);</span>
+    }
+  }
 }
 &lt;/script&gt;
 &nbsp;
 &lt;style scoped lang="scss"&gt;
 .postList {
   margin: auto;
-  width: 60%;
+  max-width: 800px;
+  width: 90%;
 }
 &lt;/style&gt;
 &nbsp;</pre></td></tr></table></pre>
@@ -198,7 +198,7 @@ import Post from "@/components/PostListing.vue";
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 17 2020 16:11:14 GMT+0100 (GMT+01:00)
+                at Wed Nov 18 2020 12:35:07 GMT+0100 (GMT+01:00)
             </div>
         </div>
         <script src="..\prettify.js"></script>
