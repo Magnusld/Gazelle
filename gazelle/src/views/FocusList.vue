@@ -1,5 +1,5 @@
 <template>
-  <div class="focusList">
+  <div class="content">
     <div class="horizontalSeparator">
       <span class="md-headline">Fokuslista</span>
       <md-button class="md-icon-button">
@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import FocusChore from "@/components/FocusChore.vue";
-import { Chore } from "@/types";
+import { ChoreResponse } from "@/client/types";
 
 @Component({
   components: {
@@ -21,11 +21,7 @@ import { Chore } from "@/types";
   }
 })
 export default class FocusList extends Vue {
-  private chores: Chore[] = [
-    { key: 0, id: 1, name: "Gjøre øving 2", courseName: "TDT4120 - Algdat" },
-    { key: 1, id: 1, name: "Gjøre øving 3", courseName: "TDT4120 - Algdat" },
-    { key: 2, id: 1, name: "Følge @abakusmemes", courseName: "TDT6969 - Memes" }
-  ];
+  private chores: ChoreResponse[] = [];
 }
 </script>
 
@@ -35,10 +31,5 @@ export default class FocusList extends Vue {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0 10px 10px;
-}
-.focusList {
-  margin: auto;
-  max-width: 800px;
-  width: 90%;
 }
 </style>

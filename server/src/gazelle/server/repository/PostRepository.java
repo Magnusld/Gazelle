@@ -8,7 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
-import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
 
@@ -26,7 +25,7 @@ public interface PostRepository extends CrudRepository<Post, Long> {
      */
     @Query("SELECT p FROM Post p WHERE p.course = :course AND "
             + "p.startDate <= :date AND p.endDate >= :date ORDER BY p.startDate DESC")
-    Optional<Post> findCurrentPostInCourse(@Param("course") Course course,
+    Iterable<Post> findCurrentPostInCourse(@Param("course") Course course,
                                            @Param("date") Date date);
 
     /**
@@ -39,6 +38,19 @@ public interface PostRepository extends CrudRepository<Post, Long> {
      */
     @Query("SELECT p FROM Post p WHERE p.course = :course AND "
             + "p.startDate > :date ORDER BY p.startDate ASC")
-    Optional<Post> findNextPostInCourse(@Param("course") Course course,
+    Iterable<Post> findNextPostInCourse(@Param("course") Course course,
                                            @Param("date") Date date);
+
+    /**
+     * Find the previous post in a course, defined by
+     *  - it has ended
+     *  - it was the previous post to end
+     * @param course the course
+     * @param date today
+     * @return the previous post in the course
+     */
+    @Query("SELECT p FROM Post p WHERE p.course = :course AND "
+            + "p.endDate < :date ORDER BY p.endDate DESC")
+    Iterable<Post> findPreviousPostInCourse(@Param("course") Course course,
+                                            @Param("date") Date date);
 }

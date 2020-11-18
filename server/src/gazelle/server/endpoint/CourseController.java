@@ -1,21 +1,24 @@
 package gazelle.server.endpoint;
 
+import gazelle.api.CourseContentResponse;
 import gazelle.api.CourseResponse;
-import gazelle.api.NewChoreRequest;
 import gazelle.api.NewCourseRequest;
 import gazelle.api.PostResponse;
 import gazelle.model.Course;
 import gazelle.model.ModelException;
+import gazelle.model.Post;
 import gazelle.model.User;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.CourseNotFoundException;
 import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.UnprocessableEntityException;
+import gazelle.server.repository.ChoreRepository;
 import gazelle.server.repository.CourseRepository;
 import gazelle.server.repository.PostRepository;
 import gazelle.server.service.CourseAndUserService;
 import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
+import gazelle.util.FirstOf;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,18 +39,24 @@ public class CourseController {
     private final CourseAndUserService courseAndUserService;
     private final PostRepository postRepository;
     private final PostController postController;
+    private final ChoreController choreController;
+    private final ChoreRepository choreRepository;
 
     @Autowired
     public CourseController(CourseRepository courseRepository,
                             TokenAuthService tokenAuthService,
                             CourseAndUserService courseAndUserService,
                             PostRepository postRepository,
-                            PostController postController) {
+                            PostController postController,
+                            ChoreController choreController,
+                            ChoreRepository choreRepository) {
         this.courseRepository = courseRepository;
         this.tokenAuthService = tokenAuthService;
         this.courseAndUserService = courseAndUserService;
         this.postRepository = postRepository;
         this.postController = postController;
+        this.choreController = choreController;
+        this.choreRepository = choreRepository;
     }
 
     /**
@@ -73,26 +82,61 @@ public class CourseController {
                 .name(course.getName())
                 .isOwner(isOwner)
                 .isFollower(isFollower)
-                .currentPost(postRepository.findCurrentPostInCourse(course, today)
+                .currentPost(FirstOf.iterable(
+                        postRepository.findCurrentPostInCourse(course, today))
                         .map(it -> postController.makePostResponse(it, user))
                         .orElse(null))
-                .nextPost(postRepository.findNextPostInCourse(course, today)
+                .nextPost(FirstOf.iterable(
+                        postRepository.findNextPostInCourse(course, today))
                         .map(it -> postController.makePostResponse(it, user))
+                        .orElse(null))
+                .previousPost(FirstOf.iterable(
+                        postRepository.findPreviousPostInCourse(course, today))
+                        .map(it -> postController.makePostResponse(it, user))
+                        .orElse(null))
+                .nextChoreDue(FirstOf.iterable(
+                        choreRepository.findNextDueDateInCourse(course, today))
+                        .map(it -> choreController.makeChoreResponse(it, user))
                         .orElse(null));
 
         return builder.build();
     }
 
     /**
+     * Makes a serializable object with info about the course, and the posts within.
+     *
+     * @param course the course
+     * @param user the user asking, or null
+     * @return CourseContentResponse the response
+     */
+    public CourseContentResponse makeCourseContentResponse(Course course, @Nullable User user) {
+        CourseContentResponse.Builder builder = new CourseContentResponse.Builder();
+        builder.id(course.getId())
+                .name(course.getName());
+
+        if (user != null)
+            builder.isFollower(courseAndUserService.isFollowing(user, course))
+                    .isOwner(courseAndUserService.isOwning(user, course));
+
+        List<PostResponse> posts = new ArrayList<>();
+        for (Post p : course.getPosts())
+            posts.add(postController.makePostResponse(p, user));
+        builder.posts(posts);
+
+        return builder.build();
+    }
+
+    /**
      * Creates a new Course object from a NewCourseRequest.
-     * Does not persist the new Course.
+     * Persists the new course.
      *
      * @param r the NewCourseRequest
      * @return Course the new Course
      */
     @Transactional(propagation = Propagation.MANDATORY)
     public Course buildCourse(NewCourseRequest r) {
-        return new Course(r.getName());
+        Course course = new Course(r.getName());
+        return courseRepository.save(course);
     }
 
     /**
@@ -129,14 +173,14 @@ public class CourseController {
      */
     @GetMapping("/{id}")
     @Transactional
-    public CourseResponse findById(@PathVariable Long id,
-                                   @RequestHeader(name = "Authorization", required = false)
-                                   @Nullable String auth) {
+    public CourseContentResponse findById(@PathVariable Long id,
+                                          @RequestHeader(name = "Authorization", required = false)
+                                          @Nullable String auth) {
         Course course = courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
         User user = null;
         if (auth != null)
             user = tokenAuthService.getUserObjectFromToken(auth);
-        return makeCourseResponse(course, user);
+        return makeCourseContentResponse(course, user);
     }
 
     /**

@@ -1,15 +1,26 @@
 <template>
-  <div>
-    <div class="headline">
-      <span class="md-headline">{{ post.name }}</span>
+  <div v-if="post">
+    <div class="breadcrumb">
+      <router-link :to="`/courses/${post.courseId}`">{{
+        post.courseName
+      }}</router-link>
+      > {{ post.title }}
+    </div>
+    <div class="horizontalSeparator">
+      <span class="md-headline">{{ post.title }}</span>
+      <md-button
+        v-if="post.isOwning"
+        class="md-primary md-raised"
+        :to="`/posts/${id}?edit=true`"
+        >Rediger post</md-button
+      >
     </div>
     <md-divider />
-    <vue-markdown class="md-subheading">{{ post.content }}</vue-markdown>
+    <vue-markdown class="md-subheading">{{ post.description }}</vue-markdown>
     <PostChore
       v-for="(chore, index) in post.chores"
       v-bind:key="index"
       v-bind:chore="chore"
-      compact="true"
     />
   </div>
 </template>
@@ -18,8 +29,9 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import ChoreListing from "@/components/ChoreListing.vue";
 import VueMarkdown from "vue-markdown";
-import { Post } from "@/types";
 import PostChore from "@/components/PostChore.vue";
+import { PostContentResponse } from "@/client/types";
+import { getPostContent } from "@/client/post";
 
 @Component({
   components: {
@@ -29,21 +41,19 @@ import PostChore from "@/components/PostChore.vue";
   }
 })
 export default class PostComponent extends Vue {
-  @Prop()
-  private post: Post = {
-    id: 1,
-    name: "Lineær regresjon",
-    content: "Litt **deilig** markdown",
-    chores: [
-      { key: 0, id: 1, name: "Gjøre oppgave 1" },
-      { key: 1, id: 2, name: "Lese kapittel 1-5" }
-    ]
-  };
+  @Prop() id!: number;
+  public post: PostContentResponse | null = null;
+
+  async mounted() {
+    this.post = await getPostContent(this.id);
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.headline {
-  padding: 15px 10px;
+.horizontalSeparator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

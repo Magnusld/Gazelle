@@ -1,10 +1,44 @@
 <template>
   <div class="postList">
     <div class="horizontalSeparator">
-      <span class="md-headline">Poster</span>
+      <div class="md-headline">{{ title }}</div>
+      <div>
+        <md-button
+          v-if="owner"
+          class="md-icon-button"
+          @click="$emit('newPost')"
+        >
+          <md-icon>add</md-icon>
+        </md-button>
+        <md-button v-if="owner" class="md-icon-button" @click="deletePosts">
+          <md-icon>delete</md-icon>
+        </md-button>
+      </div>
     </div>
-    <div class="posts">
-      <PostListing v-for="(post, index) in posts" :key="index" :post="post" />
+    <div class="posts" v-if="posts && posts.length > 0">
+      <PostListing
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        @postsToDelete="addPostToDelete"
+        :deletable="deletable"
+      />
+    </div>
+    <div v-else>
+      <md-empty-state
+        class="centered"
+        md-icon="error"
+        md-label="Ingen innlegg å vise"
+        md-description="Akkurat nå har løpet ingen innlegg."
+      >
+        <md-button
+          v-if="owner"
+          class="md-primary md-raised"
+          @click="$emit('newPost')"
+          >Opprett innlegg</md-button
+        >
+        <span v-else>Kom tilbake senere</span>
+      </md-empty-state>
     </div>
   </div>
 </template>
@@ -12,13 +46,47 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostListing from "@/components/PostListing.vue";
-import { Post } from "@/types";
+import { PostResponse } from "@/client/types";
+import { deletePost } from "@/client/post";
 @Component({
   components: { PostListing }
 })
 export default class PostList extends Vue {
-  @Prop()
-  private posts!: Post[];
+  @Prop({ default: "Innlegg" })
+  private title!: string;
+  @Prop({ default: false })
+  private owner!: boolean;
+  @Prop({ default: false })
+  private follower!: boolean;
+  @Prop() private posts!: PostResponse[];
+
+  private deletable = false;
+  private postsToDelete: PostResponse[] = [];
+
+  private async deletePosts() {
+    if (this.deletable && this.postsToDelete.length > 0) {
+      for (const post of this.postsToDelete) {
+        await deletePost(post.id);
+      }
+      this.postsToDelete = [];
+      this.$emit("updated");
+    }
+    this.deletable = !this.deletable;
+  }
+
+  private addPostToDelete(post: {
+    postResponse: PostResponse;
+    isChecked: boolean;
+  }) {
+    if (post.isChecked && !this.postsToDelete.includes(post.postResponse)) {
+      this.postsToDelete.push(post.postResponse);
+    } else {
+      this.postsToDelete.splice(
+        this.postsToDelete.indexOf(post.postResponse),
+        1
+      );
+    }
+  }
 }
 </script>
 
@@ -27,6 +95,12 @@ export default class PostList extends Vue {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 10px;
+  padding: 10px 0 10px 10px;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
 }
 </style>

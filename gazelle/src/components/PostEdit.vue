@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="headline">
-      <span class="md-headline">{{ this.headline }}</span>
+      <span class="md-headline">{{ headline }}</span>
     </div>
     <md-divider />
     <md-field>
       <label>Tittel</label>
-      <md-input v-model="tittel"></md-input>
+      <md-input v-model="title"></md-input>
     </md-field>
     <md-field>
       <label>Beskrivelse</label>
-      <md-textarea v-model="beskrivelse"></md-textarea>
+      <md-textarea v-model="description"></md-textarea>
     </md-field>
     <div class="horizontalSeparator">
       <md-datepicker v-model="startDate" class="date">
@@ -27,18 +27,26 @@
       v-on:remove="removeChore"
     />
     <div class="horizontalSeparator">
-      <md-button class="md-primary" v-on:click="this.addChore"
+      <md-button class="md-primary" v-on:click="addChore"
         >Legg til gjøremål</md-button
       >
-      <md-button class="md-raised md-primary">Lagre</md-button>
+      <md-button class="md-raised md-primary" v-on:click="sendPost"
+        >Lagre</md-button
+      >
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 import ChoreListing from "@/components/ChoreListing.vue";
-import { Chore } from "@/types";
+import { addNewPost, getPostContent, updateExistingPost } from "@/client/post";
+import {
+  NewChoreRequest,
+  NewPostRequest,
+  PostContentResponse
+} from "@/client/types";
+import { dateOfLocalDate, localDateOfDate } from "@/client/date";
 
 @Component({
   components: {
@@ -46,23 +54,74 @@ import { Chore } from "@/types";
   }
 })
 export default class Post extends Vue {
-  private newPost = false;
-  private tittel = "";
-  private beskrivelse = "";
-  private chores: Chore[] = [];
-  private startDate: Date | number | string | null = null;
-  private endDate: Date | number | string | null = null;
+  @Prop({ type: Boolean }) private new!: boolean;
+  @Prop({ type: Number }) private id!: number; //is a course id if new is true
 
-  private headline: string = this.newPost ? "Opprett post" : "Rediger post";
+  private title = "";
+  private description = "";
+  private chores: NewChoreRequest[] = [];
+  private startDate: Date = new Date();
+  private endDate: Date = new Date();
+
+  private headline: string = this.new ? "Opprett innlegg" : "Rediger innlegg";
   private nextKey = 0;
 
+  async mounted() {
+    if (!this.new) {
+      const post: PostContentResponse = await getPostContent(this.id);
+      console.log(post);
+      this.title = post.title;
+      this.description = post.description;
+      this.chores.push(
+        ...post.chores.map(chore => ({
+          key: chore.key,
+          id: chore.id,
+          text: chore.text,
+          dueDate: "2020-06-09"
+        }))
+      );
+      this.startDate = new Date(dateOfLocalDate(post.startDate));
+      this.endDate = new Date(dateOfLocalDate(post.endDate));
+      this.nextKey =
+        post.chores.length > 0
+          ? this.chores.reduce(
+              (max, p) => (p.key > max ? p.key : max),
+              this.chores[0].key
+            ) + 1
+          : 0;
+    }
+  }
+
   private addChore = (): void => {
-    this.chores.push({ key: this.nextKey++, id: null });
+    console.log(this.chores);
+    this.chores.push({
+      key: this.nextKey++,
+      id: null,
+      text: "",
+      dueDate: localDateOfDate(new Date()) //TODO: Må legge til dato
+    });
   };
 
-  private removeChore = (chore: Chore): void => {
+  private removeChore = (chore: NewChoreRequest): void => {
     this.chores.splice(this.chores.indexOf(chore), 1);
   };
+
+  private async sendPost() {
+    const newPostRequest: NewPostRequest = {
+      title: this.title,
+      description: this.description,
+      startDate: localDateOfDate(this.startDate),
+      endDate: localDateOfDate(this.endDate),
+      chores: this.chores
+    };
+    if (this.new) {
+      await addNewPost(this.id, newPostRequest);
+      await this.$router.replace("/courses/" + this.id);
+    } else {
+      await updateExistingPost(this.id, newPostRequest);
+      await this.$router.replace(`/posts/${this.id}`);
+    }
+  }
 }
 </script>
 

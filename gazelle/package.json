@@ -78,6 +78,8 @@
     "not dead"
   ],
   "jest": {
+    "testURL": "http://localhost:8088/",
+    "collectCoverage": true,
     "preset": "@vue/cli-plugin-unit-jest/presets/typescript-and-babel"
   },
   "gitHooks": {

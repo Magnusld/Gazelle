@@ -1,46 +1,48 @@
 <template>
   <PostList
-    class="postList"
-    v-bind:posts="[
-      {
-        id: 9,
-        name: 'Test Post'
-      },
-      {
-        id: 10,
-        name: 'Test Post 2.0'
-      },
-      {
-        id: 11,
-        name: 'Test Post 3.0'
-      }
-    ]"
+    class="content"
+    v-if="course"
+    @newPost="newPost"
+    @updated="listUpdate"
+    :posts="course.posts"
+    :title="course.name"
+    :owner="course.isOwner"
+    :follower="course.isFollower"
   />
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import PostList from "@/components/PostList.vue";
-import CourseList from "@/components/CourseList.vue";
-import CourseListing from "@/components/CourseListing.vue";
-import Post from "@/components/PostListing.vue";
+import { CourseContentResponse } from "@/client/types";
+import { findCourseById } from "@/client/course";
 @Component({
   components: {
-    PostList,
-    Post,
-    CourseListing,
-    CourseList
+    PostList
   }
 })
 export default class CoursePage extends Vue {
-  private id = this.$route.params.id;
+  @Prop({ type: Number }) private courseId!: number;
+  private course: CourseContentResponse | null = null;
+
+  async mounted() {
+    await this.listUpdate();
+  }
+
+  async listUpdate() {
+    try {
+      this.course = await findCourseById(this.courseId);
+      console.log(this.course);
+    } catch (e) {
+      //TODO: Proper try/catch
+      console.log("Failed to get course:", e.message, e.status);
+    }
+  }
+
+  private newPost() {
+    this.$router.push("/courses/" + this.courseId + "/posts/new");
+  }
 }
 </script>
 
-<style scoped lang="scss">
-.postList {
-  margin: auto;
-  max-width: 800px;
-  width: 90%;
-}
-</style>
+<style scoped></style>

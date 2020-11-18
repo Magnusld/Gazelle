@@ -1,17 +1,18 @@
 package gazelle.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostResponse {
     private Long id;
     private String title;
+    private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Nullable
+    private ChoreResponse nextChoreDue;
     @Nullable
     private Integer choresDone;
     @Nullable
@@ -40,6 +41,11 @@ public class PostResponse {
             return this;
         }
 
+        public Builder description(String description) {
+            built.setDescription(description);
+            return this;
+        }
+
         public Builder startDate(LocalDate startDate) {
             built.setStartDate(startDate);
             return this;
@@ -47,6 +53,11 @@ public class PostResponse {
 
         public Builder endDate(LocalDate endDate) {
             built.setEndDate(endDate);
+            return this;
+        }
+
+        public Builder nextChoreDue(@Nullable ChoreResponse nextChoreDue) {
+            built.setNextChoreDue(nextChoreDue);
             return this;
         }
 
@@ -84,6 +95,14 @@ public class PostResponse {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -98,6 +117,14 @@ public class PostResponse {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public @Nullable ChoreResponse getNextChoreDue() {
+        return nextChoreDue;
+    }
+
+    public void setNextChoreDue(@Nullable ChoreResponse nextChoreDue) {
+        this.nextChoreDue = nextChoreDue;
     }
 
     public @Nullable Integer getChoresDone() {
@@ -127,6 +154,7 @@ public class PostResponse {
     public void validate() {
         Objects.requireNonNull(id);
         Objects.requireNonNull(title);
+        Objects.requireNonNull(description);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
     }

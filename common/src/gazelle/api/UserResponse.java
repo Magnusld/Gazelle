@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
     private Long id;
     private String firstName;

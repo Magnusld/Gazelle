@@ -29,6 +29,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private Set<UserChoreProgress> userChoreProgressSet = new HashSet<>();
+
     @ManyToMany
     @JoinTable(
             name = "user_course_follow",

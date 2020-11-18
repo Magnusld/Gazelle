@@ -5,7 +5,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Chore {
@@ -29,6 +31,9 @@ public class Chore {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Post post;
+
+    @OneToMany(mappedBy = "chore", orphanRemoval = true)
+    private Set<UserChoreProgress> userChoreProgressSet = new HashSet<>();
 
     protected Chore() {}
 

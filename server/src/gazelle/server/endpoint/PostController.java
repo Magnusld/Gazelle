@@ -14,8 +14,10 @@ import gazelle.server.service.ChoreProgressService;
 import gazelle.server.service.CourseAndUserService;
 import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
+import gazelle.util.FirstOf;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -65,8 +67,16 @@ public class PostController {
         PostResponse.Builder builder = new PostResponse.Builder();
         builder.id(post.getId())
                 .title(post.getTitle())
+                .description(post.getDescription())
                 .startDate(DateHelper.localDateOfDate(post.getStartDate()))
                 .endDate(DateHelper.localDateOfDate(post.getEndDate()));
+
+        Date today = DateHelper.today();
+
+        builder.nextChoreDue(FirstOf.iterable(
+                choreRepository.findNextDueDateInPost(post, today))
+                .map(it -> choreController.makeChoreResponse(it, user))
+                .orElse(null));
 
         Set<Chore> chores = post.getChores();
         builder.choresCount(chores.size());
@@ -100,9 +110,14 @@ public class PostController {
         builder.title(post.getTitle());
         builder.description(post.getDescription());
         builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
-        builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
+        builder.endDate(DateHelper.localDateOfDate(post.getEndDate()));
+        builder.courseId(post.getCourse().getId());
+        builder.courseName(post.getCourse().getName());
 
-        List<ChoreResponse> chores = new ArrayList<ChoreResponse>();
+        if (user != null)
+            builder.isOwning(courseAndUserService.isOwning(user, post.getCourse()));
+
+        List<ChoreResponse> chores = new ArrayList<>();
         for (Chore c : post.getChores())
             chores.add(choreController.makeChoreResponse(c, user));
 
@@ -113,8 +128,9 @@ public class PostController {
 
     /**
      * Make a new Post object from the NewPostRequest in the specified course.
+     * Persists the post to give it an id.
      * Creates chore objects for all new chores.
-     * Adds the post to the course, which will persist it upon commit.
+     * Adds the post to the chore.
      *
      * @param r the NewPostRequest
      * @param course the Course the Post belongs to.
@@ -126,6 +142,8 @@ public class PostController {
         Post post = new Post(r.getTitle(), r.getDescription(), course,
                 DateHelper.dateOfLocalDate(r.getStartDate()),
                 DateHelper.dateOfLocalDate(r.getEndDate()));
+        postRepository.save(post);
+
         Set<Chore> choreList = new HashSet<>();
         for (NewChoreRequest c : r.getChores()) {
             choreList.add(choreController.buildChore(c, post));
@@ -176,23 +194,6 @@ public class PostController {
         post.setChores(choreList);
     }
 
-    @GetMapping("/courses/{courseId}/posts")
-    @Transactional
-    public List<PostResponse> getPostsForCourse(
-            @PathVariable("courseId") Long courseId,
-            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(CourseNotFoundException::new);
-        Iterable<Post> posts = postRepository.findByCourseOrderByStartDateAsc(course);
-        User user = null;
-        if (auth != null)
-            user = tokenAuthService.getUserObjectFromToken(auth);
-        List<PostResponse> responses = new ArrayList<>();
-        for (Post p : posts)
-            responses.add(makePostResponse(p, user));
-        return responses;
-    }
-
     @GetMapping("/posts/{postId}")
     @Transactional
     public PostContentResponse getPostContent(
@@ -220,7 +221,6 @@ public class PostController {
             throw new AuthorizationException("You don't own this course");
 
         Post post = buildPost(request, course);
-        // The post is persisted through being added to the course
 
         return makePostContentResponse(post, user);
     }
@@ -239,5 +239,20 @@ public class PostController {
 
         updatePost(request, post);
         return makePostContentResponse(post, user);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    @Transactional
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePost(
+            @PathVariable("postId") Long postId,
+            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        Course course = post.getCourse();
+        User user = tokenAuthService.getUserObjectFromToken(auth);
+        if (!courseAndUserService.isOwning(user, course))
+            throw new AuthorizationException("You don't own this course");
+
+        postRepository.delete(post);
     }
 }
