@@ -1,26 +1,20 @@
 <template>
-  <PostList class="postList" v-bind:posts="this.posts" />
+  <PostList class="postList" @newPost="newPost" :posts="posts" />
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import PostList from "@/components/PostList.vue";
-import CourseList from "@/components/CourseList.vue";
-import CourseListing from "@/components/CourseListing.vue";
-import Post from "@/components/PostListing.vue";
 import { PostResponse } from "@/client/types";
 import { getPostsForCourse } from "@/client/post";
 @Component({
   components: {
-    PostList,
-    Post,
-    CourseListing,
-    CourseList
+    PostList
   }
 })
 export default class CoursePage extends Vue {
-  private id = this.$route.params.id;
-  private posts: PostResponse[] = [];
+  @Prop({ type: Number }) private courseId: number;
+  private posts: PostResponse[] | null = null;
 
   async mounted() {
     await this.listUpdate();
@@ -28,10 +22,14 @@ export default class CoursePage extends Vue {
 
   async listUpdate() {
     try {
-      this.posts = await getPostsForCourse(+this.id);
+      this.posts = await getPostsForCourse(this.courseId);
     } catch (e) {
       console.log("Failed to get owned courses:", e.message, e.status);
     }
+  }
+
+  private newPost() {
+    this.$router.push("/courses/" + this.courseId + "/posts/new");
   }
 }
 </script>

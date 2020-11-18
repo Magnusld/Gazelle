@@ -1,6 +1,5 @@
 package gazelle.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
@@ -9,6 +8,7 @@ import java.util.Objects;
 public class PostResponse {
     private Long id;
     private String title;
+    private String description;
     private LocalDate startDate;
     private LocalDate endDate;
     @Nullable
@@ -38,6 +38,11 @@ public class PostResponse {
 
         public Builder title(String name) {
             built.setTitle(name);
+            return this;
+        }
+
+        public Builder description(String description) {
+            built.setDescription(description);
             return this;
         }
 
@@ -88,6 +93,14 @@ public class PostResponse {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDate getStartDate() {
@@ -141,6 +154,7 @@ public class PostResponse {
     public void validate() {
         Objects.requireNonNull(id);
         Objects.requireNonNull(title);
+        Objects.requireNonNull(description);
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
     }

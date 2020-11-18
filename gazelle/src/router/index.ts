@@ -70,17 +70,28 @@ const routes: Array<RouteConfig> = [
   {
     path: "/courses/:id",
     name: "Course",
-    component: CoursePage
+    component: CoursePage,
+    props: route => ({
+      courseId: +route.params.id
+    })
   },
   {
-    path: "/courses/:id/posts/:postId",
+    path: "/posts/:postId",
     name: "Post",
-    component: PostView
+    component: PostView,
+    props: route => ({
+      id: +route.params.postId,
+      mode: route.query.edit === "true" ? "edit" : "view"
+    })
   },
   {
-    path: "/courses/:id/posts/newPost",
-    name: "Post",
-    component: PostView
+    path: "/courses/:courseId/posts/new",
+    name: "New post",
+    component: PostView,
+    props: route => ({
+      id: +route.params.courseId,
+      mode: "new"
+    })
   },
   {
     path: "/*",

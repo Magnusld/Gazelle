@@ -16,13 +16,10 @@ export async function addNewPost(
 }
 
 export async function updateExistingPost(
-  courseId: number,
+  postId: number,
   newCourseRequest: NewPostRequest
 ): Promise<void> {
-  return await restClient.put(
-    "/courses/" + courseId + "/posts",
-    newCourseRequest
-  );
+  return await restClient.put("/posts/" + postId, newCourseRequest);
 }
 
 export async function getPostContent(

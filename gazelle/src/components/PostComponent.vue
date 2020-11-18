@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="post">
     <div class="headline">
       <span class="md-headline">{{ post.title }}</span>
     </div>
@@ -20,6 +20,7 @@ import ChoreListing from "@/components/ChoreListing.vue";
 import VueMarkdown from "vue-markdown";
 import PostChore from "@/components/PostChore.vue";
 import { PostContentResponse } from "@/client/types";
+import { getPostContent } from "@/client/post";
 
 @Component({
   components: {
@@ -29,7 +30,12 @@ import { PostContentResponse } from "@/client/types";
   }
 })
 export default class PostComponent extends Vue {
-  @Prop() private post!: PostContentResponse;
+  @Prop() id!: number;
+  public post: PostContentResponse | null = null;
+
+  async mounted() {
+    this.post = await getPostContent(this.id);
+  }
 }
 </script>
 
