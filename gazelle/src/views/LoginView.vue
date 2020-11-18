@@ -83,10 +83,9 @@ export default class LoginView extends Vue {}
 }
 .login {
   position: relative;
-  margin-top: 5%;
 }
 .logoVertical {
-  top: 10%;
+  top: 5%;
   position: relative;
 }
 .logoHorizontal {
