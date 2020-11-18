@@ -3,11 +3,18 @@ import VueMaterial from "vue-material";
 import LoginView from "@/views/LoginView.vue";
 import LoginPage from "@/components/LoginPage.vue";
 import VueRouter from "vue-router";
+import {LogInResponse, UserResponse} from "@/client/types";
+import store from '@/store';
+
+const nock = require('nock');
 
 const localVue = createLocalVue();
 localVue.use(VueMaterial);
 const router = new VueRouter();
 localVue.use(VueRouter);
+
+const scope = nock('http://localhost:8088/');
+
 jest.mock('axios');
 
 describe("LoginView.vue", () => {
@@ -37,21 +44,24 @@ describe("LoginView.vue", () => {
     expect(wrapper.find(".errorMessage").exists()).toEqual(true);
   });
   it("Tester at login knapp fungerer som forventet", async () => {
-    const data = {
-      data: {
-        user: [
-
-        ]
-      }
-    }
     const wrapper = mount(LoginPage, {
       localVue,
       router,
+      data: () => ({
+          email: "test@test.no",
+          id: 3456
+        })
     });
     const button = wrapper.findAll(".loginButton").at(0);
     expect(button.exists()).toEqual(true);
-    await expect(button.trigger('click'));
+    expect(wrapper.vm.$data.email).toEqual("test@test.no")
+
+    const data: LogInResponse = {
+      user: {firstname: "Per", lastname: "Jensen", id: 6},
+      token: "3456"
+    };
+    scope.post("/login").reply(200, data);
+    await button.trigger('click');
+    expect(store.getters.token === "3456");
   })
 });
-
-// Sjekke hvorvidt .errorMessage eksisterer når jeg sender invalidated data

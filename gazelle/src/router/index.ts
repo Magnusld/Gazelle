@@ -66,11 +66,6 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: "/post",
-    name: "Post",
-    component: PostView
-  },
-  {
     path: "/courses/:id",
     name: "Course",
     component: CoursePage,
