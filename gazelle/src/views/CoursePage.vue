@@ -1,19 +1,20 @@
 <template>
-  <PostList class="content"
-            v-if="course"
-            @newPost="newPost"
-            @updated="listUpdate"
-            :posts="course.posts"
-            :title="course.name"
-            :owner="course.isOwner"
-            :follower="course.isFollower"
+  <PostList
+    class="content"
+    v-if="course"
+    @newPost="newPost"
+    @updated="listUpdate"
+    :posts="course.posts"
+    :title="course.name"
+    :owner="course.isOwner"
+    :follower="course.isFollower"
   />
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostList from "@/components/PostList.vue";
-import {CourseContentResponse, PostResponse} from "@/client/types";
+import { CourseContentResponse } from "@/client/types";
 import { findCourseById } from "@/client/course";
 @Component({
   components: {
@@ -22,7 +23,7 @@ import { findCourseById } from "@/client/course";
 })
 export default class CoursePage extends Vue {
   @Prop({ type: Number }) private courseId!: number;
-  private course : CourseContentResponse | null = null;
+  private course: CourseContentResponse | null = null;
 
   async mounted() {
     await this.listUpdate();
@@ -44,5 +45,4 @@ export default class CoursePage extends Vue {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

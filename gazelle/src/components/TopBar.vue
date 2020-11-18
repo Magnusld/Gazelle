@@ -39,9 +39,22 @@
           <img src="../assets/applogo.svg" alt="applogo" />
         </md-button>
       </div>
-      <md-tabs ref="tabs" class="md-primary" id="navTabs" :md-active-tab="activeTab">
-        <md-tab id="my-courses-tab" md-label="Mine løp" to="/my-courses"></md-tab>
-        <md-tab id="focus-list-tab" md-label="Fokuslista" to="/focus-list"></md-tab>
+      <md-tabs
+        ref="tabs"
+        class="md-primary"
+        id="navTabs"
+        :md-active-tab="activeTab"
+      >
+        <md-tab
+          id="my-courses-tab"
+          md-label="Mine løp"
+          to="/my-courses"
+        ></md-tab>
+        <md-tab
+          id="focus-list-tab"
+          md-label="Fokuslista"
+          to="/focus-list"
+        ></md-tab>
       </md-tabs>
     </mq-layout>
     <div class="md-layout-item buttonContainer" id="userInfo">
@@ -60,7 +73,7 @@ import { logout } from "@/client/login";
 @Component
 export default class TopBar extends Vue {
   private showNavigation = false;
-  private activeTab:string|null = null;
+  private activeTab: string | null = null;
 
   private logout() {
     logout();
@@ -73,12 +86,10 @@ export default class TopBar extends Vue {
   @Watch("$route")
   onRouteChange(): void {
     this.showNavigation = false;
-    if(this.$route.path === "/my-courses")
-      this.activeTab = "my-courses-tab";
-    else if(this.$route.path === "/focus-list")
+    if (this.$route.path === "/my-courses") this.activeTab = "my-courses-tab";
+    else if (this.$route.path === "/focus-list")
       this.activeTab = "focus-list-tab";
-    else
-      this.activeTab = null;
+    else this.activeTab = null;
   }
 }
 </script>

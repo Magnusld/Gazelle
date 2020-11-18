@@ -1,9 +1,13 @@
 <template>
   <div class="postList">
     <div class="horizontalSeparator">
-      <div class="md-headline">{{title}}</div>
+      <div class="md-headline">{{ title }}</div>
       <div>
-        <md-button v-if="owner" class="md-icon-button" @click="$emit('newPost')">
+        <md-button
+          v-if="owner"
+          class="md-icon-button"
+          @click="$emit('newPost')"
+        >
           <md-icon>add</md-icon>
         </md-button>
         <md-button v-if="owner" class="md-icon-button" @click="deletePosts">
@@ -27,7 +31,12 @@
         md-label="Ingen innlegg å vise"
         md-description="Akkurat nå har løpet ingen innlegg."
       >
-        <md-button v-if="owner" class="md-primary md-raised" @click="$emit('newPost')">Opprett innlegg</md-button>
+        <md-button
+          v-if="owner"
+          class="md-primary md-raised"
+          @click="$emit('newPost')"
+          >Opprett innlegg</md-button
+        >
         <span v-else>Kom tilbake senere</span>
       </md-empty-state>
     </div>

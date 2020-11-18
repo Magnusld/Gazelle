@@ -1,5 +1,9 @@
 import restClient from "./restClient";
-import {CourseContentResponse, CourseResponse, NewCourseRequest} from "@/client/types";
+import {
+  CourseContentResponse,
+  CourseResponse,
+  NewCourseRequest
+} from "@/client/types";
 
 export async function addNewCourse(
   newCourseRequest: NewCourseRequest
@@ -11,7 +15,9 @@ export async function deleteCourse(id: number): Promise<void> {
   return await restClient.delete("/courses/" + id);
 }
 
-export async function findCourseById(id: number): Promise<CourseContentResponse> {
+export async function findCourseById(
+  id: number
+): Promise<CourseContentResponse> {
   return await restClient.get("/courses/" + id);
 }
 
