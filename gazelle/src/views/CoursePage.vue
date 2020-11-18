@@ -1,5 +1,10 @@
 <template>
-  <PostList class="postList" @newPost="newPost" :posts="posts" />
+  <PostList
+    class="postList"
+    @newPost="newPost"
+    @updated="listUpdate"
+    :posts="posts"
+  />
 </template>
 
 <script lang="ts">
@@ -13,7 +18,7 @@ import { getPostsForCourse } from "@/client/post";
   }
 })
 export default class CoursePage extends Vue {
-  @Prop({ type: Number }) private courseId: number;
+  @Prop({ type: Number }) private courseId!: number;
   private posts: PostResponse[] | null = null;
 
   async mounted() {

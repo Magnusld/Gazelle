@@ -23,13 +23,6 @@ export interface UserResponse {
   lastname: string;
 }
 
-export interface NewChoreRequest {
-  id: number;
-  key: number;
-  text: string;
-  dueDate: LocalDate;
-}
-
 export interface NewPostRequest {
   title: string;
   description: string;
@@ -56,7 +49,7 @@ export interface PostContentResponse {
   startDate: LocalDate;
   endDate: LocalDate;
   courseId: number;
-  chores: ChoreResponse;
+  chores: ChoreResponse[];
 }
 
 export enum ChoreProgress {
@@ -71,6 +64,12 @@ export interface ChoreResponse {
   text: string;
   dueDate: LocalDate | null;
   progress: ChoreProgress | null;
+}
+export interface NewChoreRequest {
+  id: number | null;
+  key: number;
+  text: string;
+  dueDate: LocalDate | null;
 }
 
 export interface NewCourseRequest {

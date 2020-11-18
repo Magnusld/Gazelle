@@ -1,9 +1,7 @@
 package gazelle.server.endpoint;
 
 import gazelle.api.CourseResponse;
-import gazelle.api.NewChoreRequest;
 import gazelle.api.NewCourseRequest;
-import gazelle.api.PostResponse;
 import gazelle.model.Course;
 import gazelle.model.ModelException;
 import gazelle.model.User;
@@ -17,6 +15,7 @@ import gazelle.server.repository.PostRepository;
 import gazelle.server.service.CourseAndUserService;
 import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
+import gazelle.util.FirstOf;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,16 +79,20 @@ public class CourseController {
                 .name(course.getName())
                 .isOwner(isOwner)
                 .isFollower(isFollower)
-                .currentPost(postRepository.findCurrentPostInCourse(course, today)
+                .currentPost(FirstOf.iterable(
+                        postRepository.findCurrentPostInCourse(course, today))
                         .map(it -> postController.makePostResponse(it, user))
                         .orElse(null))
-                .nextPost(postRepository.findNextPostInCourse(course, today)
+                .nextPost(FirstOf.iterable(
+                        postRepository.findNextPostInCourse(course, today))
                         .map(it -> postController.makePostResponse(it, user))
                         .orElse(null))
-                .previousPost(postRepository.findPreviousPostInCourse(course, today)
+                .previousPost(FirstOf.iterable(
+                        postRepository.findPreviousPostInCourse(course, today))
                         .map(it -> postController.makePostResponse(it, user))
                         .orElse(null))
-                .nextChoreDue(choreRepository.findNextDueDateInCourse(course, today)
+                .nextChoreDue(FirstOf.iterable(
+                        choreRepository.findNextDueDateInCourse(course, today))
                         .map(it -> choreController.makeChoreResponse(it, user))
                         .orElse(null));
 

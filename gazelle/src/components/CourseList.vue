@@ -55,8 +55,8 @@ import { addNewCourse, deleteCourse } from "@/client/course";
   components: { CourseListing }
 })
 export default class CourseList extends Vue {
-  @Prop()
-  private courses!: CourseResponse[] = null;
+  @Prop({ default: null })
+  private courses!: CourseResponse[];
 
   private showDialog = false;
   private error = "";

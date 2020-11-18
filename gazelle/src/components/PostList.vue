@@ -6,13 +6,19 @@
         <md-button class="md-icon-button" @click="$emit('newPost')">
           <md-icon>add</md-icon>
         </md-button>
-        <md-button class="md-icon-button">
+        <md-button class="md-icon-button" @click="deletePosts">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
     </div>
     <div class="posts">
-      <PostListing v-for="post in posts" :key="post.id" :post="post" />
+      <PostListing
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        @postsToDelete="addPostToDelete"
+        :deletable="deletable"
+      />
     </div>
     <div v-if="posts && posts.length === 0">
       <md-empty-state
@@ -32,7 +38,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostListing from "@/components/PostListing.vue";
-import { CourseResponse, PostResponse } from "@/client/types";
+import { PostResponse } from "@/client/types";
+import { deletePost } from "@/client/post";
 @Component({
   components: { PostListing }
 })
@@ -40,13 +47,13 @@ export default class PostList extends Vue {
   @Prop() private posts!: PostResponse[];
 
   private deletable = false;
-  private postsToDelete: CourseResponse[] = [];
+  private postsToDelete: PostResponse[] = [];
 
   private async deletePosts() {
     if (this.deletable && this.postsToDelete.length > 0) {
-      //for (const post of this.postsToDelete) {
-      //await deletePost(post.id);
-      //}
+      for (const post of this.postsToDelete) {
+        await deletePost(post.id);
+      }
       this.postsToDelete = [];
       this.$emit("updated");
     }
@@ -74,7 +81,7 @@ export default class PostList extends Vue {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 13px 10px;
+  padding: 10px 0 10px 10px;
 }
 .centered {
   display: flex;

@@ -16,13 +16,23 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Chore } from "@/types";
+import { ChoreResponse } from "@/client/types";
 
 @Component
 export default class ChoreListing extends Vue {
   private description = "";
   @Prop()
-  private chore!: Chore;
+  private chore!: ChoreResponse;
+
+  mounted() {
+    if (this.chore.text) {
+      this.description = this.chore.text;
+    }
+  }
+
+  updated() {
+    this.chore.text = this.description;
+  }
 }
 </script>
 

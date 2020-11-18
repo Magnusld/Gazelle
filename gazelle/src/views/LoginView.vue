@@ -6,7 +6,7 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage :invalidated="invalidated" />
+      <LoginPage class="login" :invalidated="invalidated"/>
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">
@@ -84,9 +84,12 @@ export default class LoginView extends Vue {
 }
 .logo {
 }
+.login {
+  position: relative;
+}
 .logoVertical {
-  position: absolute;
-  top: 10%;
+  top: 5%;
+  position: relative;
 }
 .logoHorizontal {
 }

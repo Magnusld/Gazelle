@@ -154,4 +154,19 @@ burde fokusere på, slik at jeg enkelt kan holde styr på egen fremgang.
 
 * Huke av gjøremål etter det er gjort
 * Velge selv hvilke ting jeg har lyst å fokusere på og dermed legge til i fokuslista
+
+
+## Nylig endrede løp (us-9) &ndash; Middels prioritet
+
+Som student ønsker jeg å se på fremsiden hvilke av løpene jeg følger som har blitt endret på 
+siden sist, slik at jeg kan holde meg oppdatert i fremgangen i faget 
+og ikke går glipp av noe
+
+#### Viktig å kunne se
+
+* Nylig endrede løp, i rekkefølge med nyligst øverst. 
+
+#### Viktig å kunne gjøre
+
+* Klikke meg direkte inn på løpet fra denne listen og se den nye endringen.
   

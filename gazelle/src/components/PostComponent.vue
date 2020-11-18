@@ -1,7 +1,10 @@
 <template>
   <div v-if="post">
-    <div class="headline">
+    <div class="horizontalSeparator">
       <span class="md-headline">{{ post.title }}</span>
+      <md-button class="md-primary md-raised" :to="`/posts/${id}?edit=true`"
+        >Rediger post</md-button
+      >
     </div>
     <md-divider />
     <vue-markdown class="md-subheading">{{ post.description }}</vue-markdown>
@@ -9,7 +12,6 @@
       v-for="(chore, index) in post.chores"
       v-bind:key="index"
       v-bind:chore="chore"
-      compact="true"
     />
   </div>
 </template>
@@ -40,7 +42,9 @@ export default class PostComponent extends Vue {
 </script>
 
 <style scoped lang="scss">
-.headline {
-  padding: 15px 10px;
+.horizontalSeparator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
