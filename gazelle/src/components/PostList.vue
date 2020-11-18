@@ -32,8 +32,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostListing from "@/components/PostListing.vue";
-import {CourseResponse, PostResponse} from "@/client/types";
-import {deleteCourse} from "@/client/course";
+import { CourseResponse, PostResponse } from "@/client/types";
 @Component({
   components: { PostListing }
 })
@@ -45,9 +44,9 @@ export default class PostList extends Vue {
 
   private async deletePosts() {
     if (this.deletable && this.postsToDelete.length > 0) {
-      for (const post of this.postsToDelete) {
-        await deletePost(post.id);
-      }
+      //for (const post of this.postsToDelete) {
+      //await deletePost(post.id);
+      //}
       this.postsToDelete = [];
       this.$emit("updated");
     }
@@ -58,15 +57,12 @@ export default class PostList extends Vue {
     postResponse: PostResponse;
     isChecked: boolean;
   }) {
-    if (
-        post.isChecked &&
-        !this.postsToDelete.includes(post.postResponse)
-    ) {
+    if (post.isChecked && !this.postsToDelete.includes(post.postResponse)) {
       this.postsToDelete.push(post.postResponse);
     } else {
       this.postsToDelete.splice(
-          this.postsToDelete.indexOf(post.postResponse),
-          1
+        this.postsToDelete.indexOf(post.postResponse),
+        1
       );
     }
   }

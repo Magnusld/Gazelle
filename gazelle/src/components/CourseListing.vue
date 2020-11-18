@@ -2,8 +2,7 @@
   <div>
     <md-divider />
     <div class="verticalCenter">
-      <md-checkbox v-if="deletable" v-model="checked">
-      </md-checkbox>
+      <md-checkbox v-if="deletable" v-model="checked"> </md-checkbox>
       <div class="courseListing">
         <div class="header">
           <div class="horizontalSeparator">

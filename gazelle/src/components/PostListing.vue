@@ -2,16 +2,15 @@
   <div>
     <md-divider />
     <div class="verticalCenter">
-      <md-checkbox v-if="deletable" v-model="checked">
-      </md-checkbox>
+      <md-checkbox v-if="deletable" v-model="checked"> </md-checkbox>
       <div class="courseListing">
         <div class="header">
           <div class="horizontalSeparator">
             <router-link
-                :to="`/posts/${post.id}`"
-                style="color:black"
-                class="title"
-            >{{ post.title }}</router-link
+              :to="`/posts/${post.id}`"
+              style="color:black"
+              class="title"
+              >{{ post.title }}</router-link
             >
           </div>
         </div>
@@ -22,8 +21,8 @@
           <div>Gjort: 3/5</div>
         </div>
         <md-progress-bar
-            md-mode="determinate"
-            :md-value="(100 * 3) / 5"
+          md-mode="determinate"
+          :md-value="(100 * 3) / 5"
         ></md-progress-bar>
       </div>
     </div>
@@ -31,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue, Watch} from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { PostResponse } from "@/client/types";
 
 @Component
