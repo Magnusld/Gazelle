@@ -16,6 +16,7 @@ import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -248,5 +249,20 @@ public class PostController {
 
         updatePost(request, post);
         return makePostContentResponse(post, user);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    @Transactional
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePost(
+            @PathVariable("postId") Long postId,
+            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        Course course = post.getCourse();
+        User user = tokenAuthService.getUserObjectFromToken(auth);
+        if (!courseAndUserService.isOwning(user, course))
+            throw new AuthorizationException("You don't own this course");
+
+        postRepository.delete(post);
     }
 }
