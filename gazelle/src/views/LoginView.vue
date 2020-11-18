@@ -6,7 +6,7 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage :invalidated="invalidated"/>
+      <LoginPage :invalidated="invalidated" />
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">
@@ -27,7 +27,7 @@
       </div>
       <div id="divider"></div>
       <div class="wrapper">
-        <LoginPage :invalidated="invalidated"/>
+        <LoginPage :invalidated="invalidated" />
       </div>
     </mq-layout>
   </div>
@@ -44,7 +44,7 @@ import LoginPage from "../components/LoginPage.vue";
 })
 export default class LoginView extends Vue {
   @Prop({ default: false })
-  private invalidated!:boolean;
+  private invalidated!: boolean;
 }
 </script>
 

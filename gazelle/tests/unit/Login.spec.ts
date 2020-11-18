@@ -3,19 +3,20 @@ import VueMaterial from "vue-material";
 import LoginView from "@/views/LoginView.vue";
 import LoginPage from "@/components/LoginPage.vue";
 import VueRouter from "vue-router";
-import {LogInResponse, UserResponse} from "@/client/types";
-import store from '@/store';
+import { LogInResponse } from "@/client/types";
+import store from "@/store";
 
-const nock = require('nock');
+// eslint-disable-next-line
+const nock = require("nock");
 
 const localVue = createLocalVue();
 localVue.use(VueMaterial);
 const router = new VueRouter();
 localVue.use(VueRouter);
 
-const scope = nock('http://localhost:8088/');
+const scope = nock("http://localhost:8088/");
 
-jest.mock('axios');
+jest.mock("axios");
 
 describe("LoginView.vue", () => {
   it("Sjekker om loginView inneholder en loginPage", () => {
@@ -40,7 +41,7 @@ describe("LoginView.vue", () => {
         invalidated: true
       }
     });
-    expect(wrapper.props().invalidated).toBe(true)
+    expect(wrapper.props().invalidated).toBe(true);
     expect(wrapper.find(".errorMessage").exists()).toEqual(true);
   });
   it("Tester at login knapp fungerer som forventet", async () => {
@@ -48,20 +49,20 @@ describe("LoginView.vue", () => {
       localVue,
       router,
       data: () => ({
-          email: "test@test.no",
-          id: 3456
-        })
+        email: "test@test.no",
+        id: 3456
+      })
     });
     const button = wrapper.findAll(".loginButton").at(0);
     expect(button.exists()).toEqual(true);
-    expect(wrapper.vm.$data.email).toEqual("test@test.no")
+    expect(wrapper.vm.$data.email).toEqual("test@test.no");
 
     const data: LogInResponse = {
-      user: {firstname: "Per", lastname: "Jensen", id: 6},
+      user: { firstname: "Per", lastname: "Jensen", id: 6 },
       token: "3456"
     };
     scope.post("/login").reply(200, data);
-    await button.trigger('click');
+    await button.trigger("click");
     expect(store.getters.token === "3456");
-  })
+  });
 });
