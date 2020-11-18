@@ -6,7 +6,7 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage class="login"/>
+      <LoginPage class="login" />
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">

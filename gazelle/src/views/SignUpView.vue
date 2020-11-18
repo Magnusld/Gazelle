@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <img src="../assets/images/orangelogo.svg" alt="Orange logo" id="logo" />
-    <SignUpPage class="signup"/>
+    <SignUpPage class="signup" />
   </div>
 </template>
 
