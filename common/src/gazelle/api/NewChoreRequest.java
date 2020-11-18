@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class NewChoreRequest {
     /**
      * id is only provided if we are overriding an existing Chore

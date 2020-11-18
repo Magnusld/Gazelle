@@ -43,9 +43,9 @@ export interface PostResponse {
   title: string;
   startDate: Date;
   endDate: Date;
-  choresDone: number;
-  choresFocused: number;
-  choresCount: number;
+  choresDone: number | null;
+  choresFocused: number | null;
+  choresCount: number | null;
 }
 
 export interface PostContentResponse {
@@ -68,8 +68,8 @@ export interface ChoreResponse {
   id: number;
   key: number;
   text: string;
-  dueDate: Date;
-  progress: ChoreProgress;
+  dueDate: Date | null;
+  progress: ChoreProgress | null;
 }
 
 export interface NewCourseRequest {
@@ -79,8 +79,9 @@ export interface NewCourseRequest {
 export interface CourseResponse {
   id: number;
   name: string;
-  isOwner: boolean;
-  isFollower: boolean;
-  currentPost?: PostResponse;
-  nextPost?: PostResponse;
+  isOwner: boolean | null;
+  isFollower: boolean | null;
+  currentPost: PostResponse | null;
+  nextPost: PostResponse | null;
+  previousPost: PostResponse | null;
 }

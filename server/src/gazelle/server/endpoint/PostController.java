@@ -68,6 +68,12 @@ public class PostController {
                 .startDate(DateHelper.localDateOfDate(post.getStartDate()))
                 .endDate(DateHelper.localDateOfDate(post.getEndDate()));
 
+        Date today = DateHelper.today();
+
+        builder.nextChoreDue(choreRepository.findNextDueDateInPost(post, today)
+                .map(it -> choreController.makeChoreResponse(it, user))
+                .orElse(null));
+
         Set<Chore> chores = post.getChores();
         builder.choresCount(chores.size());
         if (user != null) {
@@ -102,7 +108,7 @@ public class PostController {
         builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
         builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
 
-        List<ChoreResponse> chores = new ArrayList<ChoreResponse>();
+        List<ChoreResponse> chores = new ArrayList<>();
         for (Chore c : post.getChores())
             chores.add(choreController.makeChoreResponse(c, user));
 

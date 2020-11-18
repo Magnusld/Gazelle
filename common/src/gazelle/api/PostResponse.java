@@ -6,12 +6,13 @@ import org.jetbrains.annotations.Nullable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostResponse {
     private Long id;
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Nullable
+    private ChoreResponse nextChoreDue;
     @Nullable
     private Integer choresDone;
     @Nullable
@@ -47,6 +48,11 @@ public class PostResponse {
 
         public Builder endDate(LocalDate endDate) {
             built.setEndDate(endDate);
+            return this;
+        }
+
+        public Builder nextChoreDue(ChoreResponse nextChoreDue) {
+            built.setNextChoreDue(nextChoreDue);
             return this;
         }
 
@@ -98,6 +104,14 @@ public class PostResponse {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public @Nullable ChoreResponse getNextChoreDue() {
+        return nextChoreDue;
+    }
+
+    public void setNextChoreDue(@Nullable ChoreResponse nextChoreDue) {
+        this.nextChoreDue = nextChoreDue;
     }
 
     public @Nullable Integer getChoresDone() {
