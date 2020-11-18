@@ -94,7 +94,7 @@ public class CourseResponse {
         this.name = name;
     }
 
-    public @Nullable Boolean isOwner() {
+    public @Nullable Boolean getIsOwner() {
         return isOwner;
     }
 
@@ -102,7 +102,7 @@ public class CourseResponse {
         isOwner = owner;
     }
 
-    public @Nullable Boolean isFollower() {
+    public @Nullable Boolean getIsFollower() {
         return isFollower;
     }
 

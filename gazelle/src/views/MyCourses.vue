@@ -1,5 +1,5 @@
 <template>
-  <CourseList class="courseList" :courses="courses" @updated="listUpdate" />
+  <CourseList class="content" :courses="courses" @updated="listUpdate" />
 </template>
 
 <script lang="ts">
@@ -32,10 +32,5 @@ export default class MyCourses extends Vue {
 }
 </script>
 
-<style>
-.courseList {
-  margin: auto;
-  max-width: 800px;
-  width: 90%;
-}
+<style scoped>
 </style>

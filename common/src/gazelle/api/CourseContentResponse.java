@@ -1,5 +1,6 @@
 package gazelle.api;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class CourseContentResponse {
         this.name = name;
     }
 
-    public @Nullable Boolean isFollower() {
+    public @Nullable Boolean getIsFollower() {
         return isFollower;
     }
 
@@ -78,7 +79,7 @@ public class CourseContentResponse {
         this.isFollower = isFollower;
     }
 
-    public @Nullable Boolean isOwner() {
+    public @Nullable Boolean getIsOwner() {
         return isOwner;
     }
 

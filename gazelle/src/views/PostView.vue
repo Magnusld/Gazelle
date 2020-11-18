@@ -1,5 +1,5 @@
 <template>
-  <div class="post">
+  <div class="content">
     <PostComponent v-if="viewing" :id="id" />
     <PostEdit v-else :new="isNewPost" :id="id" />
   </div>
@@ -28,10 +28,5 @@ export default class PostView extends Vue {
   }
 }
 </script>
-<style>
-.post {
-  margin: auto;
-  max-width: 800px;
-  width: 90%;
-}
+<style scoped>
 </style>

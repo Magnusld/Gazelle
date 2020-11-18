@@ -22,7 +22,6 @@ import restClient from "@/client/restClient";
 })
 export default class App extends Vue {
   created() {
-    console.log("Setting initial token:", this.$store.getters.token);
     restClient.setToken(this.$store.getters.token);
     //If we are "fake logged in", make an actual request to the server
     tryGetRealUser();
@@ -30,7 +29,6 @@ export default class App extends Vue {
 
   @Watch("$store.getters.token")
   onTokenChange(newToken: string | null) {
-    console.log("Setting token:", newToken);
     restClient.setToken(newToken);
   }
 }
@@ -56,5 +54,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+.content {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4rem;
+  max-width: 800px;
+  width: 90%;
 }
 </style>

@@ -1,17 +1,17 @@
 <template>
   <div class="postList">
-    <div class="horizontalSeparator" v-if="posts && posts.length > 0">
-      <span class="md-headline">Innlegg</span>
+    <div class="horizontalSeparator">
+      <div class="md-headline">{{title}}</div>
       <div>
-        <md-button class="md-icon-button" @click="$emit('newPost')">
+        <md-button v-if="owner" class="md-icon-button" @click="$emit('newPost')">
           <md-icon>add</md-icon>
         </md-button>
-        <md-button class="md-icon-button" @click="deletePosts">
+        <md-button v-if="owner" class="md-icon-button" @click="deletePosts">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
     </div>
-    <div class="posts">
+    <div class="posts" v-if="posts && posts.length > 0">
       <PostListing
         v-for="post in posts"
         :key="post.id"
@@ -20,16 +20,15 @@
         :deletable="deletable"
       />
     </div>
-    <div v-if="posts && posts.length === 0">
+    <div v-else>
       <md-empty-state
         class="centered"
         md-icon="error"
-        md-label="Ingen poster å vise"
-        md-description="Akkurat nå har løpet ingen poster."
+        md-label="Ingen innlegg å vise"
+        md-description="Akkurat nå har løpet ingen innlegg."
       >
-        <md-button class="md-primary md-raised" @click="$emit('newPost')"
-          >Opprett post</md-button
-        >
+        <md-button v-if="owner" class="md-primary md-raised" @click="$emit('newPost')">Opprett innlegg</md-button>
+        <span v-else>Kom tilbake senere</span>
       </md-empty-state>
     </div>
   </div>
@@ -44,6 +43,12 @@ import { deletePost } from "@/client/post";
   components: { PostListing }
 })
 export default class PostList extends Vue {
+  @Prop({ default: "Innlegg" })
+  private title!: string;
+  @Prop({ default: false })
+  private owner!: boolean;
+  @Prop({ default: false })
+  private follower!: boolean;
   @Prop() private posts!: PostResponse[];
 
   private deletable = false;

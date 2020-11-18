@@ -175,7 +175,7 @@ public class CourseController {
     @Transactional
     public CourseContentResponse findById(@PathVariable Long id,
                                           @RequestHeader(name = "Authorization", required = false)
-                                   @Nullable String auth) {
+                                          @Nullable String auth) {
         Course course = courseRepository.findById(id).orElseThrow(CourseNotFoundException::new);
         User user = null;
         if (auth != null)

@@ -134,7 +134,7 @@ public class PostContentResponse {
         this.courseName = courseName;
     }
 
-    public @Nullable Boolean isOwning() {
+    public @Nullable Boolean getIsOwning() {
         return isOwning;
     }
 
