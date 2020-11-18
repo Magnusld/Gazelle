@@ -6,11 +6,11 @@
     <md-divider />
     <md-field>
       <label>Tittel</label>
-      <md-input v-model="tittel"></md-input>
+      <md-input v-model="title"></md-input>
     </md-field>
     <md-field>
       <label>Beskrivelse</label>
-      <md-textarea v-model="beskrivelse"></md-textarea>
+      <md-textarea v-model="description"></md-textarea>
     </md-field>
     <div class="horizontalSeparator">
       <md-datepicker v-model="startDate" class="date">
@@ -38,10 +38,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 import ChoreListing from "@/components/ChoreListing.vue";
 import { addNewPost, updateExistingPost } from "@/client/post";
 import { NewChoreRequest } from "@/client/types";
+import { localDateOfDate } from "@/client/date";
 
 @Component({
   components: {
@@ -49,14 +50,16 @@ import { NewChoreRequest } from "@/client/types";
   }
 })
 export default class Post extends Vue {
-  private newPost = true;
-  private tittel = "";
-  private beskrivelse = "";
+  @Prop({ type: Boolean }) private new!: boolean;
+  @Prop({ type: Number }) private id!: number; //is a course id if new is true
+
+  private title = "";
+  private description = "";
   private chores: NewChoreRequest[] = [];
   private startDate: Date = new Date();
   private endDate: Date = new Date();
 
-  private headline: string = this.newPost ? "Opprett post" : "Rediger post";
+  private headline: string = this.new ? "Opprett post" : "Rediger post";
   private nextKey = 0;
 
   private addChore = (): void => {
@@ -64,7 +67,7 @@ export default class Post extends Vue {
       key: this.nextKey++,
       id: 0,
       text: "",
-      dueDate: new Date()
+      dueDate: localDateOfDate(new Date()) //Må legge til dato
     });
   };
 
@@ -72,23 +75,25 @@ export default class Post extends Vue {
     this.chores.splice(this.chores.indexOf(chore), 1);
   };
 
-  private sendPost() {
-    if (this.newPost) {
-      addNewPost(1, {
-        title: this.tittel,
-        description: this.beskrivelse,
-        startDate: new Date(this.startDate),
-        endDate: new Date(this.endDate),
+  private async sendPost() {
+    if (this.new) {
+      await addNewPost(this.id, {
+        title: this.title,
+        description: this.description,
+        startDate: localDateOfDate(new Date(this.startDate)),
+        endDate: localDateOfDate(new Date(this.endDate)),
         chores: this.chores
       });
+      await this.$router.replace("/courses/" + this.id);
     } else {
-      updateExistingPost(1, {
-        title: this.tittel,
-        description: this.beskrivelse,
-        startDate: new Date(this.startDate),
-        endDate: new Date(this.endDate),
+      await updateExistingPost(this.id, {
+        title: this.title,
+        description: this.description,
+        startDate: localDateOfDate(new Date(this.startDate)),
+        endDate: localDateOfDate(new Date(this.endDate)),
         chores: this.chores
       });
+      await this.$router.replace(`/posts/${this.id}`);
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="horizontalSeparator" v-if="courses.length > 0">
+    <div class="horizontalSeparator" v-if="courses && courses.length > 0">
       <span class="md-headline">Mine løp</span>
       <div>
         <md-button class="md-icon-button" @click="showNewCourseDialog">
@@ -20,7 +20,7 @@
         @coursesToDelete="addCourseToDelete"
       />
     </div>
-    <div v-if="this.courses.length === 0">
+    <div v-if="courses && courses.length === 0">
       <md-empty-state
         class="centered"
         md-icon="error"
@@ -55,7 +55,8 @@ import { addNewCourse, deleteCourse } from "@/client/course";
   components: { CourseListing }
 })
 export default class CourseList extends Vue {
-  @Prop() private courses!: CourseResponse[];
+  @Prop()
+  private courses!: CourseResponse[] = null;
 
   private showDialog = false;
   private error = "";

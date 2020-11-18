@@ -1,12 +1,12 @@
 <template>
   <div class="post">
-    <PostEdit v-if="editing" />
-    <PostComponent v-else />
+    <PostComponent v-if="viewing" :id="id" />
+    <PostEdit v-else :new="isNewPost" :id="id" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 import PostComponent from "@/components/PostComponent.vue";
 import PostEdit from "../components/PostEdit.vue";
 
@@ -17,7 +17,15 @@ import PostEdit from "../components/PostEdit.vue";
   }
 })
 export default class PostView extends Vue {
-  private editing = true;
+  @Prop({ type: String }) mode!: "edit" | "new" | "view";
+  @Prop({ type: Number }) id!: number | null; //is a course id if mode=="new"
+
+  get viewing() {
+    return this.mode === "view";
+  }
+  get isNewPost() {
+    return this.mode === "new";
+  }
 }
 </script>
 <style>

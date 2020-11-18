@@ -16,6 +16,7 @@ import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +66,7 @@ public class PostController {
         PostResponse.Builder builder = new PostResponse.Builder();
         builder.id(post.getId())
                 .title(post.getTitle())
+                .description(post.getDescription())
                 .startDate(DateHelper.localDateOfDate(post.getStartDate()))
                 .endDate(DateHelper.localDateOfDate(post.getEndDate()));
 
@@ -106,7 +108,9 @@ public class PostController {
         builder.title(post.getTitle());
         builder.description(post.getDescription());
         builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
-        builder.startDate(DateHelper.localDateOfDate(post.getStartDate()));
+        builder.endDate(DateHelper.localDateOfDate(post.getEndDate()));
+        builder.courseId(post.getCourse().getId());
+        builder.courseName(post.getCourse().getName());
 
         List<ChoreResponse> chores = new ArrayList<>();
         for (Chore c : post.getChores())
@@ -226,7 +230,7 @@ public class PostController {
             throw new AuthorizationException("You don't own this course");
 
         Post post = buildPost(request, course);
-        // The post is persisted through being added to the course
+        postRepository.save(post);
 
         return makePostContentResponse(post, user);
     }
@@ -245,5 +249,20 @@ public class PostController {
 
         updatePost(request, post);
         return makePostContentResponse(post, user);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    @Transactional
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePost(
+            @PathVariable("postId") Long postId,
+            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        Course course = post.getCourse();
+        User user = tokenAuthService.getUserObjectFromToken(auth);
+        if (!courseAndUserService.isOwning(user, course))
+            throw new AuthorizationException("You don't own this course");
+
+        postRepository.delete(post);
     }
 }
