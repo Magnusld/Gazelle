@@ -65,7 +65,7 @@ public class PostContentResponse {
             return this;
         }
 
-        public Builder isOwning(Boolean isOwning) {
+        public Builder isOwning(@Nullable Boolean isOwning) {
             built.setIsOwning(isOwning);
             return this;
         }
@@ -139,7 +139,7 @@ public class PostContentResponse {
     }
 
     public void setIsOwning(@Nullable Boolean isOwning) {
-        isOwning = isOwning;
+        this.isOwning = isOwning;
     }
 
     public List<ChoreResponse> getChores() {
