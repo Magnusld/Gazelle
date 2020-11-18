@@ -2,16 +2,19 @@ package gazelle.server.endpoint;
 
 import gazelle.api.ChoreResponse;
 import gazelle.api.NewChoreRequest;
+import gazelle.api.ValueWrapper;
 import gazelle.model.Chore;
 import gazelle.model.Post;
 import gazelle.model.User;
 import gazelle.model.UserChoreProgress;
 import gazelle.server.error.ChoreNotFoundException;
+import gazelle.server.error.UnprocessableEntityException;
 import gazelle.server.repository.ChoreRepository;
 import gazelle.server.service.ChoreProgressService;
 import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +70,8 @@ public class ChoreController {
         r.validate();
         if (r.getId() != null)
             throw new IllegalArgumentException();
-        return new Chore(r.getKey(), r.getText(), DateHelper.dateOfLocalDate(r.getDueDate()), post);
+        Chore response = new Chore(r.getKey(), r.getText(), DateHelper.dateOfLocalDate(r.getDueDate()), post);
+        return choreRepository.save(response);
     }
 
     /**
@@ -87,14 +91,19 @@ public class ChoreController {
     }
 
     @PutMapping("/users/{userId}/chores/{choreId}/progress")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void setChoreState(@PathVariable("choreId") Long choreId,
                               @PathVariable("userId") Long userId,
-                              @RequestBody UserChoreProgress.Progress value,
+                              @RequestBody ValueWrapper<UserChoreProgress.Progress> value,
                               @RequestHeader(name = "Authorization", required = false)
                                   @Nullable String auth) {
         User user = tokenAuthService.assertTokenForUserAndGet(userId, auth);
         Chore chore = choreRepository.findById(choreId).orElseThrow(ChoreNotFoundException::new);
-        choreProgressService.setProgress(user, chore, value);
+
+        if(value.getValue() == null)
+            throw new UnprocessableEntityException();
+
+        choreProgressService.setProgress(user, chore, value.getValue());
     }
 }

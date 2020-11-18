@@ -18,15 +18,15 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from "vue-property-decorator";
-import type { Course } from "@/types";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import CourseListing from "./CourseListing.vue";
+import { CourseResponse } from "@/client/types";
 @Component({
   components: { CourseListing }
 })
 export default class RecentlyUpdated extends Vue {
   @Prop()
-  private courses!: Course[];
+  private courses!: CourseResponse[];
 }
 </script>
 

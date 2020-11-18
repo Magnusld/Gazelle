@@ -8,7 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
-import java.util.Optional;
 
 public interface ChoreRepository extends CrudRepository<Chore, Long> {
 
@@ -22,7 +21,7 @@ public interface ChoreRepository extends CrudRepository<Chore, Long> {
      */
     @Query("SELECT c FROM Chore c WHERE c.post.course = :course AND "
             + "c.dueDate IS NOT NULL AND c.dueDate >= :date ORDER BY c.dueDate ASC")
-    Optional<Chore> findNextDueDateInCourse(@Param("course") Course course,
+    Iterable<Chore> findNextDueDateInCourse(@Param("course") Course course,
                                             @Param("date") Date date);
 
     /**
@@ -35,6 +34,6 @@ public interface ChoreRepository extends CrudRepository<Chore, Long> {
      */
     @Query("SELECT c FROM Chore c WHERE c.post = :post AND "
             + "c.dueDate IS NOT NULL AND c.dueDate >= :date ORDER BY c.dueDate ASC")
-    Optional<Chore> findNextDueDateInPost(@Param("post") Post post,
+    Iterable<Chore> findNextDueDateInPost(@Param("post") Post post,
                                             @Param("date") Date date);
 }

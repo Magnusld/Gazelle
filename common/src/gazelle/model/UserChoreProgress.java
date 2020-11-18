@@ -1,6 +1,7 @@
 package gazelle.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class UserChoreProgress {
         }
 
         @Override
+        @JsonValue
         public String toString() {
             return text;
         }
@@ -73,7 +75,7 @@ public class UserChoreProgress {
     }
 
     @EmbeddedId
-    private UserChoreKey id;
+    private UserChoreKey id = new UserChoreKey();
 
     @ManyToOne
     @MapsId("userId")

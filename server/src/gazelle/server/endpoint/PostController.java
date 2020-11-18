@@ -14,6 +14,7 @@ import gazelle.server.service.ChoreProgressService;
 import gazelle.server.service.CourseAndUserService;
 import gazelle.server.service.TokenAuthService;
 import gazelle.util.DateHelper;
+import gazelle.util.FirstOf;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,7 +73,8 @@ public class PostController {
 
         Date today = DateHelper.today();
 
-        builder.nextChoreDue(choreRepository.findNextDueDateInPost(post, today)
+        builder.nextChoreDue(FirstOf.iterable(
+                choreRepository.findNextDueDateInPost(post, today))
                 .map(it -> choreController.makeChoreResponse(it, user))
                 .orElse(null));
 
@@ -136,6 +138,8 @@ public class PostController {
         Post post = new Post(r.getTitle(), r.getDescription(), course,
                 DateHelper.dateOfLocalDate(r.getStartDate()),
                 DateHelper.dateOfLocalDate(r.getEndDate()));
+        postRepository.save(post);
+
         Set<Chore> choreList = new HashSet<>();
         for (NewChoreRequest c : r.getChores()) {
             choreList.add(choreController.buildChore(c, post));
@@ -230,7 +234,6 @@ public class PostController {
             throw new AuthorizationException("You don't own this course");
 
         Post post = buildPost(request, course);
-        postRepository.save(post);
 
         return makePostContentResponse(post, user);
     }
