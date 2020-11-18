@@ -114,6 +114,9 @@ public class PostController {
         builder.courseId(post.getCourse().getId());
         builder.courseName(post.getCourse().getName());
 
+        if (user != null)
+            builder.isOwning(courseAndUserService.isOwning(user, post.getCourse()));
+
         List<ChoreResponse> chores = new ArrayList<>();
         for (Chore c : post.getChores())
             chores.add(choreController.makeChoreResponse(c, user));

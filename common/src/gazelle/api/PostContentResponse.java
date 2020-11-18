@@ -1,5 +1,7 @@
 package gazelle.api;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +14,8 @@ public class PostContentResponse {
     private LocalDate endDate;
     private Long courseId;
     private String courseName;
+    @Nullable
+    private Boolean isOwning;
     private List<ChoreResponse> chores;
 
     public static class Builder {
@@ -58,6 +62,11 @@ public class PostContentResponse {
 
         public Builder courseName(String courseName) {
             built.setCourseName(courseName);
+            return this;
+        }
+
+        public Builder isOwning(Boolean isOwning) {
+            built.setIsOwning(isOwning);
             return this;
         }
 
@@ -123,6 +132,14 @@ public class PostContentResponse {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public @Nullable Boolean isOwning() {
+        return isOwning;
+    }
+
+    public void setIsOwning(@Nullable Boolean isOwning) {
+        isOwning = isOwning;
     }
 
     public List<ChoreResponse> getChores() {
