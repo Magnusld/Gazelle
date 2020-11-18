@@ -36,7 +36,7 @@ mvn test
 Dette tester hver modul for seg.
 Klienter bruker derfor mock-servere for å simulere kommunikasjon med REST-apiet.
 
-Det finnes også integrasjonstester for å sjekke kommunikasjon mellom programmene.
+Det finnes også noen få integrasjonstester for å sjekke kommunikasjon mellom programmene.
 ```
 mvn integration-test
 ```
@@ -46,7 +46,7 @@ For å kompilere, teste, sjekke kodestil og kodekvalitet på hele prosjektet, sk
 mvn verify
 ```
 For å se testdekningsgrad av javamodulene, gå til ```target/site/jacoco/index.html``` i hver modul.
-Testdekning på webappen ligger i TODO.
+Testdekning på webappen ligger i ```gazelle/coverage/lcov-report/index.html```.
 
 ## CI / CD
 Alle grener testes automatisk i en GitLab Pipeline, for å hindre fletting av utestet kode.
