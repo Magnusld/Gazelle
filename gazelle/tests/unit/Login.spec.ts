@@ -94,8 +94,8 @@ describe("login.ts", () => {
     expect(store.getters.token).toEqual("3456");
     try {
       const data2: LogInResponse = {
-        user: { firstname: "Per", lastname: "Jensen", id: 6 },
-        token: "3456"
+        user: { firstname: "Karl", lastname: "Hansen", id: 8 },
+        token: "7890"
       };
       scope.post("/login").reply(200, data2);
       await button.trigger("click");
@@ -128,12 +128,22 @@ describe("login.ts", () => {
     expect(wrapper.vm.$data.firstname).toEqual("Ola");
     expect(wrapper.vm.$data.email).toEqual("test@test.no");
     const data: LogInResponse = {
-      user: { firstname: "Ola", lastname: "Normann", id: 7 },
+      user: { firstname: "Ola", lastname: "Nordmann", id: 7 },
       token: "1234"
     };
     scope.post("/signup").reply(200, data);
     await button.trigger("click");
     await delay(300);
     expect(store.getters.token).toEqual("1234");
+    try {
+      const data2: LogInResponse = {
+        user: { firstname: "Ola", lastname: "Nordmann", id: 7 },
+        token: "2345"
+      };
+      scope.post("/login").reply(200, data2);
+      await button.trigger("click");
+    } catch (error) {
+      expect(error).toEqual("Already logged in");
+    }
   });
 });
