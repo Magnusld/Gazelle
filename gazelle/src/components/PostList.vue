@@ -32,11 +32,44 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostListing from "@/components/PostListing.vue";
+import {CourseResponse, PostResponse} from "@/client/types";
+import {deleteCourse} from "@/client/course";
 @Component({
   components: { PostListing }
 })
 export default class PostList extends Vue {
   @Prop() private posts!: PostResponse[];
+
+  private deletable = false;
+  private postsToDelete: CourseResponse[] = [];
+
+  private async deletePosts() {
+    if (this.deletable && this.postsToDelete.length > 0) {
+      for (const post of this.postsToDelete) {
+        await deletePost(post.id);
+      }
+      this.postsToDelete = [];
+      this.$emit("updated");
+    }
+    this.deletable = !this.deletable;
+  }
+
+  private addPostToDelete(post: {
+    postResponse: PostResponse;
+    isChecked: boolean;
+  }) {
+    if (
+        post.isChecked &&
+        !this.postsToDelete.includes(post.postResponse)
+    ) {
+      this.postsToDelete.push(post.postResponse);
+    } else {
+      this.postsToDelete.splice(
+          this.postsToDelete.indexOf(post.postResponse),
+          1
+      );
+    }
+  }
 }
 </script>
 
