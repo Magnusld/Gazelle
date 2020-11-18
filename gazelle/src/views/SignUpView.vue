@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <img src="../assets/images/orangelogo.svg" alt="Orange logo" id="logo" />
-    <SignUpPage />
+    <SignUpPage class="signup"/>
   </div>
 </template>
 
@@ -28,7 +28,10 @@ export default class SignUpView extends Vue {}
   align-items: center;
 }
 #logo {
-  position: absolute;
-  top: 10%;
+  position: relative;
+  top: 5%;
+}
+.signup {
+  position: relative;
 }
 </style>
