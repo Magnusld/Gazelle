@@ -15,12 +15,12 @@
             >
             <div>Neste frist: I dag</div>
           </div>
-          <div v-if="course.currentPost != undefined" class="subheader">
+          <div v-if="course.currentPost != null" class="subheader">
             Nå: {{ course.currentPost.title }} (Antall dager igjen)
           </div>
         </div>
 
-        <div v-if="course.currentPost != undefined">
+        <div v-if="course.currentPost != null">
           <div class="horizontalSeparator">
             <div>
               Gjort: {{ course.currentPost.choresDone }}/{{
@@ -40,7 +40,7 @@
           <div class="subheader">Forrige: Kombinatorikk</div>
         </div>
 
-        <div v-if="course.currentPost === undefined">
+        <div v-if="course.currentPost === null">
           Ingen poster å vise
         </div>
       </div>

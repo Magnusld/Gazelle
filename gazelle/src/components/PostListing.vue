@@ -4,26 +4,16 @@
     <div class="courseListing">
       <div class="header">
         <div class="horizontalSeparator">
-          <a style="color:black" class="title">{{ post.name }}</a>
-          <md-menu md-direction="bottom-start">
-            <md-button md-menu-trigger class="md-icon-button">
-              <md-icon>more_horiz</md-icon>
-              <md-menu-content class="menu">
-                <md-menu-item>
-                  <md-button>Rediger</md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button class="md-accent">Slett</md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </md-button>
-          </md-menu>
+          <router-link
+            :to="`/posts/${post.id}`"
+            style="color:black"
+            class="title"
+            >{{ post.title }}</router-link
+          >
         </div>
       </div>
-      <div>
-        <span class="md-body-1">
-          Dette er en generic post i faget. Hei på dere! Lykke til på eksamen.
-        </span>
+      <div class="md-body-1">
+        {{ post.description }}
       </div>
       <div class="horizontalSeparator">
         <div>Gjort: 3/5</div>
@@ -38,12 +28,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Post } from "@/types";
+import { PostResponse } from "@/client/types";
 
 @Component
 export default class PostListing extends Vue {
   @Prop()
-  private post!: Post;
+  private post!: PostResponse;
 }
 </script>
 
@@ -53,6 +43,7 @@ export default class PostListing extends Vue {
   align-content: center;
   align-items: flex-end;
   justify-content: space-between;
+  padding: 0;
 }
 .menu {
   display: flex;

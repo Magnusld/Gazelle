@@ -1,4 +1,4 @@
-import { User } from "@/types";
+import { LocalDate } from "@/client/date";
 
 export interface LogInRequest {
   email: string;
@@ -13,7 +13,7 @@ export interface SignUpRequest {
 }
 
 export interface LogInResponse {
-  user: User;
+  user: UserResponse;
   token: string;
 }
 
@@ -27,33 +27,34 @@ export interface NewChoreRequest {
   id: number;
   key: number;
   text: string;
-  dueDate: Date;
+  dueDate: LocalDate;
 }
 
 export interface NewPostRequest {
   title: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: LocalDate;
+  endDate: LocalDate;
   chores: NewChoreRequest[];
 }
 
 export interface PostResponse {
   id: number;
   title: string;
-  startDate: Date;
-  endDate: Date;
+  description: string;
+  startDate: LocalDate;
+  endDate: LocalDate;
   choresDone: number | null;
   choresFocused: number | null;
-  choresCount: number | null;
+  choresCount: number;
 }
 
 export interface PostContentResponse {
   id: number;
   title: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: LocalDate;
+  endDate: LocalDate;
   courseId: number;
   chores: ChoreResponse;
 }
@@ -68,7 +69,7 @@ export interface ChoreResponse {
   id: number;
   key: number;
   text: string;
-  dueDate: Date | null;
+  dueDate: LocalDate | null;
   progress: ChoreProgress | null;
 }
 
