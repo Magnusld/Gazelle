@@ -1,8 +1,6 @@
 package gazelle.server.repository;
 
-import gazelle.model.Chore;
-import gazelle.model.Course;
-import gazelle.model.Post;
+import gazelle.model.*;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +8,18 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 
 public interface ChoreRepository extends CrudRepository<Chore, Long> {
+
+    /**
+     * Gets all chores a user has marked as the specified progress
+     * @param user the user
+     * @param progress the progress
+     * @return all chores with the specified progress
+     */
+    @Query("SELECT ucp.chore FROM UserChoreProgress ucp "
+            + "WHERE ucp.user = :user AND ucp.progress = :progress")
+    Iterable<Chore> findChoreByUserAndProgress(
+            @Param("user") User user,
+            @Param("progress") UserChoreProgress.Progress progress);
 
     /**
      * Gets the next chore with a deadline in the course, defined by:

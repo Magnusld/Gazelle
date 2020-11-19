@@ -53,7 +53,8 @@ describe("CourseListing.vue", () => {
             nextPost: null,
             previousPost: null
           }
-        ]
+        ],
+        owner: true
       },
       data: () => ({
         deletable: true
@@ -74,7 +75,7 @@ describe("CourseListing.vue", () => {
     const cListing = wrapper.findAllComponents(CourseListing).at(0);
     expect(cListing.exists()).toBe(true);
     expect(cListing.vm.$props.deletable).toBe(true);
-    const box = cListing.find(".deleteBox");
+    const box = cListing.find(".checkbox");
     expect(box.exists()).toBe(true);
     await cListing.setData({ checked: true });
     expect(cListing.vm.$data.checked).toEqual(true);
