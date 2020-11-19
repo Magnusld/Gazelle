@@ -22,7 +22,7 @@ import { CourseResponse } from "@/client/types";
 })
 export default class CoursesView extends Vue {
   @Prop() private mode!: "myCourses" | "followedCourses";
-  private courses: CourseResponse[] = [];
+  private courses: CourseResponse[] | null = null;
 
   async mounted() {
     await this.listUpdate();

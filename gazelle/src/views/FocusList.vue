@@ -6,7 +6,7 @@
     <md-divider />
     <FocusChore v-for="(chore, index) in chores" :key="index" :chore="chore" />
     <md-empty-state
-      v-if="!chores || chores.length === 0"
+      v-if="chores && chores.length === 0"
       class="centered"
       md-icon="error"
       md-label="Ingen gjøremål å vise"
@@ -32,12 +32,10 @@ import { getFocusedChores } from "@/client/chore";
   }
 })
 export default class FocusList extends Vue {
-  private chores: ChoreFullResponse[] = [];
+  private chores: ChoreFullResponse[] | null = null;
 
   async mounted() {
-    this.chores.push(
-      ...(await getFocusedChores(this.$store.getters.loggedInUserId))
-    );
+    this.chores = await getFocusedChores(this.$store.getters.loggedInUserId);
   }
 }
 </script>
