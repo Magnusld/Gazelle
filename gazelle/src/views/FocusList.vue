@@ -1,5 +1,5 @@
 <template>
-  <div class="focusList">
+  <div class="content">
     <div class="horizontalSeparator">
       <span class="md-headline">Fokuslista</span>
       <md-button class="md-icon-button">
@@ -31,10 +31,5 @@ export default class FocusList extends Vue {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0 10px 10px;
-}
-.focusList {
-  margin: auto;
-  max-width: 800px;
-  width: 90%;
 }
 </style>

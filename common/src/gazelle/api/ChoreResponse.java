@@ -43,12 +43,12 @@ public class ChoreResponse {
             return this;
         }
 
-        public Builder dueDate(LocalDate dueDate) {
+        public Builder dueDate(@Nullable LocalDate dueDate) {
             built.setDueDate(dueDate);
             return this;
         }
 
-        public Builder progress(UserChoreProgress.Progress progress) {
+        public Builder progress(@Nullable UserChoreProgress.Progress progress) {
             built.setProgress(progress);
             return this;
         }

@@ -1,17 +1,21 @@
 <template>
   <PostList
-    class="postList"
+    class="content"
+    v-if="course"
     @newPost="newPost"
     @updated="listUpdate"
-    :posts="posts"
+    :posts="course.posts"
+    :title="course.name"
+    :owner="course.isOwner"
+    :follower="course.isFollower"
   />
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostList from "@/components/PostList.vue";
-import { PostResponse } from "@/client/types";
-import { getPostsForCourse } from "@/client/post";
+import { CourseContentResponse } from "@/client/types";
+import { findCourseById } from "@/client/course";
 @Component({
   components: {
     PostList
@@ -19,7 +23,7 @@ import { getPostsForCourse } from "@/client/post";
 })
 export default class CoursePage extends Vue {
   @Prop({ type: Number }) private courseId!: number;
-  private posts: PostResponse[] | null = null;
+  private course: CourseContentResponse | null = null;
 
   async mounted() {
     await this.listUpdate();
@@ -27,9 +31,11 @@ export default class CoursePage extends Vue {
 
   async listUpdate() {
     try {
-      this.posts = await getPostsForCourse(this.courseId);
+      this.course = await findCourseById(this.courseId);
+      console.log(this.course);
     } catch (e) {
-      console.log("Failed to get owned courses:", e.message, e.status);
+      //TODO: Proper try/catch
+      console.log("Failed to get course:", e.message, e.status);
     }
   }
 
@@ -39,10 +45,4 @@ export default class CoursePage extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-.postList {
-  margin: auto;
-  max-width: 800px;
-  width: 90%;
-}
-</style>
+<style scoped></style>
