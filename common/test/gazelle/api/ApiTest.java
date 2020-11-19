@@ -2,6 +2,7 @@ package gazelle.api;
 
 import gazelle.model.Chore;
 import gazelle.model.UserChoreProgress;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -88,9 +89,40 @@ public class ApiTest {
         assertEquals(previousPost, courseResponse.getPreviousPost());
         assertEquals(nextChoreDue, courseResponse.getNextChoreDue());
 
-        assertTrue(courseResponse.equals(courseResponse));
+        assertEquals(courseResponse, courseResponse);
         assertFalse(courseResponse.equals(null));
     }
 
+    @Test
+    public void newChoreRequest() {
+        Long id = 1L;
+        Long key = 2L;
+        String text = "test";
+        LocalDate dueDate = LocalDate.now().plusDays(1);
+        NewChoreRequest newChoreRequest = new NewChoreRequest(id, key, text, dueDate);
+        newChoreRequest.validate();
+        
+        assertEquals(id, newChoreRequest.getId());
+        newChoreRequest.setId(11L);
+        assertNotEquals(newChoreRequest.getId(), id);
+        assertEquals(newChoreRequest.getId(), 11L);
+
+        assertEquals(key, newChoreRequest.getKey());
+        newChoreRequest.setKey(22L);
+        assertNotEquals(newChoreRequest.getKey(), key);
+        assertEquals(newChoreRequest.getKey(), 22L);
+
+        assertEquals(text, newChoreRequest.getText());
+        newChoreRequest.setText("test2");
+        assertNotEquals(newChoreRequest.getText(), text);
+        assertEquals(newChoreRequest.getText(), "test2");
+
+        assertEquals(dueDate, newChoreRequest.getDueDate());
+        newChoreRequest.setDueDate(LocalDate.now().plusWeeks(2));
+        assertFalse(newChoreRequest.getDueDate().equals(dueDate));
+        assertTrue(newChoreRequest.getDueDate().equals(LocalDate.now().plusWeeks(2)));
+
+        assertEquals(newChoreRequest,newChoreRequest);
+    }
 
 }
