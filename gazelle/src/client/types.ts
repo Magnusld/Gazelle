@@ -96,3 +96,10 @@ export interface ChoreResponse {
   dueDate: LocalDate | null;
   progress: ChoreProgress | null;
 }
+
+export interface ChoreFullResponse extends ChoreResponse {
+  postId: number;
+  postTitle: string;
+  courseId: number;
+  courseName: string;
+}

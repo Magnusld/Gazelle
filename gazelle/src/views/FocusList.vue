@@ -2,18 +2,29 @@
   <div class="content">
     <div class="horizontalSeparator">
       <span class="md-headline">Fokuslista</span>
-      <md-button class="md-icon-button">
-        <md-icon>delete</md-icon>
-      </md-button>
     </div>
+    <md-divider />
     <FocusChore v-for="(chore, index) in chores" :key="index" :chore="chore" />
+    <md-empty-state
+      v-if="!chores || chores.length === 0"
+      class="centered"
+      md-icon="error"
+      md-label="Ingen gjøremål å vise"
+      md-description="Du har ikke lagt til noen gjøremål på fokuslista."
+    >
+      <div>
+        Hvis du ser et gjøremål du vil legge til side, trykk på
+        <md-icon>event_available</md-icon> for å legge det til fokuslista.
+      </div>
+    </md-empty-state>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import FocusChore from "@/components/FocusChore.vue";
-import { ChoreResponse } from "@/client/types";
+import { ChoreFullResponse } from "@/client/types";
+import { getFocusedChores } from "@/client/chore";
 
 @Component({
   components: {
@@ -21,7 +32,13 @@ import { ChoreResponse } from "@/client/types";
   }
 })
 export default class FocusList extends Vue {
-  private chores: ChoreResponse[] = [];
+  private chores: ChoreFullResponse[] = [];
+
+  async mounted() {
+    this.chores.push(
+      ...(await getFocusedChores(this.$store.getters.loggedInUserId))
+    );
+  }
 }
 </script>
 

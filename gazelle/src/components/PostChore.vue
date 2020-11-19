@@ -65,9 +65,6 @@ export default class PostChore extends Vue {
   justify-content: space-between;
   align-items: center;
 }
-.checkbox {
-  --md-theme-default-accent: #f29253;
-}
 .md-primary {
   --md-theme-default-primary: #f29253;
 }
