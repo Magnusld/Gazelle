@@ -1,5 +1,7 @@
 package gazelle.client;
 
+import gazelle.api.UserResponse;
+
 public class GazelleClient {
     private final GazelleSession session;
     private final LoginClient login;
@@ -27,9 +29,19 @@ public class GazelleClient {
         return login;
     }
 
+    public CourseClient courses() {
+        return courses;
+    }
 
-
+    /**
+     * Henter id-en til den påloggede brukeren
+     * @return Long id
+     * @throws IllegalStateException hvis ingen er logget inn
+     */
     public Long loggedInUserId() {
-        return session.getLoggedInUser().getId();
+        UserResponse loggedIn = session.getLoggedInUser();
+        if (loggedIn == null)
+            throw new IllegalStateException("Ikke logget inn");
+        return loggedIn.getId();
     }
 }

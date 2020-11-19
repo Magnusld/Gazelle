@@ -32,7 +32,7 @@ public class CourseListController extends BaseController {
         clearView();
         app.sideRun(() -> {
             Long userId = app.getClient().loggedInUserId();
-            List<CourseResponse> courses = app.getClient().courses().getCoursesOwnedBy(userId);
+            List<CourseResponse> courses = app.getClient().courses().getOwnedCourses(userId);
             app.mainRun(() -> setCourses(courses));
         });
     }
