@@ -6,7 +6,8 @@ import CourseList from "@/components/CourseList.vue";
 import nock from "nock";
 import store from "@/store";
 import CoursesView from "@/views/CoursesView.vue";
-import { CourseResponse, UserResponse } from "@/client/types";
+import { CourseResponse, NewCourseRequest, UserResponse } from "@/client/types";
+
 const localVue = createLocalVue();
 localVue.use(VueMaterial);
 const router = new VueRouter();
@@ -20,7 +21,7 @@ function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe("CourseListing.vue", () => {
+describe("CourseView.vue", () => {
   beforeEach(() => {
     store.commit("logout");
     nock.cleanAll();
@@ -85,7 +86,7 @@ describe("CourseListing.vue", () => {
     await delay(300);
     expect(wrapper.vm.$data.coursesToDelete.length).toEqual(0);
   });
-  it("Tester coursesView", async () => {
+  it("Tester coursesView for owned courses", async () => {
     const data: CourseResponse[] = [
       {
         id: 2,
@@ -113,13 +114,63 @@ describe("CourseListing.vue", () => {
       },
       components: {
         CourseList: CourseList
-      }
+      },
+      stubs: ["MdPortal"]
     });
     await delay(300);
     expect(store.getters.token).toEqual(4567);
     const cList = wrapper.findComponent(CourseList);
     expect(cList.exists()).toEqual(true);
     expect(cList.vm.$props.owner).toEqual(true);
+    expect(cList.vm.$props.courses).toEqual(data);
+    const nCourseButton = cList.find(".addNewCoursePopUpButton");
+    expect(nCourseButton.exists()).toEqual(true);
+    await nCourseButton.trigger("click");
+    expect(cList.vm.$data.showDialog).toEqual(true);
+    cList.setData({ name: "testNewCourse" });
+    const data3: NewCourseRequest = { name: "testNewCourse" };
+    scope.post("/courses").reply(200, data3);
+    scope.get("/users/1/ownedCourses").reply(200, data);
+    expect(cList.find(".addNewCourseButton").exists()).toEqual(true);
+    await cList.find(".addNewCourseButton").trigger("click");
+    await delay(300);
+    expect(cList.vm.$data.showDialog).toEqual(false);
+  });
+  it("Teste CoursesView for ikke eide courses", async () => {
+    const data: CourseResponse[] = [
+      {
+        id: 2,
+        name: "test",
+        isOwner: true,
+        isFollower: null,
+        currentPost: null,
+        nextPost: null,
+        previousPost: null
+      }
+    ];
+    scope.get("/users/" + 3 + "/followedCourses").reply(200, data);
+    const user: UserResponse = {
+      id: 3,
+      firstname: "Kari",
+      lastname: "Nordmann"
+    };
+    store.commit("authSuccess", { user, token: 4567 });
+    const wrapper = mount(CoursesView, {
+      localVue,
+      router,
+      store,
+      propsData: {
+        mode: "followedCourses"
+      },
+      components: {
+        CourseList: CourseList
+      }
+    });
+    await delay(300);
+    expect(store.getters.token).toEqual(4567);
+    const cList = wrapper.findComponent(CourseList);
+    expect(cList.exists()).toEqual(true);
+    expect(cList.vm.$props.owner).toEqual(false);
     expect(cList.vm.$props.courses).toEqual(data);
   });
 });

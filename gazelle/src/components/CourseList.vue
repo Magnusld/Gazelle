@@ -3,7 +3,10 @@
     <div class="horizontalSeparator" v-if="courses && courses.length > 0">
       <span class="md-headline">{{ owner ? "Mine løp" : "Fulgte løp" }}</span>
       <div v-if="owner" class="centeredButton">
-        <md-button class="md-icon-button" @click="showNewCourseDialog">
+        <md-button
+          class="md-icon-button addNewCoursePopUpButton"
+          @click="showNewCourseDialog"
+        >
           <md-icon>add</md-icon>
         </md-button>
         <span v-if="deletable">Slett {{ coursesToDelete.length }} løp:</span>
@@ -45,7 +48,9 @@
         <md-input v-model="name"></md-input>
       </md-field>
       <div class="errorMessage" v-if="error">{{ error }}</div>
-      <md-button class="md-primary md-raised" v-on:click="addCourse"
+      <md-button
+        class="md-primary md-raised addNewCourseButton"
+        v-on:click="addCourse"
         >Lag løp</md-button
       >
     </md-dialog>

@@ -52,7 +52,9 @@
         </template>
       </md-autocomplete>
       <div class="md-layout-item child buttonContainer" id="userInfo">
-        <md-button class="md-secondary logoutButton" v-on:click="logout">Logg ut</md-button>
+        <md-button class="md-secondary logoutButton" v-on:click="logout"
+          >Logg ut</md-button
+        >
         <mq-layout mq="laptop+">
           <div>
             {{
@@ -71,13 +73,6 @@
       </md-toolbar>
 
       <md-list>
-<<<<<<< HEAD
-        <md-list-item to="/">
-          <md-icon>home</md-icon>
-          <span class="md-list-item-text">Hjem</span>
-        </md-list-item>
-=======
->>>>>>> master
         <md-list-item to="/my-courses">
           <md-icon>list</md-icon>
           <span class="md-list-item-text">Mine løp</span>
