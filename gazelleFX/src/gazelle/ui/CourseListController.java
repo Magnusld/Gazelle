@@ -1,7 +1,7 @@
 package gazelle.ui;
 
 import gazelle.api.CourseResponse;
-import gazelle.model.User;
+import gazelle.api.UserResponse;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
@@ -21,7 +21,7 @@ public class CourseListController extends BaseController {
     private Button deleteCourse;
     @FXML
     private VBox courseList;
-    private final ArrayList<CourseController> controllers = new ArrayList<>();
+    private final ArrayList<CourseItemController> controllers = new ArrayList<>();
 
     private GazelleController app;
 
@@ -31,10 +31,9 @@ public class CourseListController extends BaseController {
     public void onShow() {
         clearView();
         app.sideRun(() -> {
-            /*User user = app.getSession().getLoggedInUser();
-            List<CourseResponse> courses = app.getSession().getCoursesForUser(user);
+            Long userId = app.getClient().loggedInUserId();
+            List<CourseResponse> courses = app.getClient().courses().getCoursesOwnedBy(userId);
             app.mainRun(() -> setCourses(courses));
-             */
         });
     }
 
@@ -45,7 +44,7 @@ public class CourseListController extends BaseController {
     public void setCourses(List<CourseResponse> courses) {
         // Make enough controllers
         while (controllers.size() < courses.size())
-            controllers.add(CourseController.load(this));
+            controllers.add(CourseItemController.load(this));
 
         // Remove extra controllers
         controllers.subList(courses.size(), controllers.size()).clear();

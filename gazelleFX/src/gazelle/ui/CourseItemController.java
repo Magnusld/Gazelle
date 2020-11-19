@@ -1,13 +1,10 @@
 package gazelle.ui;
 
 import gazelle.api.CourseResponse;
-import gazelle.model.Course;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
-import java.util.List;
-
-public class CourseController extends BaseController {
+public class CourseItemController extends BaseController {
 
     @FXML
     private Text courseTitle;
@@ -28,8 +25,8 @@ public class CourseController extends BaseController {
         courseTitle.setText(course.getName());
     }
 
-    public static CourseController load(CourseListController parent) {
-        CourseController courseController = loadFromFXML("/scenes/course.fxml");
+    public static CourseItemController load(CourseListController parent) {
+        CourseItemController courseController = loadFromFXML("/scenes/courseItem.fxml");
         //courseController.parent = parent;
         return courseController;
     }

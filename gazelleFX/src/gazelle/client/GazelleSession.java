@@ -1,10 +1,14 @@
 package gazelle.client;
 
+import gazelle.api.RestErrorObject;
 import gazelle.api.UserResponse;
+import gazelle.client.error.ClientException;
 import org.jetbrains.annotations.Nullable;
 
 import javax.ws.rs.client.*;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Objects;
 
 /**

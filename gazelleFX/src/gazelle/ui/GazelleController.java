@@ -7,6 +7,7 @@ import gazelle.model.Course;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -21,6 +22,10 @@ public class GazelleController extends BaseController {
     @FXML
     private VBox contentBox;
 
+    private static final String[] NAV_LINES = new String[] {
+        "#myCoursesLine", "#followedLine", "#focusListLine"
+    };
+
     private GazelleClient client;
 
     private LogInController logInController;
@@ -28,7 +33,7 @@ public class GazelleController extends BaseController {
     private CourseListController courseListController;
 
     @FXML
-    private void initialize() throws IOException {
+    private void initialize() {
         client = new GazelleClient(API_URI);
 
         logInController = LogInController.load(this);
@@ -38,12 +43,20 @@ public class GazelleController extends BaseController {
         showLogInScreen(); //TODO: Already logged in?
     }
 
+    public GazelleClient getClient() {
+        return client;
+    }
+
     private void setCurrentScreen(BaseController controller) {
         contentBox.getChildren().setAll(controller.getNode());
     }
 
-    public GazelleClient getClient() {
-        return client;
+    private void setNavSelection(int index) {
+        for (String line : NAV_LINES)
+            getNode().lookup(line).getStyleClass().remove("navBarSelected");
+        if (index >= 0 && index < NAV_LINES.length)
+            getNode().lookup(NAV_LINES[index]).getStyleClass().add("navBarSelected");
+        navbar.setVisible(true);
     }
 
     public void showLogInScreen() {
@@ -58,10 +71,21 @@ public class GazelleController extends BaseController {
         setCurrentScreen(signUpController);
     }
 
+    @FXML
     public void showMyCourses() {
-        navbar.setVisible(true);
+        setNavSelection(0);
         courseListController.onShow();
         setCurrentScreen(courseListController);
+    }
+
+    @FXML
+    public void showFollowedCourses() {
+        setNavSelection(1);
+    }
+
+    @FXML
+    public void showFocusList() {
+        setNavSelection(2);
     }
 
     /**

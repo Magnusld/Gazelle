@@ -61,7 +61,7 @@ public class LoginClient {
 
         // We always use POST when sending secrets
         Response response = session.unauthorizedPath("login").post(Entity.json(request));
-        if (response.getStatusInfo() == Response.Status.UNAUTHORIZED)
+        if (response.getStatusInfo().equals(Response.Status.UNAUTHORIZED))
             throw new LogInException();
         if (!ResponseCode.successfulPostWithEntity(response.getStatusInfo()))
             throw new ClientException("Failed to log in", response);

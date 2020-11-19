@@ -20,14 +20,14 @@
                   <Image url="@../images/logo.png" />
                </image>
             </ImageView>
-            <VBox alignment="CENTER" spacing="3.0">
+            <VBox alignment="CENTER" onMouseClicked="#showMyCourses" spacing="3.0">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mine Løp">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <Pane>
+                  <Pane fx:id="myCoursesLine">
                      <styleClass>
                         <String fx:value="navBarSelected" />
                         <String fx:value="navBarUnderLine" />
@@ -35,14 +35,24 @@
                   </Pane>
                </children>
             </VBox>
-            <VBox alignment="CENTER" spacing="3.0">
+            <VBox alignment="CENTER" onMouseClicked="#showFollowedCourses" spacing="3.0">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Fulgte løp">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Pane fx:id="followedLine" styleClass="navBarUnderLine" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" onMouseClicked="#showFocusList" spacing="3.0">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Fokuslista">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <Pane styleClass="navBarUnderLine" />
+                  <Pane fx:id="focusListLine" styleClass="navBarUnderLine" />
                </children>
             </VBox>
          </children>
