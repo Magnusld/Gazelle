@@ -169,4 +169,18 @@ og ikke går glipp av noe
 #### Viktig å kunne gjøre
 
 * Klikke meg direkte inn på løpet fra denne listen og se den nye endringen.
+
+
+## Søkefelt (us-9) &ndash; Middels prioritet
+
+Som student eller faglærer ønsker jeg å kunne søke etter løp jeg har lyst
+ å følge.
+
+#### Viktig å kunne se
+
+* Søkefelt i navigasjonsbar
+
+#### Viktig å kunne gjøre
+
+* Søke etter både egne og andres løp
   
