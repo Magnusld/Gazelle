@@ -1,17 +1,18 @@
 <template>
   <div>
-    <div class="horizontalSeparator" v-if="courses && courses.length > 0">
+    <div class="horizontalSeparator">
       <span class="md-headline">{{ owner ? "Mine løp" : "Fulgte løp" }}</span>
-      <div v-if="owner">
+      <div v-if="owner" class="centeredButton">
         <md-button class="md-icon-button" @click="showNewCourseDialog">
           <md-icon>add</md-icon>
         </md-button>
+        <span v-if="deletable">Slett {{ coursesToDelete.length }} løp:</span>
         <md-button class="md-icon-button" @click="deleteCourses">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
     </div>
-    <div class="courses">
+    <div class="courses" v-if="courses">
       <CourseListing
         v-for="course in courses"
         :key="course.id"
@@ -61,7 +62,7 @@ import { addNewCourse, deleteCourse } from "@/client/course";
   components: { CourseListing }
 })
 export default class CourseList extends Vue {
-  @Prop({ default: null }) private courses!: CourseResponse[];
+  @Prop({ default: null }) private courses!: CourseResponse[] | null;
   @Prop({ default: false }) private owner!: boolean;
 
   private showDialog = false;

@@ -20,7 +20,7 @@ Vue.use(VueMaterial);
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 450,
-    tablet: 800,
+    tablet: 965,
     laptop: 1250,
     desktop: Infinity
   }

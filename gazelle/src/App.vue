@@ -62,4 +62,12 @@ body {
   max-width: 800px;
   width: 90%;
 }
+.checkbox {
+  --md-theme-default-accent: #f29253;
+}
+.centeredButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
