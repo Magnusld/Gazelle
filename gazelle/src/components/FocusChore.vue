@@ -1,6 +1,13 @@
 <template>
   <div>
-    <div class="subheader">{{ chore.courseName }}</div>
+    <div class="breadcrumb subheader">
+      <router-link :to="`/courses/${chore.courseId}`">{{
+          chore.courseName
+        }}</router-link>
+      > <router-link :to="`/courses/${chore.postId}`">{{
+        chore.postTitle
+      }}</router-link>
+    </div>
     <div class="separator">
       <md-checkbox v-model="checked" class="checkbox">
         {{ chore.text }}
