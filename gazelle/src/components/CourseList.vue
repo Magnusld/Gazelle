@@ -6,7 +6,7 @@
         <md-button class="md-icon-button" @click="showNewCourseDialog">
           <md-icon>add</md-icon>
         </md-button>
-        <md-button class="md-icon-button" @click="deleteCourses">
+        <md-button class="md-icon-button deleteButton" @click="deleteCourses">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
