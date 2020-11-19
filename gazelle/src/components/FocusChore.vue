@@ -2,9 +2,10 @@
   <div>
     <div class="breadcrumb subheader">
       <router-link :to="`/courses/${chore.courseId}`">{{
-          chore.courseName
-        }}</router-link>
-      > <router-link :to="`/courses/${chore.postId}`">{{
+        chore.courseName
+      }}</router-link>
+      >
+      <router-link :to="`/courses/${chore.postId}`">{{
         chore.postTitle
       }}</router-link>
     </div>
