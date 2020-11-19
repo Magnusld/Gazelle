@@ -19,12 +19,7 @@
             <img src="../assets/applogo.svg" alt="applogo" />
           </md-button>
         </div>
-        <md-tabs
-          ref="tabs"
-          class="md-primary"
-          id="navTabs"
-          :md-active-tab="activeTab"
-        >
+        <md-tabs class="md-primary" id="navTabs" :md-sync-route="true">
           <md-tab
             id="my-courses-tab"
             md-label="Mine løp"
@@ -57,7 +52,9 @@
         </template>
       </md-autocomplete>
       <div class="md-layout-item buttonContainer" id="userInfo">
-        <md-button class="md-secondary logoutButton" v-on:click="logout">Logg ut</md-button>
+        <md-button class="md-secondary logoutButton" v-on:click="logout"
+          >Logg ut</md-button
+        >
         <md-button class="md-icon-button" to="/user-settings">
           <md-icon>person</md-icon>
         </md-button>
@@ -97,7 +94,6 @@ import { findAllCourses } from "@/client/course";
 @Component
 export default class TopBar extends Vue {
   private showNavigation = false;
-  private activeTab: string | null = null;
   private selectedCourse: string | null = null;
   private courses: Promise<CourseResponse[]> | CourseResponse[] = [];
 
@@ -124,10 +120,6 @@ export default class TopBar extends Vue {
   @Watch("$route")
   onRouteChange(): void {
     this.showNavigation = false;
-    if (this.$route.path === "/my-courses") this.activeTab = "my-courses-tab";
-    else if (this.$route.path === "/focus-list")
-      this.activeTab = "focus-list-tab";
-    else this.activeTab = null;
   }
 }
 </script>

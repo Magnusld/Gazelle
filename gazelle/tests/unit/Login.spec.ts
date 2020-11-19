@@ -173,13 +173,14 @@ describe("login.ts", () => {
     const wrapper2 = mount(TopBar, {
       localVue,
       router,
-      store
+      store,
+      stubs: ["md-tabs", "md-tab"]
     });
     const logoutButton = wrapper2.findAll(".logoutButton").at(0);
     expect(logoutButton.exists()).toEqual(true);
     scope.post("/logout").reply(200);
     await logoutButton.trigger("click");
-    await delay(330);
+    await delay(300);
     expect(store.getters.token).toEqual(null);
   });
 });
