@@ -141,9 +141,10 @@ public class ChoreController {
 
     @GetMapping("/users/{userId}/focusedChores/")
     @Transactional
-    public List<ChoreFullResponse> getFocusedChores(@PathVariable("userId") Long userId,
-                                                    @RequestHeader(name = "Authorization", required = false)
-                                 @Nullable String auth) {
+    public List<ChoreFullResponse> getFocusedChores(
+            @PathVariable("userId") Long userId,
+            @RequestHeader(name = "Authorization", required = false)
+            @Nullable String auth) {
         User user = tokenAuthService.assertTokenForUserAndGet(userId, auth);
 
         Iterable<Chore> chores = choreRepository.findChoreByUserAndProgress(user,
