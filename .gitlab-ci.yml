@@ -11,7 +11,7 @@ default:
       - .m2/repository
   before_script:
     - apt-get update
-    - apt-get install -y xvfb
+    - apt-get install -y xvfb libpangoft2-1.0-0
 
 workflow: #Only run for changes pushed to branches
   rules:
