@@ -2,6 +2,7 @@ package gazelle.server.endpoint;
 
 import gazelle.api.CourseResponse;
 import gazelle.api.UserResponse;
+import gazelle.api.ValueWrapper;
 import gazelle.server.TestHelper;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.service.CourseAndUserService;
@@ -81,14 +82,14 @@ public class CourseFollowControllerTest {
     @Test
     public void addRemoveCourseFollower() {
         assertThrows(AuthorizationException.class, () -> {
-            courseFollowController.addCourseFollower(user2, course1, token1);
+            courseFollowController.addCourseFollower(user2, new ValueWrapper<>(course1), token1);
         });
         assertFalse(courseFollowController.getCourseFollowers(course1, token2)
                 .stream().anyMatch(user -> user.getId().equals(user2)));
-        courseFollowController.addCourseFollower(user2, course1, token2);
+        courseFollowController.addCourseFollower(user2, new ValueWrapper<>(course1), token2);
         assertTrue(courseFollowController.getCourseFollowers(course1, token2)
                 .stream().anyMatch(user -> user.getId().equals(user2)));
-        courseFollowController.addCourseFollower(user2, course1, token2); //Adding again is NOP
+        courseFollowController.addCourseFollower(user2, new ValueWrapper<>(course1), token2); //Adding again is NOP
         assertTrue(courseFollowController.getCourseFollowers(course1, token2)
                 .stream().anyMatch(user -> user.getId().equals(user2)));
 

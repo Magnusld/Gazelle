@@ -2,6 +2,7 @@ package gazelle.server.endpoint;
 
 import gazelle.api.CourseResponse;
 import gazelle.api.UserResponse;
+import gazelle.api.ValueWrapper;
 import gazelle.server.TestHelper;
 import gazelle.server.error.AuthorizationException;
 import gazelle.server.error.GazelleException;
@@ -84,15 +85,15 @@ public class CourseOwnControllerTest {
     public void addCourseOwner() {
         courseAndUserService.addOwner(user1, course1);
         assertThrows(MissingAuthorizationException.class, () -> {
-            courseOwnController.addCourseOwner(user2, course1, null);
+            courseOwnController.addCourseOwner(user2, new ValueWrapper<>(course1), null);
         });
         assertThrows(InvalidTokenException.class, () -> {
-            courseOwnController.addCourseOwner(user2, course1, "Unbearer: 123");
+            courseOwnController.addCourseOwner(user2, new ValueWrapper<>(course1), "Unbearer: 123");
         });
         assertThrows(AuthorizationException.class, () -> {
-            courseOwnController.addCourseOwner(user2, course1, token2);
+            courseOwnController.addCourseOwner(user2, new ValueWrapper<>(course1), token2);
         });
-        courseOwnController.addCourseOwner(user2, course1, token1);
+        courseOwnController.addCourseOwner(user2, new ValueWrapper<>(course1), token1);
         List<UserResponse> owners = courseOwnController.getCourseOwners(course1);
         assertEquals(2, owners.size());
         assertTrue(owners.stream().anyMatch(it -> it.getId().equals(user2)));

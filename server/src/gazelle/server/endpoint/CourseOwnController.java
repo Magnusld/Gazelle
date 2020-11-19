@@ -2,6 +2,7 @@ package gazelle.server.endpoint;
 
 import gazelle.api.CourseResponse;
 import gazelle.api.UserResponse;
+import gazelle.api.ValueWrapper;
 import gazelle.model.Course;
 import gazelle.model.User;
 import gazelle.server.error.*;
@@ -94,15 +95,16 @@ public class CourseOwnController {
     @PostMapping("/users/{userId}/ownedCourses")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void addCourseOwner(@PathVariable Long userId, @RequestBody Long courseId,
-                                   @RequestHeader(name = "Authorization", required = false)
+    public void addCourseOwner(@PathVariable Long userId,
+                               @RequestBody ValueWrapper<Long> courseId,
+                               @RequestHeader(name = "Authorization", required = false)
                                    @Nullable String auth) {
         User caller = tokenAuthService.getUserObjectFromToken(auth);
-        Course course = courseRepository.findById(courseId)
+        Course course = courseRepository.findById(courseId.getValue())
                 .orElseThrow(CourseNotFoundException::new);
         if (!courseAndUserService.isOwning(caller, course))
             throw new AuthorizationException("You don't own the course");
-        courseAndUserService.addOwner(userId, courseId);
+        courseAndUserService.addOwner(userId, courseId.getValue());
     }
 
     /**
