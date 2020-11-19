@@ -1,5 +1,6 @@
 package gazelle.server.endpoint;
 
+import gazelle.api.ChoreFullResponse;
 import gazelle.api.ChoreResponse;
 import gazelle.api.NewChoreRequest;
 import gazelle.api.ValueWrapper;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -51,6 +54,32 @@ public class ChoreController {
                 .key(chore.getKey())
                 .text(chore.getText())
                 .dueDate(DateHelper.localDateOfDate(chore.getDueDate()));
+
+        if (user != null)
+            builder.progress(choreProgressService.getProgress(user, chore));
+
+        return builder.build();
+    }
+
+    /**
+     * Make a serializable object with data about the chore and its relationships,
+     * including the post and course it belongs to.
+     *
+     * @param chore the chore
+     * @param user the user making the request
+     * @return ChoreResponse the response
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public ChoreFullResponse makeFullChoreResponse(Chore chore, @Nullable User user) {
+        ChoreFullResponse.Builder builder = new ChoreFullResponse.Builder();
+        builder.id(chore.getId())
+                .key(chore.getKey())
+                .text(chore.getText())
+                .dueDate(DateHelper.localDateOfDate(chore.getDueDate()))
+                .postId(chore.getPost().getId())
+                .postTitle(chore.getPost().getTitle())
+                .courseId(chore.getPost().getCourse().getId())
+                .courseName(chore.getPost().getCourse().getName());
 
         if (user != null)
             builder.progress(choreProgressService.getProgress(user, chore));
@@ -108,5 +137,22 @@ public class ChoreController {
             throw new UnprocessableEntityException();
 
         choreProgressService.setProgress(user, chore, value.getValue());
+    }
+
+    @GetMapping("/users/{userId}/focusedChores/")
+    @Transactional
+    public List<ChoreFullResponse> getFocusedChores(
+            @PathVariable("userId") Long userId,
+            @RequestHeader(name = "Authorization", required = false)
+            @Nullable String auth) {
+        User user = tokenAuthService.assertTokenForUserAndGet(userId, auth);
+
+        Iterable<Chore> chores = choreRepository.findChoreByUserAndProgress(user,
+                UserChoreProgress.Progress.FOCUSED);
+
+        List<ChoreFullResponse> response = new ArrayList<>();
+        for (Chore c : chores)
+            response.add(makeFullChoreResponse(c, user));
+        return response;
     }
 }

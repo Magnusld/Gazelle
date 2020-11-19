@@ -89,7 +89,7 @@ public class CourseFollowControllerTest {
         courseFollowController.addCourseFollower(user2, new ValueWrapper<>(course1), token2);
         assertTrue(courseFollowController.getCourseFollowers(course1, token2)
                 .stream().anyMatch(user -> user.getId().equals(user2)));
-        courseFollowController.addCourseFollower(user2, new ValueWrapper<>(course1), token2); //Adding again is NOP
+        courseFollowController.addCourseFollower(user2, new ValueWrapper<>(course1), token2); //NOP
         assertTrue(courseFollowController.getCourseFollowers(course1, token2)
                 .stream().anyMatch(user -> user.getId().equals(user2)));
 
