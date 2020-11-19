@@ -58,7 +58,9 @@
       </md-tabs>
     </mq-layout>
     <div class="md-layout-item buttonContainer" id="userInfo">
-      <md-button class="md-secondary" v-on:click="logout">Logg ut</md-button>
+      <md-button class="md-secondary logoutButton" v-on:click="logout"
+        >Logg ut</md-button
+      >
       <md-button class="md-icon-button" to="/user-settings">
         <md-icon>person</md-icon>
       </md-button>

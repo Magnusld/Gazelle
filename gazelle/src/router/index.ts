@@ -48,9 +48,9 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "Login Page",
-    props: { mode: "login" },
     component: LoginView,
     props: route => ({
+      mode: "login",
       invalidated: route.query.reason === "invalidated"
     }),
     meta: {

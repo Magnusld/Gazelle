@@ -6,7 +6,11 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage class="login" :invalidated="invalidated" v-if="mode === 'login'" class="form" />
+      <LoginPage
+        :invalidated="invalidated"
+        v-if="mode === 'login'"
+        class="form"
+      />
       <SignUpPage v-if="mode === 'signUp'" class="form" />
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
@@ -28,12 +32,12 @@
       </div>
       <div id="divider"></div>
       <div class="wrapper">
-<<<<<<< HEAD
-        <LoginPage :invalidated="invalidated" />
-=======
-        <LoginPage v-if="mode === 'login'" class="form" />
+        <LoginPage
+          :invalidated="invalidated"
+          v-if="mode === 'login'"
+          class="form"
+        />
         <SignUpPage v-if="mode === 'signUp'" class="form" />
->>>>>>> master
       </div>
     </mq-layout>
   </div>
@@ -51,12 +55,8 @@ import SignUpPage from "@/components/SignUpPage.vue";
   }
 })
 export default class LoginView extends Vue {
-<<<<<<< HEAD
-  @Prop({ default: false })
-  private invalidated!: boolean;
-=======
+  @Prop({ default: false }) private invalidated!: boolean;
   @Prop({ default: "login" }) private mode!: string | null;
->>>>>>> master
 }
 </script>
 

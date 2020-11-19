@@ -8,6 +8,7 @@ import { LogInResponse } from "@/client/types";
 import store from "@/store";
 import SignUpPage from "@/components/SignUpPage.vue";
 import nock from "nock";
+import TopBar from "@/components/TopBar.vue";
 
 const localVue = createLocalVue();
 localVue.use(VueMaterial);
@@ -35,7 +36,9 @@ localVue.use(VueMq, {
   defaultBreakpoint: "mobile"
 });
 
-const scope = nock("http://localhost:8088/");
+const baseURL = "http://localhost:8088/";
+
+const scope: nock.Scope = nock(baseURL);
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -44,6 +47,7 @@ function delay(ms: number) {
 describe("login.ts", () => {
   beforeEach(() => {
     store.commit("logout");
+    nock.cleanAll();
   });
 
   it("Sjekker om loginView inneholder en loginPage", () => {
@@ -98,6 +102,7 @@ describe("login.ts", () => {
       };
       scope.post("/login").reply(200, data2);
       await button.trigger("click");
+      await delay(300);
     } catch (error) {
       expect(error).toEqual("Already logged in");
     }
@@ -105,7 +110,10 @@ describe("login.ts", () => {
   it("Tester oppsett av SignUpView", () => {
     const wrapper = shallowMount(LoginView, {
       localVue,
-      router
+      router,
+      propsData: {
+        mode: "signUp"
+      }
     });
     expect(wrapper.findComponent(SignUpPage).exists()).toBe(true);
   });
@@ -143,5 +151,35 @@ describe("login.ts", () => {
     } catch (error) {
       expect(error).toEqual("Already logged in");
     }
+  });
+  it("Tester om logg ut knapp fungerer som forventet", async () => {
+    const wrapper = mount(LoginPage, {
+      localVue,
+      router,
+      data: () => ({
+        email: "test@test.no",
+        id: 3456
+      })
+    });
+    const loginButton = wrapper.findAll(".loginButton").at(0);
+    const data: LogInResponse = {
+      user: { firstname: "Per", lastname: "Jensen", id: 6 },
+      token: "3456"
+    };
+    scope.post("/login").reply(200, data);
+    await loginButton.trigger("click");
+    await delay(300);
+    expect(store.getters.token).toEqual("3456");
+    const wrapper2 = mount(TopBar, {
+      localVue,
+      router,
+      store
+    });
+    const logoutButton = wrapper2.findAll(".logoutButton").at(0);
+    expect(logoutButton.exists()).toEqual(true);
+    scope.post("/logout").reply(200);
+    await logoutButton.trigger("click");
+    await delay(330);
+    expect(store.getters.token).toEqual(null);
   });
 });
