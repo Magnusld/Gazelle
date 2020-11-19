@@ -6,7 +6,7 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage class="login" :invalidated="invalidated"/>
+      <LoginPage class="login" :invalidated="invalidated" />
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">

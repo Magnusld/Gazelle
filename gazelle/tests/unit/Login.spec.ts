@@ -6,7 +6,6 @@ import LoginPage from "@/components/LoginPage.vue";
 import VueRouter from "vue-router";
 import { LogInResponse } from "@/client/types";
 import store from "@/store";
-import SignUpView from "@/views/SignUpView.vue";
 import SignUpPage from "@/components/SignUpPage.vue";
 import nock from "nock";
 
@@ -104,12 +103,11 @@ describe("login.ts", () => {
     }
   });
   it("Tester oppsett av SignUpView", () => {
-    const wrapper = shallowMount(SignUpView, {
+    const wrapper = shallowMount(LoginView, {
       localVue,
       router
     });
     expect(wrapper.findComponent(SignUpPage).exists()).toBe(true);
-    expect(wrapper.find("#logo").exists()).toBe(true);
   });
   it("Tester oppretting av nye brukere", async () => {
     const wrapper = mount(SignUpPage, {
