@@ -116,9 +116,11 @@ export default class TopBar extends Vue {
   }
 
   private goToCourse(course: CourseResponse) {
-    this.$router.push(`/courses/${course.id}`).catch(() => {return;});
+    this.$router.push(`/courses/${course.id}`).catch(() => {
+      return;
+    });
     this.$nextTick(() => (this.selectedCourse = ""));
-}
+  }
 
   @Watch("$route")
   onRouteChange(): void {
