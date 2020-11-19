@@ -30,7 +30,7 @@ public class ApiTest {
         assertEquals(1, choreFullResponse.getCourseId());
         assertEquals("It-prosjekt", choreFullResponse.getCourseName());
 
-        assertTrue(choreFullResponse.equals(choreFullResponse));
+        assertEquals(choreFullResponse, choreFullResponse);
     }
 
     @Test
@@ -47,8 +47,7 @@ public class ApiTest {
         assertEquals(dueDate, choreResponse.getDueDate());
         assertEquals(progress, choreResponse.getProgress());
 
-        assertTrue(choreResponse.equals(choreResponse));
-        assertFalse(choreResponse.equals(null));
+        assertEquals(choreResponse, choreResponse);
     }
 
     @Test
@@ -64,8 +63,7 @@ public class ApiTest {
         assertEquals(false, courseContentResponse.getIsOwner());
         assertEquals(posts, courseContentResponse.getPosts());
 
-        assertTrue(courseContentResponse.equals(courseContentResponse));
-        assertFalse(courseContentResponse.equals(null));
+        assertEquals(courseContentResponse, courseContentResponse);
     }
 
     @Test
@@ -90,7 +88,6 @@ public class ApiTest {
         assertEquals(nextChoreDue, courseResponse.getNextChoreDue());
 
         assertEquals(courseResponse, courseResponse);
-        assertFalse(courseResponse.equals(null));
     }
 
     @Test
@@ -119,8 +116,8 @@ public class ApiTest {
 
         assertEquals(dueDate, newChoreRequest.getDueDate());
         newChoreRequest.setDueDate(LocalDate.now().plusWeeks(2));
-        assertFalse(newChoreRequest.getDueDate().equals(dueDate));
-        assertTrue(newChoreRequest.getDueDate().equals(LocalDate.now().plusWeeks(2)));
+        assertNotEquals(dueDate, newChoreRequest.getDueDate());
+        assertEquals(LocalDate.now().plusWeeks(2), newChoreRequest.getDueDate());
 
         assertEquals(newChoreRequest,newChoreRequest);
     }
