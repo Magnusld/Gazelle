@@ -74,18 +74,25 @@ public class GazelleController extends BaseController {
     @FXML
     public void showMyCourses() {
         setNavSelection(0);
-        courseListController.onShow();
+        courseListController.onShow(true);
         setCurrentScreen(courseListController);
     }
 
     @FXML
     public void showFollowedCourses() {
         setNavSelection(1);
+        courseListController.onShow(false);
+        setCurrentScreen(courseListController);
     }
 
     @FXML
     public void showFocusList() {
         setNavSelection(2);
+    }
+
+    public void showCourseScreen(Long courseId) {
+        setNavSelection(-1);
+        //TODO
     }
 
     /**

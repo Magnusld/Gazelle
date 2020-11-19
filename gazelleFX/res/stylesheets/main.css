@@ -54,16 +54,12 @@ Button.deleteIcon {
     -fx-border-color: #FE4A49;
 }
 
-Button.deleteIcon:hover {
-    -fx-background-color: #E66857;
-}
-
-Button.deleteIcon.deleteIconText {
+.deleteMode Button.deleteIcon {
     -fx-pref-width: 120;
 }
 
-Button.secondary {
-    -fx-background-color: #b7cde7;
+Button.deleteIcon:hover {
+    -fx-background-color: #E66857;
 }
 
 .separator {
@@ -78,10 +74,21 @@ Button.secondary {
     -fx-background-color:  #11BA52;
 }
 
-.course {
-    -fx-border-radius: 2;
+.courseItem {
+    -fx-border-radius: 3;
     -fx-border-color: rgba(0,0,0,0);
     -fx-padding: 2 5;
+    -fx-border-width: 3;
+}
+
+.deleteMode .courseItem {
+    -fx-background-color: #EEEEEE;
+    -fx-border-color: #CCCCCC;
+}
+
+.deleteMode .markedForDelete {
+    -fx-background-color: #FFAAAA;
+    -fx-border-color: #FF8888;
 }
 
 /* Specific to FXML files */
