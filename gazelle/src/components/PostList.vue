@@ -3,10 +3,15 @@
     <div class="horizontalSeparator">
       <div class="md-headline">{{ title }}</div>
       <div>
-        <div v-if="owner">
+        <div v-if="owner" class="centeredButton">
           <md-button class="md-icon-button" @click="$emit('newPost')">
             <md-icon>add</md-icon>
           </md-button>
+          <span v-if="deletable"
+            >Slett {{ postsToDelete.length }} post{{
+              postsToDelete.length === 1 ? "" : "er"
+            }}:</span
+          >
           <md-button class="md-icon-button" @click="deletePosts">
             <md-icon>delete</md-icon>
           </md-button>
@@ -118,9 +123,7 @@ export default class PostList extends Vue {
   align-items: center;
   height: 80vh;
 }
-.centeredButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.md-accent {
+  --md-theme-default-accent: #f29253;
 }
 </style>
