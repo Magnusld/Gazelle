@@ -3,16 +3,31 @@
     <div class="horizontalSeparator">
       <div class="md-headline">{{ title }}</div>
       <div>
-        <md-button
-          v-if="owner"
-          class="md-icon-button"
-          @click="$emit('newPost')"
-        >
-          <md-icon>add</md-icon>
-        </md-button>
-        <md-button v-if="owner" class="md-icon-button" @click="deletePosts">
-          <md-icon>delete</md-icon>
-        </md-button>
+        <div v-if="owner">
+          <md-button class="md-icon-button" @click="$emit('newPost')">
+            <md-icon>add</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" @click="deletePosts">
+            <md-icon>delete</md-icon>
+          </md-button>
+        </div>
+
+        <div v-else>
+          <md-button
+            v-if="follower"
+            class="md-accent md-raised centeredButton"
+            @click="$emit('unfollow')"
+          >
+            Fulgt
+          </md-button>
+          <md-button
+            v-else
+            class="md-primary md-raised centeredButton"
+            @click="$emit('setFollow')"
+          >
+            Følg
+          </md-button>
+        </div>
       </div>
     </div>
     <div class="posts" v-if="posts && posts.length > 0">
@@ -102,5 +117,10 @@ export default class PostList extends Vue {
   justify-content: center;
   align-items: center;
   height: 80vh;
+}
+.centeredButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

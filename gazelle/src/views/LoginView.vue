@@ -6,7 +6,8 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage class="login" />
+      <LoginPage v-if="mode === 'login'" class="form" />
+      <SignUpPage v-if="mode === 'signUp'" class="form" />
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">
@@ -27,22 +28,27 @@
       </div>
       <div id="divider"></div>
       <div class="wrapper">
-        <LoginPage />
+        <LoginPage v-if="mode === 'login'" class="form" />
+        <SignUpPage v-if="mode === 'signUp'" class="form" />
       </div>
     </mq-layout>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import LoginPage from "../components/LoginPage.vue";
+import SignUpPage from "@/components/SignUpPage.vue";
 
 @Component({
   components: {
-    LoginPage
+    LoginPage,
+    SignUpPage
   }
 })
-export default class LoginView extends Vue {}
+export default class LoginView extends Vue {
+  @Prop({ default: "login" }) private mode!: string | null;
+}
 </script>
 
 <style scoped>
@@ -81,7 +87,7 @@ export default class LoginView extends Vue {}
 }
 .logo {
 }
-.login {
+.form {
   position: relative;
 }
 .logoVertical {

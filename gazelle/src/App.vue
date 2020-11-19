@@ -58,7 +58,7 @@ body {
 .content {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 4rem;
+  margin-top: 1rem;
   max-width: 800px;
   width: 90%;
 }
