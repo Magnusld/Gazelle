@@ -5,7 +5,7 @@
       class="md-layout md-primary md-elevation-2 md-dense"
       id="topBar"
     >
-      <mq-layout :mq="['mobile', 'tablet']">
+      <mq-layout class="child" :mq="['mobile', 'tablet']">
         <div class="buttonContainer">
           <md-button class="md-icon-button" @click="showNavigation = true">
             <md-icon>menu</md-icon>
@@ -13,12 +13,7 @@
         </div>
       </mq-layout>
 
-      <mq-layout mq="laptop+" class="md-layout-item md-layout">
-        <div class="buttonContainer">
-          <md-button class="md-icon-button" to="/">
-            <img src="../assets/applogo.svg" alt="applogo" />
-          </md-button>
-        </div>
+      <mq-layout mq="laptop+" class="child md-layout-item md-layout">
         <md-tabs
           ref="tabs"
           class="md-primary"
@@ -42,8 +37,9 @@
           ></md-tab>
         </md-tabs>
       </mq-layout>
+
       <md-autocomplete
-        class="search md-primary"
+        class="child md-primary"
         v-model="selectedCourse"
         :md-options="courses"
         md-layout="box"
@@ -56,11 +52,18 @@
           <md-highlight-text :md-term="term">{{ item.name }}</md-highlight-text>
         </template>
       </md-autocomplete>
-      <div class="md-layout-item buttonContainer" id="userInfo">
+
+      <div class="md-layout-item child buttonContainer" id="userInfo">
         <md-button class="md-secondary" v-on:click="logout">Logg ut</md-button>
-        <md-button class="md-icon-button" to="/user-settings">
-          <md-icon>person</md-icon>
-        </md-button>
+        <mq-layout mq="laptop+">
+          <div>
+            {{
+              $store.getters.loggedInUser.firstName +
+                " " +
+                $store.getters.loggedInUser.lastName
+            }}
+          </div>
+        </mq-layout>
       </div>
     </md-toolbar>
 
@@ -70,14 +73,14 @@
       </md-toolbar>
 
       <md-list>
-        <md-list-item to="/">
-          <md-icon>home</md-icon>
-          <span class="md-list-item-text">Hjem</span>
-        </md-list-item>
-
         <md-list-item to="/my-courses">
           <md-icon>list</md-icon>
           <span class="md-list-item-text">Mine løp</span>
+        </md-list-item>
+
+        <md-list-item to="/followed-courses">
+          <md-icon>playlist_add_check</md-icon>
+          <span class="md-list-item-text">Fulgte løp</span>
         </md-list-item>
 
         <md-list-item to="/focus-list">
@@ -134,9 +137,16 @@ export default class TopBar extends Vue {
 </script>
 
 <style scoped lang="scss">
+#topBar {
+  display: flex;
+  justify-content: space-between;
+}
+.child {
+  width: 33%;
+}
 #navTabs {
   margin: 0;
-  width: 80%;
+  width: 100%;
   padding: 0;
 }
 .navigationButtons {
@@ -149,19 +159,12 @@ export default class TopBar extends Vue {
 }
 .buttonContainer {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
 }
 #userInfo {
-  float: right;
-  width: 25%;
+  justify-content: flex-end;
 }
 .md-list-item-text {
   color: black;
-}
-.search {
-  max-width: 500px;
-  width: 40%;
-  margin: 0;
 }
 </style>

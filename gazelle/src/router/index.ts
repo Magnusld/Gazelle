@@ -1,8 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RawLocation, Route, RouteConfig } from "vue-router";
 import FocusList from "@/views/FocusList.vue";
-import UserSettings from "@/views/UserSettings.vue";
-import Home from "@/views/Home.vue";
 import store, { LogInStatus } from "@/store";
 import LoginView from "@/views/LoginView.vue";
 import CoursePage from "@/views/CoursePage.vue";
@@ -15,11 +13,7 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "home",
-    component: Home,
-    meta: {
-      requiresAuth: true
-    }
+    redirect: "my-courses"
   },
   {
     path: "/my-courses",
@@ -44,14 +38,6 @@ const routes: Array<RouteConfig> = [
     path: "/focus-list",
     name: "Focus list",
     component: FocusList,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: "/user-settings",
-    name: "User settings",
-    component: UserSettings,
     meta: {
       requiresAuth: true
     }
