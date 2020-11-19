@@ -3,16 +3,15 @@
     <div class="horizontalSeparator">
       <div class="md-headline">{{ title }}</div>
       <div>
-        <md-button
-          v-if="owner"
-          class="md-icon-button"
-          @click="$emit('newPost')"
-        >
-          <md-icon>add</md-icon>
-        </md-button>
-        <md-button v-if="owner" class="md-icon-button" @click="deletePosts">
-          <md-icon>delete</md-icon>
-        </md-button>
+        <div v-if="owner">
+          <md-button class="md-icon-button" @click="$emit('newPost')">
+            <md-icon>add</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" @click="deletePosts">
+            <md-icon>delete</md-icon>
+          </md-button>
+        </div>
+
         <div v-else>
           <md-button
             v-if="follower"

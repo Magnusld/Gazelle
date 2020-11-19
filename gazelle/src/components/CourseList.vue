@@ -2,7 +2,7 @@
   <div>
     <div class="horizontalSeparator" v-if="courses && courses.length > 0">
       <span class="md-headline">{{ owner ? "Mine løp" : "Fulgte løp" }}</span>
-      <div>
+      <div v-if="owner">
         <md-button class="md-icon-button" @click="showNewCourseDialog">
           <md-icon>add</md-icon>
         </md-button>
