@@ -5,6 +5,8 @@ import gazelle.model.UserChoreProgress;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,4 +49,48 @@ public class ApiTest {
         assertTrue(choreResponse.equals(choreResponse));
         assertFalse(choreResponse.equals(null));
     }
+
+    @Test
+    public void courseContentResponse() {
+        CourseContentResponse.Builder builder = new CourseContentResponse.Builder();
+        List<PostResponse> posts = new ArrayList<>();
+        builder.id(1L).name("test").isFollower(true).isOwner(false).posts(posts);
+        CourseContentResponse courseContentResponse = builder.build();
+
+        assertEquals(1L, courseContentResponse.getId());
+        assertEquals("test", courseContentResponse.getName());
+        assertEquals(true, courseContentResponse.getIsFollower());
+        assertEquals(false, courseContentResponse.getIsOwner());
+        assertEquals(posts, courseContentResponse.getPosts());
+
+        assertTrue(courseContentResponse.equals(courseContentResponse));
+        assertFalse(courseContentResponse.equals(null));
+    }
+
+    @Test
+    public void courseResponse() {
+        CourseResponse.Builder builder = new CourseResponse.Builder();
+        PostResponse currentPost = new PostResponse();
+        PostResponse nextPost = new PostResponse();
+        PostResponse previousPost = new PostResponse();
+        ChoreResponse nextChoreDue = new ChoreResponse();
+        builder
+                .id(1L).name("test").isOwner(true).isFollower(false)
+                .currentPost(currentPost).nextPost(nextPost).previousPost(previousPost).nextChoreDue(nextChoreDue);
+        CourseResponse courseResponse = builder.build();
+
+        assertEquals(1L, courseResponse.getId());
+        assertEquals("test", courseResponse.getName());
+        assertEquals(true, courseResponse.getIsOwner());
+        assertEquals(false, courseResponse.getIsFollower());
+        assertEquals(currentPost, courseResponse.getCurrentPost());
+        assertEquals(nextPost, courseResponse.getNextPost());
+        assertEquals(previousPost, courseResponse.getPreviousPost());
+        assertEquals(nextChoreDue, courseResponse.getNextChoreDue());
+
+        assertTrue(courseResponse.equals(courseResponse));
+        assertFalse(courseResponse.equals(null));
+    }
+
+
 }
