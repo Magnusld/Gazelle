@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter, { RawLocation, Route, RouteConfig } from "vue-router";
-import MyCourses from "@/views/MyCourses.vue";
 import FocusList from "@/views/FocusList.vue";
 import UserSettings from "@/views/UserSettings.vue";
 import Home from "@/views/Home.vue";
@@ -9,6 +8,7 @@ import LoginView from "@/views/LoginView.vue";
 import CoursePage from "@/views/CoursePage.vue";
 import ErrorPage from "@/views/ErrorPage.vue";
 import PostView from "@/views/PostView.vue";
+import CoursesView from "@/views/CoursesView.vue";
 
 Vue.use(VueRouter);
 
@@ -24,7 +24,18 @@ const routes: Array<RouteConfig> = [
   {
     path: "/my-courses",
     name: "My courses",
-    component: MyCourses,
+    component: CoursesView,
+    props: { mode: "myCourses" },
+    meta: {
+      requiresAuth: true
+    }
+  },
+
+  {
+    path: "/followed-courses",
+    name: "Followed courses",
+    component: CoursesView,
+    props: { mode: "followedCourses" },
     meta: {
       requiresAuth: true
     }
