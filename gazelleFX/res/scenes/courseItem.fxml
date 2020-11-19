@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER_LEFT" onMouseClicked="#handleClick" prefWidth="500.0" styleClass="course" stylesheets="@../stylesheets/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gazelle.ui.CourseItemController">
+   <children>
+      <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT">
+         <children>
+            <Text fx:id="courseTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="TDT4120 – Algdat">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Region HBox.hgrow="ALWAYS" />
+            <Text fill="#fe4a49" strokeType="OUTSIDE" strokeWidth="0.0" text="Neste Frist: i dag">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text fill="#11ba52" strokeType="OUTSIDE" strokeWidth="0.0" text="Gjort: 11/16">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Pane styleClass="progressBar">
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Pane>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Forrige: Problemer og alroritmer">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Text>
+   </children>
+</VBox>

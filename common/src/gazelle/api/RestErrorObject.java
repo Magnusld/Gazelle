@@ -1,4 +1,4 @@
-package gazelle.server.error;
+package gazelle.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
