@@ -1,5 +1,6 @@
 package gazelle.server.endpoint;
 
+import gazelle.api.CourseContentResponse;
 import gazelle.api.CourseResponse;
 import gazelle.api.NewCourseRequest;
 import gazelle.model.Course;
@@ -63,19 +64,19 @@ public class CourseControllerTest {
             courseController.findById(5000L, null);
         });
 
-        CourseResponse response = courseController.findById(course1.getId(), null);
+        CourseContentResponse response = courseController.findById(course1.getId(), null);
         assertEquals(course1.getId(), response.getId());
-        assertNull(response.isOwner());
+        assertNull(response.getIsOwner());
 
         response = courseController.findById(course1.getId(), token1);
         assertEquals(course1.getId(), response.getId());
         assertEquals(course1.getName(), response.getName());
-        assertEquals(false, response.isOwner());
+        assertEquals(false, response.getIsOwner());
 
         response = courseController.findById(course2.getId(), token1);
         assertEquals(course2.getId(), response.getId());
         assertEquals(course2.getName(), response.getName());
-        assertEquals(true, response.isOwner());
+        assertEquals(true, response.getIsOwner());
     }
 
     @Test
@@ -90,8 +91,8 @@ public class CourseControllerTest {
         CourseResponse response = courseController.addNewCourse(course, token);
         assertNotNull(response.getId());
         assertEquals(course.getName(), response.getName());
-        assertEquals(true, response.isOwner());
-        assertEquals(false, response.isFollower());
+        assertEquals(true, response.getIsOwner());
+        assertEquals(false, response.getIsFollower());
         assertNull(response.getCurrentPost());
         assertNull(response.getNextPost());
 
@@ -113,7 +114,7 @@ public class CourseControllerTest {
         NewCourseRequest course = new NewCourseRequest("Testname");
         CourseResponse response = courseController.addNewCourse(course, localToken);
 
-        assertEquals(true, response.isOwner());
+        assertEquals(true, response.getIsOwner());
 
         assertThrows(MissingAuthorizationException.class, () -> {
             courseController.deleteCourse(response.getId(), null);

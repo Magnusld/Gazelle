@@ -63,7 +63,7 @@ export default class Post extends Vue {
   private startDate: Date = new Date();
   private endDate: Date = new Date();
 
-  private headline: string = this.new ? "Opprett post" : "Rediger post";
+  private headline: string = this.new ? "Opprett innlegg" : "Rediger innlegg";
   private nextKey = 0;
 
   async mounted() {

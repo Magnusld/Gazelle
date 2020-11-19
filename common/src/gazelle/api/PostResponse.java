@@ -56,7 +56,7 @@ public class PostResponse {
             return this;
         }
 
-        public Builder nextChoreDue(ChoreResponse nextChoreDue) {
+        public Builder nextChoreDue(@Nullable ChoreResponse nextChoreDue) {
             built.setNextChoreDue(nextChoreDue);
             return this;
         }

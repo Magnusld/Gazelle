@@ -114,6 +114,9 @@ public class PostController {
         builder.courseId(post.getCourse().getId());
         builder.courseName(post.getCourse().getName());
 
+        if (user != null)
+            builder.isOwning(courseAndUserService.isOwning(user, post.getCourse()));
+
         List<ChoreResponse> chores = new ArrayList<>();
         for (Chore c : post.getChores())
             chores.add(choreController.makeChoreResponse(c, user));
@@ -125,8 +128,9 @@ public class PostController {
 
     /**
      * Make a new Post object from the NewPostRequest in the specified course.
+     * Persists the post to give it an id.
      * Creates chore objects for all new chores.
-     * Adds the post to the course, which will persist it upon commit.
+     * Adds the post to the chore.
      *
      * @param r the NewPostRequest
      * @param course the Course the Post belongs to.
@@ -188,23 +192,6 @@ public class PostController {
             choreRepository.delete(oldChore);
         }
         post.setChores(choreList);
-    }
-
-    @GetMapping("/courses/{courseId}/posts")
-    @Transactional
-    public List<PostResponse> getPostsForCourse(
-            @PathVariable("courseId") Long courseId,
-            @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(CourseNotFoundException::new);
-        Iterable<Post> posts = postRepository.findByCourseOrderByStartDateAsc(course);
-        User user = null;
-        if (auth != null)
-            user = tokenAuthService.getUserObjectFromToken(auth);
-        List<PostResponse> responses = new ArrayList<>();
-        for (Post p : posts)
-            responses.add(makePostResponse(p, user));
-        return responses;
     }
 
     @GetMapping("/posts/{postId}")

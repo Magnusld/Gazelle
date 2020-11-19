@@ -1,8 +1,17 @@
 <template>
   <div v-if="post">
+    <div class="breadcrumb">
+      <router-link :to="`/courses/${post.courseId}`">{{
+        post.courseName
+      }}</router-link>
+      > {{ post.title }}
+    </div>
     <div class="horizontalSeparator">
       <span class="md-headline">{{ post.title }}</span>
-      <md-button class="md-primary md-raised" :to="`/posts/${id}?edit=true`"
+      <md-button
+        v-if="post.isOwning"
+        class="md-primary md-raised"
+        :to="`/posts/${id}?edit=true`"
         >Rediger post</md-button
       >
     </div>

@@ -23,6 +23,28 @@ export interface UserResponse {
   lastname: string;
 }
 
+export interface NewCourseRequest {
+  name: string;
+}
+
+export interface CourseResponse {
+  id: number;
+  name: string;
+  isOwner: boolean | null;
+  isFollower: boolean | null;
+  currentPost: PostResponse | null;
+  nextPost: PostResponse | null;
+  previousPost: PostResponse | null;
+}
+
+export interface CourseContentResponse {
+  id: number;
+  name: string;
+  isOwner: boolean | null;
+  isFollower: boolean | null;
+  posts: PostResponse[];
+}
+
 export interface NewPostRequest {
   title: string;
   description: string;
@@ -49,7 +71,16 @@ export interface PostContentResponse {
   startDate: LocalDate;
   endDate: LocalDate;
   courseId: number;
+  courseName: string;
+  isOwning: boolean | null;
   chores: ChoreResponse[];
+}
+
+export interface NewChoreRequest {
+  id: number | null;
+  key: number;
+  text: string;
+  dueDate: LocalDate | null;
 }
 
 export enum ChoreProgress {
@@ -64,24 +95,4 @@ export interface ChoreResponse {
   text: string;
   dueDate: LocalDate | null;
   progress: ChoreProgress | null;
-}
-export interface NewChoreRequest {
-  id: number | null;
-  key: number;
-  text: string;
-  dueDate: LocalDate | null;
-}
-
-export interface NewCourseRequest {
-  name: string;
-}
-
-export interface CourseResponse {
-  id: number;
-  name: string;
-  isOwner: boolean | null;
-  isFollower: boolean | null;
-  currentPost: PostResponse | null;
-  nextPost: PostResponse | null;
-  previousPost: PostResponse | null;
 }

@@ -6,7 +6,8 @@
         alt="Orange logo"
         class="logo logoVertical"
       />
-      <LoginPage class="login" :invalidated="invalidated" />
+      <LoginPage class="login" :invalidated="invalidated" v-if="mode === 'login'" class="form" />
+      <SignUpPage v-if="mode === 'signUp'" class="form" />
     </mq-layout>
     <mq-layout mq="laptop+" id="horizontal">
       <div class="wrapper info">
@@ -27,7 +28,12 @@
       </div>
       <div id="divider"></div>
       <div class="wrapper">
+<<<<<<< HEAD
         <LoginPage :invalidated="invalidated" />
+=======
+        <LoginPage v-if="mode === 'login'" class="form" />
+        <SignUpPage v-if="mode === 'signUp'" class="form" />
+>>>>>>> master
       </div>
     </mq-layout>
   </div>
@@ -36,15 +42,21 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import LoginPage from "../components/LoginPage.vue";
+import SignUpPage from "@/components/SignUpPage.vue";
 
 @Component({
   components: {
-    LoginPage
+    LoginPage,
+    SignUpPage
   }
 })
 export default class LoginView extends Vue {
+<<<<<<< HEAD
   @Prop({ default: false })
   private invalidated!: boolean;
+=======
+  @Prop({ default: "login" }) private mode!: string | null;
+>>>>>>> master
 }
 </script>
 
@@ -84,7 +96,7 @@ export default class LoginView extends Vue {
 }
 .logo {
 }
-.login {
+.form {
   position: relative;
 }
 .logoVertical {
