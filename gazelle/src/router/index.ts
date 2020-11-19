@@ -7,7 +7,6 @@ import Home from "@/views/Home.vue";
 import store, { LogInStatus } from "@/store";
 import LoginView from "@/views/LoginView.vue";
 import CoursePage from "@/views/CoursePage.vue";
-import SignUpView from "@/views/SignUpView.vue";
 import ErrorPage from "@/views/ErrorPage.vue";
 import PostView from "@/views/PostView.vue";
 
@@ -49,6 +48,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "Login Page",
+    props: { mode: "login" },
     component: LoginView,
     meta: {
       requiresLoggedOut: true
@@ -57,7 +57,8 @@ const routes: Array<RouteConfig> = [
   {
     path: "/signUp",
     name: "Sign Up Page",
-    component: SignUpView,
+    component: LoginView,
+    props: { mode: "signUp" },
     meta: {
       requiresLoggedOut: true
     }
