@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Watch, Vue } from "vue-property-decorator";
 import PostList from "@/components/PostList.vue";
 import { CourseContentResponse } from "@/client/types";
 import { findCourseById } from "@/client/course";
@@ -29,10 +29,10 @@ export default class CoursePage extends Vue {
     await this.listUpdate();
   }
 
+  @Watch("courseId")
   async listUpdate() {
     try {
       this.course = await findCourseById(this.courseId);
-      console.log(this.course);
     } catch (e) {
       //TODO: Proper try/catch
       console.log("Failed to get course:", e.message, e.status);
