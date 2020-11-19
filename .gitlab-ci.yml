@@ -1,5 +1,7 @@
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  _JAVA_OPTIONS: "-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw"
+
 
 default:
   image: maven:3.6-adoptopenjdk-14-openj9
@@ -9,6 +11,11 @@ default:
       - gazelle/node
       - gazelle/node_modules
       - .m2/repository
+  before_script:
+    - apt-get update
+    - apt-get install -y xvfb
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
 
 workflow: #Only run for changes pushed to branches
   rules:
