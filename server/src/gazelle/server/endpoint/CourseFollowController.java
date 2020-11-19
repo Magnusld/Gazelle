@@ -2,6 +2,7 @@ package gazelle.server.endpoint;
 
 import gazelle.api.CourseResponse;
 import gazelle.api.UserResponse;
+import gazelle.api.ValueWrapper;
 import gazelle.model.Course;
 import gazelle.model.User;
 import gazelle.server.error.*;
@@ -116,11 +117,11 @@ public class CourseFollowController {
     @PostMapping("/users/{userId}/followedCourses")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addCourseFollower(@PathVariable Long userId,
-                                  @RequestBody Long courseId,
+                                  @RequestBody ValueWrapper<Long> courseId,
                                   @RequestHeader(name = "Authorization", required = false)
                                   @Nullable String auth) {
         tokenAuthService.assertTokenForUser(userId, auth);
-        courseAndUserService.addFollower(userId, courseId);
+        courseAndUserService.addFollower(userId, courseId.getValue());
     }
 
     /**

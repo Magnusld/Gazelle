@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="horizontalSeparator" v-if="courses && courses.length > 0">
-      <span class="md-headline">Mine løp</span>
+      <span class="md-headline">{{ owner ? "Mine løp" : "Fulgte løp" }}</span>
       <div>
         <md-button class="md-icon-button" @click="showNewCourseDialog">
           <md-icon>add</md-icon>
@@ -25,11 +25,17 @@
         class="centered"
         md-icon="error"
         md-label="Ingen løp å vise"
-        md-description="Akkurat nå eier du ingen løp."
+        :md-description="
+          `Akkurat nå ${owner ? 'eier' : 'følger'} du ingen løp.`
+        "
       >
-        <md-button class="md-primary md-raised" @click="showNewCourseDialog"
+        <md-button
+          v-if="owner"
+          class="md-primary md-raised"
+          @click="showNewCourseDialog"
           >Lag løp</md-button
         >
+        <span v-else>Følg noen løp for å vise dem her</span>
       </md-empty-state>
     </div>
     <md-dialog :md-active.sync="showDialog">
@@ -55,8 +61,8 @@ import { addNewCourse, deleteCourse } from "@/client/course";
   components: { CourseListing }
 })
 export default class CourseList extends Vue {
-  @Prop({ default: null })
-  private courses!: CourseResponse[];
+  @Prop({ default: null }) private courses!: CourseResponse[];
+  @Prop({ default: false }) private owner!: boolean;
 
   private showDialog = false;
   private error = "";

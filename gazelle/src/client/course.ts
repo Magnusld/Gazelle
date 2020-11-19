@@ -40,8 +40,7 @@ export async function addCourseFollower(
   userId: number
 ): Promise<void> {
   return await restClient.post("/users/" + userId + "/followedCourses", {
-    userId,
-    courseId
+    value: courseId
   });
 }
 
@@ -69,8 +68,7 @@ export async function addCourseOwner(
   userId: number
 ): Promise<void> {
   return await restClient.post("/users/" + userId + "/ownedCourses", {
-    userId,
-    courseId
+    value: courseId
   });
 }
 
