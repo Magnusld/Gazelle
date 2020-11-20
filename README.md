@@ -17,7 +17,7 @@ Appen er delt inn i flere moduler: Webklient, JavaFX-klient, tjener og delt logi
  - Tjeneren er skrevet i Spring Boot og ligger i mappen `server/`
  - Delt logikk, slik som objekter og tekst-tolking ligger i `common/`
 
-Plant-uml (Må oppdateres)
+![PlantUML](/assets/architecture.png)
 
 Tjeneren tar seg av lagring og det meste av prosessering.
 Den har et REST-api som klientene bruker for å hente og sende data.
