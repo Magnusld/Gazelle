@@ -66,7 +66,7 @@ describe("CoursePageAndPostList test", () => {
         courseId: 2
       }
     });
-    await delay(300);
+    await delay(600);
     expect(wrapper.vm.$data.course).toEqual(data1);
     const pList = wrapper.findComponent(PostList);
     expect(pList.exists()).toEqual(true);
@@ -81,7 +81,7 @@ describe("CoursePageAndPostList test", () => {
     scope.delete("/posts/3").reply(200);
     scope.get("/courses/2").reply(200, data1);
     await pList.find(".deletePostButton").trigger("click");
-    await delay(300);
+    await delay(600);
     expect(pList.vm.$data.postsToDelete.length).toEqual(0);
     expect(pList.vm.$data.deletable).toEqual(false);
   });
@@ -120,7 +120,7 @@ describe("CoursePageAndPostList test", () => {
         courseId: 5
       }
     });
-    await delay(300);
+    await delay(600);
     expect(wrapper.vm.$data.course).toEqual(data1);
     const pList = wrapper.findComponent(PostList);
     expect(pList.exists()).toEqual(true);
@@ -136,12 +136,12 @@ describe("CoursePageAndPostList test", () => {
     scope.post("/users/4/followedCourses").reply(200);
     scope.get("/courses/5").reply(200, data3);
     await pList.find(".followButton").trigger("click");
-    await delay(300);
+    await delay(600);
     expect(pList.vm.$props.follower).toEqual(true);
     scope.delete("/users/4/followedCourses/5").reply(200);
     scope.get("/courses/5").reply(200, data1);
     await pList.find(".unFollowButton").trigger("click");
-    await delay(300);
+    await delay(600);
     expect(pList.vm.$props.follower).toEqual(false);
   });
 });

@@ -60,6 +60,7 @@ public class LoginFXTest extends ApplicationTest {
                                         + "{ \"id\":8, \"firstName\": \"food\", \"lastName\": \"test\"}}}")
                                 .withDelay(TimeUnit.MILLISECONDS, 50));
     }
+
     private void createExpectationForSignUp() {
         mockServer
                 .when(

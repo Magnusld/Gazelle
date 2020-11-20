@@ -50,7 +50,7 @@ describe("FocusView og FocusPost tester", () => {
       router,
       store
     });
-    await delay(300);
+    await delay(500);
     expect(wrapper.vm.$data.chores).toEqual(data);
     const fChore = wrapper.findAllComponents(FocusChore).at(0);
     expect(fChore.exists()).toEqual(true);
