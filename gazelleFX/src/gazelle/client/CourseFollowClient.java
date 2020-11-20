@@ -6,6 +6,7 @@ import gazelle.api.ValueWrapper;
 import gazelle.model.Course;
 
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import java.util.List;
 
 public class CourseFollowClient {
@@ -18,24 +19,25 @@ public class CourseFollowClient {
 
     public List<CourseResponse> getFollowedCourses(Long userId) {
         WebTarget path = session.path("/users/{userId}/followedCourses").resolveTemplate("userId", userId);
-        return Requester.get(session.authorizedPath(path), List.class);
+        return Requester.get(session.authorizedPath(path), new GenericType<List<CourseResponse>>() {});
     }
 
     public List<UserResponse> getCourseFollowers(Long courseId) {
         WebTarget path = session.path("/courses/{courseId}/followers").resolveTemplate("courseId", courseId);
-        return Requester.get(session.authorizedPath(path), List.class);
+        return Requester.get(session.authorizedPath(path), new GenericType<List<UserResponse>>() {});
     }
 
     public void addCourseFollower(Long userId, ValueWrapper<Long> courseId) {
         WebTarget path = session.path("/users/{userId}/followedCourses")
                 .resolveTemplate("userId", userId);
-        Requester.postWithResponse(
-                session.authorizedPath(path), courseId, void.class);
+        Requester.post(
+                session.authorizedPath(path), courseId);
     }
 
     public void removeCourseFollower(Long userId, Long courseId) {
         WebTarget path = session.path("/users/{userId}/followedCourses/{courseId}")
-                .resolveTemplate("userId", userId);
+                .resolveTemplate("userId", userId)
+                .resolveTemplate("courseId", courseId);
         Requester.delete(session.authorizedPath(path));
     }
 }
