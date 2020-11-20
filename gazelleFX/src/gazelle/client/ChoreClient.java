@@ -17,14 +17,16 @@ public class ChoreClient {
         this.session = session;
     }
 
-    public void setChoreState(Long choreId, Long userId, ValueWrapper<UserChoreProgress.Progress> value) {
+    public void setChoreState(Long choreId, Long userId, UserChoreProgress.Progress value) {
         WebTarget path = session.path("/users/{userId}/chores/{choreId}/progress")
                 .resolveTemplate("choreId", choreId).resolveTemplate("userId", userId);
-        Requester.put(session.authorizedPath(path), value);
+        Requester.put(session.authorizedPath(path), new ValueWrapper<>(value));
     }
 
     public List<ChoreFullResponse> getFocusedChores(Long userId) {
-        WebTarget path = session.path("/users/{userId}/focusedChores/").resolveTemplate("userId", userId);
-        return Requester.get(session.authorizedPath(path), new GenericType<List<ChoreFullResponse>>() {});
+        WebTarget path = session.path("/users/{userId}/focusedChores/")
+                .resolveTemplate("userId", userId);
+        return Requester.get(session.authorizedPath(path),
+                new GenericType<List<ChoreFullResponse>>() {});
     }
 }

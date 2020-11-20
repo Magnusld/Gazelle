@@ -31,6 +31,6 @@
          </VBox.margin>
       </Pane>
       <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" text="Beskrivelse" />
-      <VBox fx:id="list" spacing="10.0" />
+      <VBox fx:id="list" alignment="CENTER" spacing="10.0" />
    </children>
 </VBox>

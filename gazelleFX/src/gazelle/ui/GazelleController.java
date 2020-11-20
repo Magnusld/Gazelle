@@ -43,7 +43,7 @@ public class GazelleController extends BaseController {
         signUpController = SignUpController.load(this);
         courseListController = CourseListController.load(this);
         coursePageController = CoursePageController.load(this);
-        //postPageController = PostPageController.load(this);
+        postPageController = PostPageController.load(this);
         postEditController = PostEditController.load(this);
 
         showLogInScreen(); //TODO: Already logged in?

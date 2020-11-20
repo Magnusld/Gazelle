@@ -147,7 +147,6 @@ public class PostEditController extends BaseController {
         List<NewChoreRequest> chores = new ArrayList<>();
         for (ChoreEditController cec : choreEdits)
             chores.add(cec.makeNewChoreRequest());
-        System.out.println(chores.size());
 
         builder.chores(chores);
         NewPostRequest newPostRequest = builder.build();
@@ -160,7 +159,7 @@ public class PostEditController extends BaseController {
                 else {
                     postId = app.getClient().posts().addNewPost(courseId, newPostRequest).getId();
                 }
-                //app.mainRun(() -> app.showPostScreen(postId));
+                app.mainRun(() -> app.showPostScreen(postId));
             } catch (ClientException e) {
                 app.mainRun(() -> {
                     FxUtils.showAndWaitError("Klarte ikke lagre innlegg", e.getMessage());

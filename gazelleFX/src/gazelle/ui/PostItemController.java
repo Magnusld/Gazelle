@@ -9,13 +9,10 @@ public class PostItemController extends ListItemController<PostResponse> {
 
     @FXML
     private Text postTitle;
-
     @FXML
     private Text descriptionText;
-
     @FXML
     private Text doneText;
-
     @FXML
     private Text focusedText;
 
@@ -30,10 +27,10 @@ public class PostItemController extends ListItemController<PostResponse> {
         substring = substring.split("\\r?\\n")[0];
         descriptionText.setText(substring);
         doneText.setText("Gjort: " + post.getChoresDone() + "/" + post.getChoresCount());
-        if (post.getChoresFocused() > 0) {
-            focusedText.setText("(" + post.getChoresFocused() + " fokusert)");
-        }
-        else {
+        Integer focused = post.getChoresFocused();
+        if (focused != null && focused > 0) {
+            focusedText.setText("(" + focused + " fokusert)");
+        } else {
             focusedText.setText("");
         }
 

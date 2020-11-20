@@ -34,26 +34,33 @@ public class ChoreController extends BaseController {
         this.doneBox.setSelected(progress == UserChoreProgress.Progress.DONE);
         this.focusCheck.setSelected(progress == UserChoreProgress.Progress.FOCUSED);
         this.focusCheck.setVisible(progress != UserChoreProgress.Progress.DONE);
-        try {
-            app.sideRun(() -> {
-                app.getClient().
-            });
-        } catch (ClientException e) {
 
-        }
+        app.sideRun(() -> {
+            try {
+                Long userId = app.getClient().loggedInUserId();
+                app.getClient().chores().setChoreState(choreId, userId, progress);
+            } catch (ClientException e) {
+                FxUtils.showAndWaitError("Klarte ikke oppdatere oppgave", e.getMessage());
+                app.mainRun(app::showMyCourses);
+            }
+        });
     }
 
     @FXML
     public void onDoneChange() {
-
+        setState(doneBox.isSelected()
+                ? UserChoreProgress.Progress.DONE
+                : UserChoreProgress.Progress.UNDONE);
     }
 
     @FXML
     public void onFocusCheckChange() {
-
+        setState(focusCheck.isSelected()
+                ? UserChoreProgress.Progress.FOCUSED
+                : UserChoreProgress.Progress.UNDONE);
     }
 
-    public ChoreController load(GazelleController app) {
-        return loadFromFXML("scenes/chore.fxml", new ChoreController(app));
+    public static ChoreController load(GazelleController app) {
+        return loadFromFXML("/scenes/chore.fxml", new ChoreController(app));
     }
 }

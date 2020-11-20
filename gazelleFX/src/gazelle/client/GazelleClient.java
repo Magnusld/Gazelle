@@ -7,12 +7,14 @@ public class GazelleClient {
     private final LoginClient login;
     private final CourseClient courses;
     private final PostClient posts;
+    private final ChoreClient chores;
 
     public GazelleClient(String baseURL) {
         session = new GazelleSession(baseURL);
         login = new LoginClient(session);
         courses = new CourseClient(session);
         posts = new PostClient(session);
+        chores = new ChoreClient(session);
     }
 
     /**
@@ -37,6 +39,10 @@ public class GazelleClient {
 
     public PostClient posts() {
         return posts;
+    }
+
+    public ChoreClient chores() {
+        return chores;
     }
 
     /**
