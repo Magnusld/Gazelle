@@ -34,6 +34,7 @@ public class GazelleController extends BaseController {
     private CoursePageController coursePageController;
     private PostEditController postEditController;
     private PostPageController postPageController;
+    private FocusListController focusListController;
 
     @FXML
     private void initialize() {
@@ -45,6 +46,7 @@ public class GazelleController extends BaseController {
         coursePageController = CoursePageController.load(this);
         //postPageController = PostPageController.load(this);
         postEditController = PostEditController.load(this);
+        focusListController = FocusListController.load(this);
 
         showLogInScreen(); //TODO: Already logged in?
     }
@@ -94,6 +96,8 @@ public class GazelleController extends BaseController {
     @FXML
     public void showFocusList() {
         setNavSelection(2);
+        focusListController.onShow();
+        setCurrentScreen(focusListController);
     }
 
     @FXML
