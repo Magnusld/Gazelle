@@ -132,9 +132,8 @@ public class LoginFXTest extends ApplicationTest {
     }
 
     @Test
-    public void courseTest() throws InterruptedException {
+    public void do404Tests() throws InterruptedException {
         app.getClient().session().setLoggedIn("dommy-token", makeUserResponse());
-        createCoursesForUser();
         Platform.runLater(app::showMyCourses);
         Thread.sleep(3000);
         Platform.runLater(app::showFollowedCourses);

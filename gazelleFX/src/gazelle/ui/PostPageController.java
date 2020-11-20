@@ -49,8 +49,10 @@ public class PostPageController extends BaseController {
                     }
                 });
             } catch (ClientException e) {
-                FxUtils.showAndWaitError("Klarte ikke laste inn innlegg", e.getMessage());
-                app.mainRun(app::showMyCourses);
+                app.mainRun(() -> {
+                    FxUtils.showAndWaitError("Klarte ikke laste inn innlegg", e.getMessage());
+                    app.showMyCourses();
+                });
             }
         });
     }
