@@ -49,8 +49,10 @@ public class CourseListController extends ListController<CourseItemController, C
                     setItems(courses);
                 });
             } catch (ClientException e) {
-                FxUtils.showAndWaitError("Klarte ikke hente løpsliste", e.getMessage());
-                app.mainRun(app::showLogInScreen);
+                app.mainRun(() -> {
+                    FxUtils.showAndWaitError("Klarte ikke hente løpsliste", e.getMessage());
+                    app.showLogInScreen();
+                });
             }
         });
     }
@@ -91,10 +93,12 @@ public class CourseListController extends ListController<CourseItemController, C
             try {
                 for (CourseResponse course : toDelete)
                     app.getClient().courses().deleteCourse(course.getId());
-            } catch (ClientException e) {
-                FxUtils.showAndWaitError("Klarte ikke slette løp", e.getMessage());
-            } finally {
                 app.mainRun(this::refresh);
+            } catch (ClientException e) {
+                app.mainRun(() -> {
+                    FxUtils.showAndWaitError("Klarte ikke slette løp", e.getMessage());
+                    refresh();
+                });
             }
         });
     }
