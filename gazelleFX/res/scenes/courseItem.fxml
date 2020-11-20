@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -17,8 +18,6 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Text>
-            <Pane HBox.hgrow="ALWAYS" />
-            <Text fx:id="nextDueDateText" fill="#d71212" strokeType="OUTSIDE" strokeWidth="0.0" text="Neste frist: 2 dager" />
          </children>
       </HBox>
       <Text fx:id="currentText" strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)">
@@ -33,6 +32,7 @@
                   <Font size="14.0" />
                </font>
             </Text>
+            <Region HBox.hgrow="ALWAYS" />
             <Text fx:id="focusedText" fill="#fa8500" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="focusedText" text="(2 Fokusert)">
                <font>
                   <Font size="14.0" />
@@ -40,19 +40,19 @@
             </Text>
          </children>
       </HBox>
-      <Pane styleClass="progressBar">
-         <VBox.margin>
-            <Insets top="5.0" />
-         </VBox.margin>
-      </Pane>
-      <Text fx:id="previousText" strokeType="OUTSIDE" strokeWidth="0.0" text="Forrige: Problemer og alroritmer">
+      <Text fx:id="previousText" fill="#888888" strokeType="OUTSIDE" strokeWidth="0.0" text="Forrige: Problemer og alroritmer">
          <font>
             <Font size="14.0" />
          </font>
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets />
          </VBox.margin>
       </Text>
+      <Pane styleClass="separator" stylesheets="@../stylesheets/main.css">
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Pane>
    </children>
    <styleClass>
       <String fx:value="courseItem" />
