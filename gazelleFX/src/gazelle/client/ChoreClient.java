@@ -16,7 +16,8 @@ public class ChoreClient {
     }
 
     public void setChoreState(Long choreId, Long userId, ValueWrapper<UserChoreProgress.Progress> value) {
-        WebTarget path = session.path();
+        WebTarget path = session.path("/users/{userId}/chores/{choreId}/progress")
+                .resolveTemplate("choreId", choreId);
         Requester.put(session.authorizedPath(path), value);
     }
 
