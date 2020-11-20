@@ -158,4 +158,39 @@ describe("PostView tester", () => {
       "Beskrivelsen har blit endret på"
     );
   });
+  it("Teste PostView for viewing av post som follower", async () => {
+    const data: PostContentResponse = {
+      id: 1,
+      title: "TestPost",
+      description: "Dette er en test post",
+      startDate: "2020-11-19",
+      endDate: "2020-11-20",
+      courseId: 1,
+      courseName: "Test",
+      isOwning: false,
+      chores: [
+        {
+          id: 1,
+          key: 1,
+          text: "Dette er en test Chore",
+          dueDate: null,
+          progress: ChoreProgress.UNDONE
+        }
+      ]
+    };
+    scope.get("/posts/1").reply(200, data);
+    const wrapper = mount(PostView, {
+      localVue,
+      router,
+      store,
+      propsData: {
+        mode: "view",
+        id: 1
+      }
+    });
+    await delay(300);
+    const pComponent = wrapper.findComponent(PostComponent);
+    expect(pComponent.exists()).toEqual(true);
+    expect(pComponent.find(".editPostButton").exists()).toEqual(false);
+  });
 });
