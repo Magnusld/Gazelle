@@ -24,4 +24,17 @@ public class BaseController {
             throw new RuntimeException("Failed loading from FXML: " + fxmlPath, e);
         }
     }
+
+    public static <T extends BaseController> T loadFromFXML(String fxmlPath, T controller) {
+        try {
+            final FXMLLoader fxmlLoader =
+                    new FXMLLoader(BaseController.class.getResource(fxmlPath));
+            fxmlLoader.setController(controller);
+            Parent parent = fxmlLoader.load();
+            controller.node = parent;
+            return controller;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed loading from FXML: " + fxmlPath, e);
+        }
+    }
 }

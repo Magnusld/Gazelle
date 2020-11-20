@@ -16,14 +16,14 @@ public class AuthTest {
 
         assertEquals(request.getEmail(), email);
         request.setEmail("jrgentest@jrgensentest.no");
-        assertEquals(request.getEmail(),"jrgentest@jrgensentest.no");
+        assertEquals(request.getEmail(), "jrgentest@jrgensentest.no");
         
         assertEquals(request.getPassword(), password);
         request.setPassword("littMeirSikkert123");
         assertEquals(request.getPassword(), "littMeirSikkert123");
 
-        assertTrue(request.equals(request));
-        assertFalse(request.equals(null));
+        assertEquals(request, request);
+        assertNotEquals(request, null);
     }
 
     @Test
@@ -37,8 +37,8 @@ public class AuthTest {
         assertEquals(token, logInResponse.getToken());
 
         logInResponse.setToken("Bearer: xvalidy");
-        assertFalse(logInResponse.getToken().equals(token));
-        assertTrue(logInResponse.getToken().equals("Bearer: xvalidy"));
+        assertNotEquals(token, logInResponse.getToken());
+        assertEquals(logInResponse.getToken(), "Bearer: xvalidy");
 
         assertEquals(user, logInResponse.getUser());
 
@@ -47,25 +47,10 @@ public class AuthTest {
         UserResponse user2 = builder2.build();
         logInResponse.setUser(user2);
         assertEquals(logInResponse.getUser(), user2);
-        assertFalse(logInResponse.getUser().equals(user));
+        assertNotEquals(user, logInResponse.getUser());
 
-        assertTrue(logInResponse.equals(logInResponse));
-        assertFalse(logInResponse.equals(null));
-    }
-
-    @Test
-    public void logOutRequest() {
-        String token = "Bearer: validx";
-        LogOutRequest logOutRequest = new LogOutRequest(token);
-
-        assertEquals(logOutRequest.getToken(), token);
-
-        logOutRequest.setToken("Bearer: xvalidy");
-        assertFalse(logOutRequest.getToken().equals(token));
-        assertEquals(logOutRequest.getToken(), "Bearer: xvalidy");
-
-        assertTrue(logOutRequest.equals(logOutRequest));
-        assertFalse(logOutRequest.equals(null));
+        assertEquals(logInResponse, logInResponse);
+        assertNotEquals(logInResponse, null);
     }
 
     @Test
@@ -94,10 +79,9 @@ public class AuthTest {
         assertEquals(signUpRequest.getPassword(), "eglikarlego");
 
         User user = signUpRequest.buildUser();
-        assertTrue(user instanceof User);
 
-        assertTrue(signUpRequest.equals(signUpRequest));
-        assertFalse(signUpRequest.equals(null));
+        assertEquals(signUpRequest, signUpRequest);
+        assertNotEquals(signUpRequest, null);
     }
 
     @Test
@@ -105,7 +89,7 @@ public class AuthTest {
         UserFromTokenRequest user = new UserFromTokenRequest("Bearer: validx");
         assertEquals(user.getToken(), "Bearer: validx");
         user.setToken("Bearer: xvalidy");
-        assertFalse(user.getToken().equals("Bearer: validx"));
-        assertTrue(user.getToken().equals("Bearer: xvalidy"));
+        assertNotEquals(user.getToken(), "Bearer: validx");
+        assertEquals(user.getToken(), "Bearer: xvalidy");
     }
 }
