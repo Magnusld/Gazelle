@@ -94,7 +94,6 @@ export default class Post extends Vue {
   }
 
   private addChore = (): void => {
-    console.log(this.chores);
     this.chores.push({
       key: this.nextKey++,
       id: null,

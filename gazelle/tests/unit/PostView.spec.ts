@@ -63,11 +63,11 @@ describe("PostView tester", () => {
     expect(pEdit.vm.$data.chores.length).toEqual(1);
     await pEdit.vm.$forceUpdate();
     expect(pEdit.findAllComponents(ChoreListing).length).toEqual(1);
-    await pEdit
-      .findAllComponents(ChoreListing)
-      .at(0)
-      .find(".deleteChoreButton")
-      .trigger("click");
+    const cListing = pEdit.findAllComponents(ChoreListing).at(0);
+    expect(cListing.exists()).toEqual(true);
+    await cListing.setData({ description: "Dette er en TestChore" });
+    expect(cListing.vm.$props.chore.text).toEqual("Dette er en TestChore");
+    await cListing.find(".deleteChoreButton").trigger("click");
     expect(pEdit.vm.$data.chores.length).toEqual(0);
     scope.post("/courses/1/posts").reply(200);
     await pEdit.find(".sendPostButton").trigger("click");
