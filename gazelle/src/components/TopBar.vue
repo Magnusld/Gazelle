@@ -38,7 +38,7 @@
       </mq-layout>
 
       <md-autocomplete
-        class="child md-primary"
+        class="child md-primary searchBar"
         v-model="selectedCourse"
         :md-options="courses"
         md-layout="box"

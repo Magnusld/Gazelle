@@ -3,7 +3,7 @@ import VueMaterial from "vue-material";
 import VueRouter from "vue-router";
 import nock from "nock";
 import store from "@/store";
-import { UserResponse } from "@/client/types";
+import { CourseResponse, UserResponse } from "@/client/types";
 import TopBar from "@/components/TopBar.vue";
 import VueMq from "vue-mq";
 
@@ -33,9 +33,9 @@ localVue.use(VueMq, {
   defaultBreakpoint: "mobile"
 });
 
-// const baseURL = "http://localhost:8088/";
+const baseURL = "http://localhost:8088/";
 
-// const scope: nock.Scope = nock(baseURL);
+const scope: nock.Scope = nock(baseURL);
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -59,8 +59,24 @@ describe("Teste TopBar", () => {
       router,
       store
     });
-    await delay(300);
     expect(wrapper.find("#topBar").exists()).toEqual(true);
+    const data: CourseResponse[] = [
+      {
+        id: 1,
+        name: "TestCourse",
+        isOwner: null,
+        isFollower: null,
+        currentPost: null,
+        nextPost: null,
+        previousPost: null
+      }
+    ];
+    scope.get("/courses").reply(200, data);
+    // eslint-disable-next-line
+    // @ts-ignore
+    await wrapper.vm.loadCourses("");
+    await delay(300);
+    expect(wrapper.vm.$data.courses).toEqual(data);
   });
   it("Teste at TopBar ikke vises når bruker ikke logget inn", async () => {
     const wrapper = shallowMount(TopBar, {
