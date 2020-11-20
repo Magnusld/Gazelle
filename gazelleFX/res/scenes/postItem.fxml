@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER_LEFT" onMouseClicked="#handleClick" prefWidth="500.0" stylesheets="@../stylesheets/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT">
+         <children>
+            <Text fx:id="postTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="TDT4120 – Algdat">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Pane HBox.hgrow="ALWAYS" />
+            <Text fx:id="nextDueDateText" fill="#d71212" strokeType="OUTSIDE" strokeWidth="0.0" text="Neste frist: 2 dager" />
+         </children>
+      </HBox>
+      <Text fx:id="descriptionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <HBox spacing="5.0">
+         <children>
+            <Text fx:id="doneText" fill="#11ba52" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="doneText" text="Gjort: 11/16">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="focusedText" fill="#fa8500" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="focusedText" text="(2 Fokusert)">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <Pane styleClass="progressBar">
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Pane>
+   </children>
+   <styleClass>
+      <String fx:value="courseItem" />
+      <String fx:value="listItem" />
+   </styleClass>
+</VBox>

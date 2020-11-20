@@ -32,6 +32,9 @@ public class CourseControllerTest {
     private CourseController courseController;
 
     @Autowired
+    private ChoreController choreController;
+
+    @Autowired
     private CourseAndUserService courseAndUserService;
 
     @Autowired

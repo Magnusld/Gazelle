@@ -9,6 +9,9 @@ default:
       - gazelle/node
       - gazelle/node_modules
       - .m2/repository
+  before_script:
+    - apt-get update
+    - apt-get install -y xvfb libpangoft2-1.0-0
 
 workflow: #Only run for changes pushed to branches
   rules:
@@ -16,14 +19,14 @@ workflow: #Only run for changes pushed to branches
 
 test:
   stage: test
-  script: mvn verify
+  script: xvfb-run mvn "-DargLine=-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw" verify
   rules:
     - if: '$CI_COMMIT_BRANCH != "master"'
 
 deploy:
   stage: deploy
   script:
-    - mvn install
+    - xvfb-run mvn "-DargLine=-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw" install
     - mvn frontend:yarn@"yarn build" -pl gazelle
   artifacts:
     paths:
