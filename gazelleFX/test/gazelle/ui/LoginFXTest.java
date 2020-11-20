@@ -11,7 +11,12 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
+import java.beans.Transient;
 import java.util.concurrent.TimeUnit;
+
+import gazelle.api.UserResponse;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Her må vi sette opp ein MockServer fordi det meste av funksjonalitet
@@ -20,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class LoginFXTest extends ApplicationTest {
 
-    private ClientAndServer mockServer;
+    private ClientAndServer mockServer = ClientAndServer.startClientAndServer(8055);
 
     private Parent parent;
     private GazelleController app;
@@ -28,11 +33,12 @@ public class LoginFXTest extends ApplicationTest {
 
     @Override
     public void start(final Stage stage) throws Exception {
-        mockServer = ClientAndServer.startClientAndServer(8088);
         createExpectationForLogin();
         createCoursesForUser();
+        createExpectationForSignUp();
 
         app = GazelleController.load();
+        app.getClient().setBaseURL("http://localhost:8055");
         parent = app.getNode();
         stage.setScene(new Scene(parent));
         stage.show();
@@ -50,8 +56,22 @@ public class LoginFXTest extends ApplicationTest {
                                 .withHeaders(
                                         new Header("Content-Type", "application/json"))
                                 .withBody("{\"token\": \"dummy-token\", \"user\": "
-                                        + "{ \"id\":8, \"username\": \"food\","
-                                        + " \"password\":\"barf\" }}")
+                                        + "{ \"id\":8, \"firstName\": \"food\", \"lastName\": \"test\"}}}")
+                                .withDelay(TimeUnit.MILLISECONDS, 50));
+    }
+    private void createExpectationForSignUp() {
+        mockServer
+                .when(
+                        request()
+                                .withMethod("POST")
+                                .withPath("/signup"))
+                .respond(
+                        response()
+                                .withStatusCode(200)
+                                .withHeaders(
+                                        new Header("Content-Type", "application/json"))
+                                .withBody("{\"token\": \"dummy-token\", \"user\": "
+                                        + "{ \"id\":8, \"firstName\": \"food\", \"lastName\": \"test\"}}}")
                                 .withDelay(TimeUnit.MILLISECONDS, 50));
     }
 
@@ -72,19 +92,26 @@ public class LoginFXTest extends ApplicationTest {
 
     @Test
     public void loginTest() throws InterruptedException {
-        /*
-        clickOn("#username").write("food");
+        clickOn("#email").write("test@test.no");
         clickOn("#password").write("barf");
         clickOn("#login");
         Thread.sleep(5000);
         UserResponse user = app.getClient().session().getLoggedInUser();
-        assertEquals(user.getUsername(), "food");
-        */
+        assertTrue(user.getFirstName().equals("food"));
     }
 
     @Test
-    public void newCourseTest() {
-
+    public void signUpTest() throws InterruptedException {
+        clickOn("#signUpLink");
+        clickOn("#firstname").write("food");
+        clickOn("#lastname").write("test");
+        clickOn("#email").write("test@test.no");
+        clickOn("#password").write("barf");
+        clickOn("#password2").write("barf");
+        clickOn("#signup");
+        Thread.sleep(5000);
+        UserResponse user = app.getClient().session().getLoggedInUser();
+        assertTrue(user.getFirstName().equals("food"));
     }
 
     @Override
