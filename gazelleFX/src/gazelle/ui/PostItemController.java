@@ -16,7 +16,6 @@ public class PostItemController extends ListItemController<PostResponse> {
 
     protected void onItemChanged(PostResponse post) {
         postTitle.setText(post.getTitle());
-        //TODO
     }
 
     public static PostItemController load(CoursePageController parent) {

@@ -19,7 +19,7 @@
     <div class="errorMessage" v-if="error">{{ error }}</div>
     <div class="buttonBar">
       <md-button
-        class="md-raised md-primary"
+        class="md-raised md-primary loginButton"
         v-on:keyup.enter="login"
         v-on:click="login"
         >Logg inn</md-button
@@ -30,20 +30,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import router from "@/router";
 import { login } from "@/client/login";
 
 @Component
 export default class LoginPage extends Vue {
+  @Prop({ type: Boolean, default: false })
+  private invalidated!: boolean;
+
   private email = "";
   private password = "";
-  private error = "";
-
-  mounted() {
-    const reason = this.$route.query.reason;
-    if (reason == "invalidated") this.error = "Du har blitt logget ut";
-  }
+  private error = this.invalidated ? "Du har blitt logget ut" : "";
 
   private async login() {
     this.error = "";

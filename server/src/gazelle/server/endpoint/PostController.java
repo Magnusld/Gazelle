@@ -227,7 +227,8 @@ public class PostController {
 
     @PutMapping("/posts/{postId}")
     @Transactional
-    public PostContentResponse updateExistingPost(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateExistingPost(
             @PathVariable("postId") Long postId,
             @RequestBody NewPostRequest request,
             @RequestHeader(name = "Authorization", required = false) @Nullable String auth) {
@@ -238,7 +239,6 @@ public class PostController {
             throw new AuthorizationException("You don't own this course");
 
         updatePost(request, post);
-        return makePostContentResponse(post, user);
     }
 
     @DeleteMapping("/posts/{postId}")

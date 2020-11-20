@@ -3,16 +3,19 @@
     <div class="horizontalSeparator">
       <div class="md-headline">{{ title }}</div>
       <div>
-        <div v-if="owner" class="centeredButton">
+        <div v-if="owner" class="centeredButton addNewPostButton">
           <md-button class="md-icon-button" @click="$emit('newPost')">
             <md-icon>add</md-icon>
           </md-button>
           <span v-if="deletable"
             >Slett {{ postsToDelete.length }} post{{
               postsToDelete.length === 1 ? "" : "er"
-            }}:</span
+            }}:
+          </span>
+          <md-button
+            class="md-icon-button deletePostButton"
+            @click="deletePosts"
           >
-          <md-button class="md-icon-button" @click="deletePosts">
             <md-icon>delete</md-icon>
           </md-button>
         </div>
@@ -20,14 +23,14 @@
         <div v-else>
           <md-button
             v-if="follower"
-            class="md-accent md-raised centeredButton"
+            class="md-accent md-raised centeredButton unFollowButton"
             @click="$emit('unfollow')"
           >
             Fulgt
           </md-button>
           <md-button
             v-else
-            class="md-primary md-raised centeredButton"
+            class="md-primary md-raised centeredButton followButton"
             @click="$emit('setFollow')"
           >
             Følg

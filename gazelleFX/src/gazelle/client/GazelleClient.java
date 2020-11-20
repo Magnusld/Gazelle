@@ -6,11 +6,13 @@ public class GazelleClient {
     private final GazelleSession session;
     private final LoginClient login;
     private final CourseClient courses;
+    private final PostClient posts;
 
     public GazelleClient(String baseURL) {
         session = new GazelleSession(baseURL);
         login = new LoginClient(session);
         courses = new CourseClient(session);
+        posts = new PostClient(session);
     }
 
     /**
@@ -31,6 +33,10 @@ public class GazelleClient {
 
     public CourseClient courses() {
         return courses;
+    }
+
+    public PostClient posts() {
+        return posts;
     }
 
     /**

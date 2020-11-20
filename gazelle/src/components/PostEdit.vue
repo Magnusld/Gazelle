@@ -27,10 +27,12 @@
       v-on:remove="removeChore"
     />
     <div class="horizontalSeparator">
-      <md-button class="md-primary" v-on:click="addChore"
+      <md-button class="md-primary addChoreButton" v-on:click="addChore"
         >Legg til gjøremål</md-button
       >
-      <md-button class="md-raised md-primary" v-on:click="sendPost"
+      <md-button
+        class="md-raised md-primary sendPostButton"
+        v-on:click="sendPost"
         >Lagre</md-button
       >
     </div>
@@ -69,7 +71,6 @@ export default class Post extends Vue {
   async mounted() {
     if (!this.new) {
       const post: PostContentResponse = await getPostContent(this.id);
-      console.log(post);
       this.title = post.title;
       this.description = post.description;
       this.chores.push(
@@ -93,7 +94,6 @@ export default class Post extends Vue {
   }
 
   private addChore = (): void => {
-    console.log(this.chores);
     this.chores.push({
       key: this.nextKey++,
       id: null,
