@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Text?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <CheckBox fx:id="doneBox" mnemonicParsing="false" onAction="#onDoneChange" />
+      <Text fx:id="text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Region HBox.hgrow="ALWAYS" />
+      <CheckBox fx:id="focusCheck" mnemonicParsing="false" onAction="#onFocusCheckChange" text="Fokusert" />
+   </children>
+</HBox>
