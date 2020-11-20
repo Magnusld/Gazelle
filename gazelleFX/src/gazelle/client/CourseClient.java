@@ -51,7 +51,8 @@ public class CourseClient {
 
     public void addCourseFollower(Long userId, Long courseId) {
         WebTarget path = session.path("users/{userId}/followedCourses")
-                .resolveTemplate("userId", userId);
+                .resolveTemplate("userId", userId)
+                .resolveTemplate("courseId", courseId);
         Requester.post(session.authorizedPath(path), new ValueWrapper<>(courseId));
     }
 
