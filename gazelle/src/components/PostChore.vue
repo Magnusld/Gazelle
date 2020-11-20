@@ -5,7 +5,7 @@
         {{ chore.text }}
       </md-checkbox>
       <md-button
-        class="md-icon-button"
+        class="md-icon-button toggleFocusButton"
         v-if="!checked"
         :class="{ 'md-primary': isFocused, 'md-raised': isFocused }"
         v-on:click="toggleFocus"

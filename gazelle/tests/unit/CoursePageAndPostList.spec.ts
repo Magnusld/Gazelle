@@ -25,7 +25,7 @@ function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe("CoursePageAndPost test", () => {
+describe("CoursePageAndPostList test", () => {
   beforeEach(() => {
     store.commit("logout");
     nock.cleanAll();
