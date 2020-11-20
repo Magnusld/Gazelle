@@ -109,21 +109,20 @@ describe("PostView tester", () => {
     expect(pComponent.find(".editPostButton").exists()).toEqual(true);
     expect(pComponent.findAllComponents(PostChore).length).toEqual(1);
     const pChore = pComponent.findAllComponents(PostChore).at(0);
+    pChore.setData({ checked: false });
     expect(pChore.find(".toggleFocusButton").exists()).toEqual(true);
     scope.put("/users/1/chores/1/progress").reply(200);
     await pChore.find(".toggleFocusButton").trigger("click");
-    scope.put("/users/1/chores/1/progress").reply(200);
-    pChore.setProps({
-      chore: {
-        id: 1,
-        key: 1,
-        text: "Dette er en test Chore",
-        dueDate: null,
-        progress: ChoreProgress.DONE
-      }
-    });
-    await pChore.vm.$forceUpdate();
+    expect(pChore.vm.$data.isFocused).toEqual(true);
     await delay(300);
+    scope.put("/users/1/chores/1/progress").reply(200);
+    await pChore.setData({ checked: true });
+    await delay(300);
+    expect(pChore.vm.$data.checked).toEqual(true);
+    scope.put("/users/1/chores/1/progress").reply(200);
+    await pChore.setData({ checked: false });
+    await delay(300);
+    expect(pChore.vm.$data.isFocused).toEqual(false);
   });
   it("Teste at PostView oppfører seg som forventet for redigering av poster", async () => {
     const data: PostContentResponse = {

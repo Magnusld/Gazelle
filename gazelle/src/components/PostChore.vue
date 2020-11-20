@@ -27,8 +27,7 @@ import { setChoreState } from "@/client/chore";
 
 @Component
 export default class PostChore extends Vue {
-  @Prop()
-  private chore!: ChoreResponse;
+  @Prop() private chore!: ChoreResponse;
   private checked = this.chore.progress === ChoreProgress.DONE;
   private isFocused = this.chore.progress === ChoreProgress.FOCUSED;
 
