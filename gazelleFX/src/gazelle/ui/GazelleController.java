@@ -92,6 +92,11 @@ public class GazelleController extends BaseController {
         setNavSelection(2);
     }
 
+    @FXML
+    public void onSearchEntered() {
+        
+    }
+
     public void showCourseScreen(Long courseId) {
         setNavSelection(-1);
         coursePageController.onShow(courseId);
