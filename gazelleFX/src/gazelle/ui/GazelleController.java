@@ -31,6 +31,7 @@ public class GazelleController extends BaseController {
     private LogInController logInController;
     private SignUpController signUpController;
     private CourseListController courseListController;
+    private CoursePageController coursePageController;
 
     @FXML
     private void initialize() {
@@ -39,6 +40,7 @@ public class GazelleController extends BaseController {
         logInController = LogInController.load(this);
         signUpController = SignUpController.load(this);
         courseListController = CourseListController.load(this);
+        coursePageController = CoursePageController.load(this);
 
         showLogInScreen(); //TODO: Already logged in?
     }
@@ -92,7 +94,8 @@ public class GazelleController extends BaseController {
 
     public void showCourseScreen(Long courseId) {
         setNavSelection(-1);
-        //TODO
+        coursePageController.onShow(courseId);
+        setCurrentScreen(coursePageController);
     }
 
     /**

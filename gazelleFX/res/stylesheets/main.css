@@ -74,16 +74,24 @@ Button.deleteIcon:hover {
     -fx-background-color:  #11BA52;
 }
 
-.courseItem {
+.list {
+    -fx-max-width: 900;
+}
+
+.listItem {
     -fx-border-radius: 3;
     -fx-border-color: rgba(0,0,0,0);
     -fx-padding: 2 5;
     -fx-border-width: 3;
 }
 
-.deleteMode .courseItem {
+.deleteMode .listItem {
     -fx-background-color: #EEEEEE;
     -fx-border-color: #CCCCCC;
+}
+.deleteMode .listItem:hover {
+    -fx-background-color: #F3F3F3;
+    -fx-border-color: #DDDDDD;
 }
 
 .deleteMode .markedForDelete {
@@ -91,11 +99,12 @@ Button.deleteIcon:hover {
     -fx-border-color: #FF8888;
 }
 
-/* Specific to FXML files */
-.courseList {
-    -fx-max-width: 900;
+.deleteMode .markedForDelete:hover {
+    -fx-background-color: #FFAFAF;
+    -fx-border-color: #FF9494;
 }
 
+/* Specific to FXML files */
 .login, .signup {
     -fx-max-width: 500;
     -fx-margin: 70px 0 0 0;
