@@ -23,8 +23,6 @@ public class CourseItemController extends ListItemController<CourseResponse> {
     private Text focusedText;
     @FXML
     private Text previousText;
-    @FXML
-    private Text nextDueDateText;
 
     protected CourseItemController(CourseListController parent) {
         super(parent);
@@ -33,9 +31,9 @@ public class CourseItemController extends ListItemController<CourseResponse> {
     protected void onItemChanged(CourseResponse course) {
         courseTitle.setText(course.getName());
 
-        currentText.setText("");
         doneText.setText("");
         focusedText.setText("");
+        currentText.setText("");
         PostResponse currentPost = course.getCurrentPost();
         if (currentPost != null) {
             long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), currentPost.getEndDate()) + 1;
@@ -53,18 +51,6 @@ public class CourseItemController extends ListItemController<CourseResponse> {
         PostResponse previousPost = course.getPreviousPost();
         if (previousPost != null)
             previousText.setText(String.format("Forrige: %s", previousPost.getTitle()));
-
-        nextDueDateText.setText("");
-        ChoreResponse nextDue = course.getNextChoreDue();
-        if (nextDue != null) {
-            LocalDate due = nextDue.getDueDate();
-            long daysUntil = ChronoUnit.DAYS.between(LocalDate.now(), due);
-            if (daysUntil == 0) {
-                nextDueDateText.setText("Neste first: I dag!");
-            } else {
-                nextDueDateText.setText(String.format("Neste frist: %d dager", daysUntil));
-            }
-        }
     }
 
     public static CourseItemController load(CourseListController parent) {
