@@ -78,7 +78,7 @@ export default class Post extends Vue {
           key: chore.key,
           id: chore.id,
           text: chore.text,
-          dueDate: "2020-06-09"
+          dueDate: null
         }))
       );
       this.startDate = new Date(dateOfLocalDate(post.startDate));

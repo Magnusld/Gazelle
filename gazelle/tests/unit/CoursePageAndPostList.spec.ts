@@ -43,8 +43,8 @@ describe("CoursePageAndPostList test", () => {
         id: 3,
         title: "Test",
         description: "Test",
-        startDate: "2020-11-18",
-        endDate: "2020-11-19",
+        startDate: [0, 0, 0],
+        endDate: [0, 0, 0],
         choresDone: null,
         choresFocused: null,
         choresCount: 0
@@ -97,8 +97,8 @@ describe("CoursePageAndPostList test", () => {
         id: 6,
         title: "Test",
         description: "Test",
-        startDate: "2020-11-18",
-        endDate: "2020-11-19",
+        startDate: [0, 0, 0],
+        endDate: [0, 0, 0],
         choresDone: null,
         choresFocused: null,
         choresCount: 0

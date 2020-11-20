@@ -16,10 +16,10 @@
               :to="'/courses/' + course.id"
               >{{ course.name }}</router-link
             >
-            <div>Neste frist: I dag</div>
           </div>
-          <div v-if="course.currentPost != null" class="subheader">
-            Nå: {{ course.currentPost.title }} (Antall dager igjen)
+          <div v-if="getDaysUntil() !== undefined" class="subheader">
+            Nå: {{ course.currentPost.title }} ({{ getDaysUntil() }} dager
+            igjen)
           </div>
         </div>
 
@@ -55,6 +55,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { CourseResponse } from "@/client/types";
+import { daysUntil } from "@/client/date";
 
 @Component
 export default class CourseListing extends Vue {
@@ -68,6 +69,14 @@ export default class CourseListing extends Vue {
       courseResponse: this.course,
       isChecked: this.checked
     });
+  }
+
+  private getDaysUntil(): number | undefined {
+    if (this.course.currentPost) {
+      return daysUntil(this.course.currentPost?.endDate);
+    } else {
+      return undefined;
+    }
   }
 }
 </script>
