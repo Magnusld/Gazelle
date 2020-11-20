@@ -43,6 +43,10 @@ mvn verify
 For å se testdekningsgrad av javamodulene, gå til ```target/site/jacoco/index.html``` i hver modul.
 Testdekning på webappen ligger i ```gazelle/coverage/lcov-report/index.html```.
 
+**Merk**: I dette prosjektet har JavaFX-klienten relativt dårlig testdekningsgrad
+i forhold til de andre modulene. Dette skyldes fokuset vårt på Vue som frontend,
+og forvirring rundt oppgavekrav.
+
 ## CI / CD
 Alle grener testes automatisk i en GitLab Pipeline, for å hindre fletting av utestet kode.
 Feil i kodestil og kodekvalitet får også Pipelinen til å feile.
