@@ -13,9 +13,9 @@ For å bygge og teste prosjektet selv, fortsett å lese!
 ## Organisering
 Appen er delt inn i flere moduler: Webklient, JavaFX-klient, tjener og delt logikk.
  - Webklienten er skrevet med Vue og ligger i mappen `gazelle/`
- - JavaFX-klienten er skrevet i JavaFX og ligger i mappen `gazelleFX/`
+ - [JavaFX-klienten](gazelleFX/README.md) er skrevet i JavaFX og ligger i mappen `gazelleFX/`
  - Tjeneren er skrevet i Spring Boot og ligger i mappen `server/`
- - Delt logikk, slik som objekter og tekst-tolking ligger i `common/`
+ - [Delt logikk](common/README.md), slik som objekter og tekst-tolking ligger i `common/`
 
 ![PlantUML](/assets/architecture.png)
 
