@@ -18,13 +18,17 @@ public class CourseFollowClient {
     }
 
     public List<CourseResponse> getFollowedCourses(Long userId) {
-        WebTarget path = session.path("/users/{userId}/followedCourses").resolveTemplate("userId", userId);
-        return Requester.get(session.authorizedPath(path), new GenericType<List<CourseResponse>>() {});
+        WebTarget path = session.path("/users/{userId}/followedCourses")
+                .resolveTemplate("userId", userId);
+        return Requester.get(session.authorizedPath(path),
+                new GenericType<List<CourseResponse>>() {});
     }
 
     public List<UserResponse> getCourseFollowers(Long courseId) {
-        WebTarget path = session.path("/courses/{courseId}/followers").resolveTemplate("courseId", courseId);
-        return Requester.get(session.authorizedPath(path), new GenericType<List<UserResponse>>() {});
+        WebTarget path = session.path("/courses/{courseId}/followers")
+                .resolveTemplate("courseId", courseId);
+        return Requester.get(session.authorizedPath(path),
+                new GenericType<List<UserResponse>>() {});
     }
 
     public void addCourseFollower(Long userId, ValueWrapper<Long> courseId) {

@@ -28,7 +28,7 @@
             <Insets bottom="5.0" top="5.0" />
          </VBox.margin>
       </Pane>
-      <VBox fx:id="list" spacing="10.0">
+      <VBox fx:id="list" alignment="CENTER" spacing="10.0">
          <children>
             <TextField fx:id="title" promptText="Tittel" />
             <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" promptText="Beskrivelse" />
@@ -39,7 +39,7 @@
                   <DatePicker fx:id="endDate" minWidth="225.0" promptText="Sluttdato" />
                </children>
             </HBox>
-            <VBox fx:id="choresContainer" />
+            <VBox fx:id="choresContainer" alignment="CENTER" />
             <HBox spacing="10.0">
                <children>
                   <Button fx:id="addChore" minWidth="140.0" mnemonicParsing="false" onAction="#onAddChoreButton" text="Legg til gjøremål" />

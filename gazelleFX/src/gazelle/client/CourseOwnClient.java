@@ -19,13 +19,15 @@ public class CourseOwnClient {
     public List<CourseResponse> getOwnedCourses(Long userId) {
         WebTarget path = session.path("/users/{userId}/ownedCourses")
                 .resolveTemplate("userId", userId);
-        return Requester.get(session.authorizedPath(path), new GenericType<List<CourseResponse>>() {});
+        return Requester.get(session.authorizedPath(path),
+                new GenericType<List<CourseResponse>>() {});
     }
 
     public List<UserResponse> getCourseOwners(Long courseId) {
         WebTarget path = session.path("/courses/{courseId}/owners")
                 .resolveTemplate("courseId", courseId);
-        return Requester.get(session.authorizedPath(path), new GenericType<List<UserResponse>>() {});
+        return Requester.get(session.authorizedPath(path),
+                new GenericType<List<UserResponse>>() {});
     }
 
     public void addCourseOwner(Long userId, ValueWrapper<Long> courseId) {
