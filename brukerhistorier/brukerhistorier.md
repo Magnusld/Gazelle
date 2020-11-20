@@ -171,7 +171,7 @@ og ikke går glipp av noe
 * Klikke meg direkte inn på løpet fra denne listen og se den nye endringen.
 
 
-## Søkefelt (us-9) &ndash; Middels prioritet
+## Søkefelt (us-10) &ndash; Middels prioritet
 
 Som student eller faglærer ønsker jeg å kunne søke etter løp jeg har lyst
  å følge.
