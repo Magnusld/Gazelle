@@ -23,6 +23,6 @@
             <Insets bottom="10.0" top="10.0" />
          </VBox.margin>
       </Pane>
-      <VBox fx:id="list" spacing="10.0" />
+      <VBox fx:id="list" alignment="TOP_CENTER" spacing="10.0" />
    </children>
 </VBox>

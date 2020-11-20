@@ -22,8 +22,9 @@ public class PostItemController extends ListItemController<PostResponse> {
 
     protected void onItemChanged(PostResponse post) {
         postTitle.setText(post.getTitle());
-        String substring = post.getDescription().length() > 100 ? post.getDescription().substring(0, 100) :
-                post.getDescription();
+        String substring = post.getDescription().length() > 100
+                ? post.getDescription().substring(0, 100)
+                : post.getDescription();
         substring = substring.split("\\r?\\n")[0];
         descriptionText.setText(substring);
         doneText.setText("Gjort: " + post.getChoresDone() + "/" + post.getChoresCount());
