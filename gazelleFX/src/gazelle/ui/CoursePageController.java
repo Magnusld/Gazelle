@@ -1,10 +1,12 @@
 package gazelle.ui;
 
+import gazelle.api.CourseContentResponse;
 import gazelle.api.PostResponse;
 import gazelle.client.error.ClientException;
 import gazelle.ui.list.ListController;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CoursePageController extends ListController<PostItemController, PostResponse> {
 
@@ -18,7 +20,6 @@ public class CoursePageController extends ListController<PostItemController, Pos
 
     public void onShow(Long courseId) {
         this.courseId = courseId;
-        System.out.println(this.courseId);
         super.onFirstShow();
     }
 
@@ -36,13 +37,20 @@ public class CoursePageController extends ListController<PostItemController, Pos
 
     protected void requestListFill(boolean full) {
         app.sideRun(() -> {
-            /*Long userId = app.getClient().loggedInUserId();
-            List<PostResponse> courses =
-                    owner ? app.getClient().courses().getOwnedCourses(userId)
-                            : app.getClient().courses().getFollowedCourses(userId);
-            app.mainRun(() -> setItems(courses));*/
-            setOwnerMode(true);
-            setTitle("Test");
+            try {
+                CourseContentResponse course = app.getClient().courses().findById(courseId);
+                Boolean isOwner = course.getIsOwner();
+                Objects.requireNonNull(isOwner);
+
+                app.mainRun(() -> {
+                    setOwnerMode(isOwner);
+                    setTitle(course.getName());
+                    setItems(course.getPosts());
+                });
+            } catch (ClientException e) {
+                FxUtils.showAndWaitError("Klarte ikke hente løpet", e.getMessage());
+                app.mainRun(app::showMyCourses);
+            }
         });
     }
 
@@ -58,7 +66,7 @@ public class CoursePageController extends ListController<PostItemController, Pos
         app.sideRun(() -> {
             try {
                 for (PostResponse post : toDelete) {
-                    System.nanoTime(); //TODO
+                    app.getClient().posts().deletePost(post.getId());
                 }
             } catch (ClientException e) {
                 FxUtils.showAndWaitError("Klarte ikke slette løp", e.getMessage());

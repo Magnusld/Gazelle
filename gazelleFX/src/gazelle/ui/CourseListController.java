@@ -23,6 +23,7 @@ public class CourseListController extends ListController<CourseItemController, C
         this.ownerMode = ownerMode;
         super.onFirstShow();
         super.setTitle(ownerMode ? "Mine løp" : "Fulgte løp");
+        super.setOwnerMode(ownerMode);
     }
 
     protected String getNewButtonText() {
@@ -39,14 +40,18 @@ public class CourseListController extends ListController<CourseItemController, C
 
     protected void requestListFill(boolean full) {
         app.sideRun(() -> {
-            Long userId = app.getClient().loggedInUserId();
-            List<CourseResponse> courses =
-                    ownerMode ? app.getClient().courses().getOwnedCourses(userId)
-                            : app.getClient().courses().getFollowedCourses(userId);
-            app.mainRun(() -> {
-                setOwnerMode(ownerMode);
-                setItems(courses);
-            });
+            try {
+                Long userId = app.getClient().loggedInUserId();
+                List<CourseResponse> courses =
+                        ownerMode ? app.getClient().courses().getOwnedCourses(userId)
+                                : app.getClient().courses().getFollowedCourses(userId);
+                app.mainRun(() -> {
+                    setItems(courses);
+                });
+            } catch (ClientException e) {
+                FxUtils.showAndWaitError("Klarte ikke hente løpsliste", e.getMessage());
+                app.mainRun(app::showLogInScreen);
+            }
         });
     }
 

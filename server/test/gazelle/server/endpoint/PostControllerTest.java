@@ -55,20 +55,6 @@ public class PostControllerTest {
         courseAndUserService.addOwner(user1, course2.getId());
     }
 
-    //@Test
-    public void makePostResponse() {
-        User user = testHelper.createTestUserObject();
-        String token = testHelper.logInUser(user.getId());
-
-        PostResponse postResponse = postController.makePostResponse(post1, user);
-
-        assertEquals(postResponse.getId(), post1.getId());
-        assertEquals(postResponse.getDescription(), post1.getDescription());
-        assertEquals(postResponse.getTitle(), post1.getTitle());
-        assertEquals(postResponse.getStartDate(), DateHelper.localDateOfDate(post1.getStartDate()));
-        assertEquals(postResponse.getEndDate(), DateHelper.localDateOfDate(post1.getEndDate()));
-    }
-
     @Test
     public void getPostContent() {
         assertThrows(PostNotFoundException.class, () -> {
@@ -132,8 +118,8 @@ public class PostControllerTest {
 
         PostContentResponse original = postController.addNewPost(
                 courseResponse.getId(), originalPost, token);
-        PostContentResponse updated = postController.updateExistingPost(
-                original.getId(), updatedPost, token);
+        postController.updateExistingPost(original.getId(), updatedPost, token);
+        PostContentResponse updated = postController.getPostContent(original.getId(), token);
 
         assertEquals(original.getId(), updated.getId());
         assertEquals(original.getCourseId(), updated.getCourseId());
@@ -141,8 +127,8 @@ public class PostControllerTest {
         assertNotEquals(original.getDescription(), updated.getDescription());
 
         updatedPost.setChores(originalPost.getChores());
-        PostContentResponse updated2 = postController.updateExistingPost(
-                original.getId(), updatedPost, token);
+        postController.updateExistingPost(original.getId(), updatedPost, token);
+        PostContentResponse updated2 = postController.getPostContent(original.getId(), token);
 
         //Check that user is an owner
         assertTrue(courseAndUserService.isOwning(user, courseResponse.getId()));
