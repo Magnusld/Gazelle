@@ -36,11 +36,6 @@ mvn test
 Dette tester hver modul for seg.
 Klienter bruker derfor mock-servere for å simulere kommunikasjon med REST-apiet.
 
-Det finnes også noen få integrasjonstester for å sjekke kommunikasjon mellom programmene.
-```
-mvn integration-test
-```
-
 For å kompilere, teste, sjekke kodestil og kodekvalitet på hele prosjektet, skriv:
 ```
 mvn verify
