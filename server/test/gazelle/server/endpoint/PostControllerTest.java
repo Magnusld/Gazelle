@@ -7,6 +7,7 @@ import gazelle.model.User;
 import gazelle.server.TestHelper;
 import gazelle.server.error.*;
 import gazelle.server.service.CourseAndUserService;
+import gazelle.util.DateHelper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -64,8 +65,8 @@ public class PostControllerTest {
         assertEquals(postResponse.getId(), post1.getId());
         assertEquals(postResponse.getDescription(), post1.getDescription());
         assertEquals(postResponse.getTitle(), post1.getTitle());
-        assertEquals(postResponse.getStartDate(), post1.getStartDate());
-        assertEquals(postResponse.getEndDate(), post1.getEndDate());
+        assertEquals(postResponse.getStartDate(), DateHelper.localDateOfDate(post1.getStartDate()));
+        assertEquals(postResponse.getEndDate(), DateHelper.localDateOfDate(post1.getEndDate()));
     }
 
     @Test
@@ -105,7 +106,8 @@ public class PostControllerTest {
         assertThrows(AuthorizationException.class, () -> {
             PostContentResponse response = postController.addNewPost(course1.getId(), post, token);
         });
-        PostContentResponse response = postController.addNewPost(courseResponse.getId(), post, token);
+        PostContentResponse response = postController.addNewPost(
+                courseResponse.getId(), post, token);
         assertNotNull(response.getId());
         assertEquals(post.getTitle(), response.getTitle());
         assertEquals(true, response.getIsOwning());
@@ -128,8 +130,10 @@ public class PostControllerTest {
         NewPostRequest originalPost = testHelper.createTestNewPostRequest();
         NewPostRequest updatedPost = testHelper.createTestNewPostRequest();
 
-        PostContentResponse original = postController.addNewPost(courseResponse.getId(), originalPost, token);
-        PostContentResponse updated = postController.updateExistingPost(original.getId(), updatedPost, token);
+        PostContentResponse original = postController.addNewPost(
+                courseResponse.getId(), originalPost, token);
+        PostContentResponse updated = postController.updateExistingPost(
+                original.getId(), updatedPost, token);
 
         assertEquals(original.getId(), updated.getId());
         assertEquals(original.getCourseId(), updated.getCourseId());
@@ -137,7 +141,8 @@ public class PostControllerTest {
         assertNotEquals(original.getDescription(), updated.getDescription());
 
         updatedPost.setChores(originalPost.getChores());
-        PostContentResponse updated2 = postController.updateExistingPost(original.getId(), updatedPost, token);
+        PostContentResponse updated2 = postController.updateExistingPost(
+                original.getId(), updatedPost, token);
 
         //Check that user is an owner
         assertTrue(courseAndUserService.isOwning(user, courseResponse.getId()));
@@ -163,7 +168,8 @@ public class PostControllerTest {
             PostContentResponse response = postController.addNewPost(course1.getId(), post, token);
         });
 
-        PostContentResponse response = postController.addNewPost(courseResponse.getId(), post, token);
+        PostContentResponse response = postController.addNewPost(
+                courseResponse.getId(), post, token);
 
         assertThrows(MissingAuthorizationException.class, () -> {
             postController.deletePost(response.getId(), null);

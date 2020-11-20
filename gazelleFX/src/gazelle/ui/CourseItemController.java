@@ -1,5 +1,6 @@
 package gazelle.ui;
 
+import gazelle.api.ChoreResponse;
 import gazelle.api.CourseResponse;
 import gazelle.api.PostResponse;
 import gazelle.ui.list.ListController;
@@ -35,8 +36,8 @@ public class CourseItemController extends ListItemController<CourseResponse> {
         currentText.setText("");
         doneText.setText("");
         focusedText.setText("");
-        if (course.getCurrentPost() != null) {
-            PostResponse currentPost = course.getCurrentPost();
+        PostResponse currentPost = course.getCurrentPost();
+        if (currentPost != null) {
             long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), currentPost.getEndDate()) + 1;
             String current = String.format("Nå: %s (%d dager igjen)",
                     currentPost.getTitle(), daysLeft);
@@ -49,12 +50,14 @@ public class CourseItemController extends ListItemController<CourseResponse> {
         }
 
         previousText.setText("");
-        if (course.getPreviousPost() != null)
-            previousText.setText(String.format("Forrige: %s", course.getPreviousPost().getTitle()));
+        PostResponse previousPost = course.getPreviousPost();
+        if (previousPost != null)
+            previousText.setText(String.format("Forrige: %s", previousPost.getTitle()));
 
         nextDueDateText.setText("");
-        if (course.getNextChoreDue() != null) {
-            LocalDate due = course.getNextChoreDue().getDueDate();
+        ChoreResponse nextDue = course.getNextChoreDue();
+        if (nextDue != null) {
+            LocalDate due = nextDue.getDueDate();
             long daysUntil = ChronoUnit.DAYS.between(LocalDate.now(), due);
             if (daysUntil == 0) {
                 nextDueDateText.setText("Neste first: I dag!");

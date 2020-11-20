@@ -18,6 +18,7 @@ public class CoursePageController extends ListController<PostItemController, Pos
 
     public void onShow(Long courseId) {
         this.courseId = courseId;
+        System.out.println(this.courseId);
         super.onFirstShow();
     }
 
@@ -56,8 +57,9 @@ public class CoursePageController extends ListController<PostItemController, Pos
     protected void doDeletes(List<PostResponse> toDelete) {
         app.sideRun(() -> {
             try {
-                for (PostResponse post : toDelete);
-                    //app.getClient().courses().deleteCourse(course.getId());
+                for (PostResponse post : toDelete) {
+                    System.nanoTime(); //TODO
+                }
             } catch (ClientException e) {
                 FxUtils.showAndWaitError("Klarte ikke slette løp", e.getMessage());
             } finally {

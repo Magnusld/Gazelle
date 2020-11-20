@@ -1,9 +1,6 @@
 package gazelle.api;
 
-import gazelle.model.Chore;
 import gazelle.model.UserChoreProgress;
-import net.bytebuddy.asm.Advice;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -79,7 +76,8 @@ public class ApiTest {
         ChoreResponse nextChoreDue = new ChoreResponse();
         builder
                 .id(1L).name("test").isOwner(true).isFollower(false)
-                .currentPost(currentPost).nextPost(nextPost).previousPost(previousPost).nextChoreDue(nextChoreDue);
+                .currentPost(currentPost).nextPost(nextPost)
+                .previousPost(previousPost).nextChoreDue(nextChoreDue);
         CourseResponse courseResponse = builder.build();
 
         assertEquals(1L, courseResponse.getId());
@@ -123,7 +121,7 @@ public class ApiTest {
         assertNotEquals(dueDate, newChoreRequest.getDueDate());
         assertEquals(LocalDate.now().plusWeeks(2), newChoreRequest.getDueDate());
 
-        assertEquals(newChoreRequest,newChoreRequest);
+        assertEquals(newChoreRequest, newChoreRequest);
     }
 
     @Test
@@ -178,7 +176,7 @@ public class ApiTest {
         assertEquals(startDate, postContentResponse.getStartDate());
         assertEquals(endDate, postContentResponse.getEndDate());
         assertEquals(11L, postContentResponse.getCourseId());
-        assertEquals("courseTest",postContentResponse.getCourseName());
+        assertEquals("courseTest", postContentResponse.getCourseName());
         assertEquals(false, postContentResponse.getIsOwning());
         assertEquals(chores, postContentResponse.getChores());
 
@@ -221,15 +219,14 @@ public class ApiTest {
         assertEquals("Johansen", userResponse.getLastName());
 
         assertEquals(userResponse, userResponse);
-        assertFalse(userResponse.equals((int) 3));
     }
 
     @Test
     public void valueWrapper() {
-        ValueWrapper valueWrapper = new ValueWrapper(3);
-        assertEquals(3, valueWrapper.getValue());
+        ValueWrapper<String> valueWrapper = new ValueWrapper<>("Test");
+        assertEquals("Test", valueWrapper.getValue());
         valueWrapper.setValue("string");
-        assertNotEquals(3, valueWrapper.getValue());
+        assertNotEquals("Test", valueWrapper.getValue());
         assertEquals("string", valueWrapper.getValue());
     }
 }
