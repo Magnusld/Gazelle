@@ -55,11 +55,11 @@ public class CoursePageController extends ListController<PostItemController, Pos
     }
 
     protected void onItemSelected(PostResponse post) {
-        //app.showPostScreen(post.getId());
+        app.showPostScreen(post.getId());
     }
 
     protected void onNewButtonPressed() {
-        //app.showNewPostScreen(courseId);
+        app.showNewPostScreen(courseId);
     }
 
     protected void doDeletes(List<PostResponse> toDelete) {

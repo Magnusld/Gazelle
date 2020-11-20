@@ -12,12 +12,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" stylesheets="@../stylesheets/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox>
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rediger innlegg">
+            <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Rediger innlegg">
                <font>
                   <Font size="22.0" />
                </font>
@@ -41,11 +40,12 @@
                </children>
             </HBox>
             <VBox fx:id="choresContainer" />
-            <HBox>
+            <HBox spacing="10.0">
                <children>
-                  <Button fx:id="addChore" minWidth="120.0" mnemonicParsing="false" stylesheets="@../stylesheets/main.css" text="Legg til gjøremål" />
+                  <Button fx:id="addChore" minWidth="140.0" mnemonicParsing="false" onAction="#onAddChoreButton" text="Legg til gjøremål" />
                   <Region HBox.hgrow="ALWAYS" />
-                  <Button fx:id="savePost" minWidth="120.0" mnemonicParsing="false" stylesheets="@../stylesheets/main.css" text="Lagre" />
+                  <Button fx:id="cancel" mnemonicParsing="false" onAction="#onCancelButton" text="Avbryt" />
+                  <Button fx:id="savePost" minWidth="120.0" mnemonicParsing="false" onAction="#onSavePostButton" text="Lagre" />
                </children>
             </HBox>
          </children>

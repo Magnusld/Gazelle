@@ -7,11 +7,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TextField fx:id="choreText" HBox.hgrow="ALWAYS" />
-      <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteButtonClick" styleClass="deleteIcon" stylesheets="@../stylesheets/main.css">
+      <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonClick" styleClass="deleteIcon" stylesheets="@../stylesheets/main.css">
          <graphic>
             <ImageView fitHeight="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
