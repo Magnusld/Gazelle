@@ -10,7 +10,7 @@
       <span class="md-headline">{{ post.title }}</span>
       <md-button
         v-if="post.isOwning"
-        class="md-primary md-raised"
+        class="md-primary md-raised editPostButton"
         :to="`/posts/${id}?edit=true`"
         >Rediger post</md-button
       >

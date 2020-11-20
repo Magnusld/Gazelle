@@ -12,7 +12,6 @@
           </md-button>
         </div>
       </mq-layout>
-
       <mq-layout mq="laptop+" class="child md-layout-item md-layout">
         <md-tabs
           ref="tabs"
@@ -39,7 +38,7 @@
       </mq-layout>
 
       <md-autocomplete
-        class="child md-primary"
+        class="child md-primary searchBar"
         v-model="selectedCourse"
         :md-options="courses"
         md-layout="box"
@@ -54,9 +53,10 @@
           <md-highlight-text :md-term="term">{{ item.name }}</md-highlight-text>
         </template>
       </md-autocomplete>
-
       <div class="md-layout-item child buttonContainer" id="userInfo">
-        <md-button class="md-secondary" v-on:click="logout">Logg ut</md-button>
+        <md-button class="md-secondary logoutButton" v-on:click="logout"
+          >Logg ut</md-button
+        >
         <mq-layout mq="laptop+">
           <div>
             {{
@@ -103,7 +103,6 @@ import { findAllCourses } from "@/client/course";
 @Component
 export default class TopBar extends Vue {
   private showNavigation = false;
-  private activeTab: string | null = null;
   private selectedCourse: string | null = null;
   private courses: Promise<CourseResponse[]> | CourseResponse[] = [];
 
@@ -133,10 +132,6 @@ export default class TopBar extends Vue {
   @Watch("$route")
   onRouteChange(): void {
     this.showNavigation = false;
-    if (this.$route.path === "/my-courses") this.activeTab = "my-courses-tab";
-    else if (this.$route.path === "/focus-list")
-      this.activeTab = "focus-list-tab";
-    else this.activeTab = null;
   }
 }
 </script>

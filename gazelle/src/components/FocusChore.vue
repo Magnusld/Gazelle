@@ -14,7 +14,7 @@
         {{ chore.text }}
       </md-checkbox>
       <md-button
-        class="md-icon-button"
+        class="md-icon-button toggleFocusButton"
         v-if="!checked"
         :class="{ 'md-primary': isFocused, 'md-raised': isFocused }"
         v-on:click="toggleFocus"
@@ -36,8 +36,7 @@ import { setChoreState } from "@/client/chore";
 
 @Component
 export default class FocusChore extends Vue {
-  @Prop()
-  private chore!: ChoreFullResponse;
+  @Prop() private chore!: ChoreFullResponse;
   private checked = this.chore.progress === ChoreProgress.DONE;
   private isFocused = this.chore.progress === ChoreProgress.FOCUSED;
 

@@ -8,7 +8,10 @@
         md-counter="200"
       ></md-textarea>
     </md-field>
-    <md-button v-on:click="$emit('remove', chore)" class="md-icon-button">
+    <md-button
+      v-on:click="$emit('remove', chore)"
+      class="md-icon-button deleteChoreButton"
+    >
       <md-icon>clear</md-icon>
     </md-button>
   </div>
@@ -21,8 +24,7 @@ import { ChoreResponse } from "@/client/types";
 @Component
 export default class ChoreListing extends Vue {
   private description = "";
-  @Prop()
-  private chore!: ChoreResponse;
+  @Prop() private chore!: ChoreResponse;
 
   mounted() {
     if (this.chore.text) {
