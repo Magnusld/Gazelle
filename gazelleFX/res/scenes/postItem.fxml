@@ -12,7 +12,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT">
          <children>
-            <Text fx:id="courseTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="TDT4120 – Algdat">
+            <Text fx:id="postTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="TDT4120 – Algdat">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -21,7 +21,7 @@
             <Text fx:id="nextDueDateText" fill="#d71212" strokeType="OUTSIDE" strokeWidth="0.0" text="Neste frist: 2 dager" />
          </children>
       </HBox>
-      <Text fx:id="currentText" strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)">
+      <Text fx:id="descriptionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Nå: Datastrukturer (4 dager igjen)">
          <font>
             <Font size="14.0" />
          </font>
@@ -45,14 +45,6 @@
             <Insets top="5.0" />
          </VBox.margin>
       </Pane>
-      <Text fx:id="previousText" strokeType="OUTSIDE" strokeWidth="0.0" text="Forrige: Problemer og alroritmer">
-         <font>
-            <Font size="14.0" />
-         </font>
-         <VBox.margin>
-            <Insets top="10.0" />
-         </VBox.margin>
-      </Text>
    </children>
    <styleClass>
       <String fx:value="courseItem" />

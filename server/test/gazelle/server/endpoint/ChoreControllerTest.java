@@ -1,13 +1,9 @@
 package gazelle.server.endpoint;
 
 import gazelle.api.*;
-import gazelle.model.Course;
-import gazelle.model.Post;
-import gazelle.model.User;
 import gazelle.model.UserChoreProgress;
+import gazelle.model.UserChoreProgress.Progress;
 import gazelle.server.TestHelper;
-import gazelle.server.error.AuthorizationException;
-import gazelle.server.error.InvalidTokenException;
 import gazelle.server.error.UnprocessableEntityException;
 import gazelle.server.service.CourseAndUserService;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,22 +39,19 @@ public class ChoreControllerTest {
     @Autowired
     private TestHelper testHelper;
 
-    private NewPostRequest post;
-    private NewCourseRequest course;
-    private CourseResponse courseResponse;
     private PostContentResponse postContentResponse;
-    private User user;
+    private Long user;
     private String token;
 
     @BeforeAll
     public void setup() {
-        user = testHelper.createTestUserObject();
-        token = testHelper.logInUser(user.getId());
+        user = testHelper.createTestUser();
+        token = testHelper.logInUser(user);
 
-        course = new NewCourseRequest("Testname");
-        courseResponse = courseController.addNewCourse(course, token);
+        NewCourseRequest course = new NewCourseRequest("Testname");
+        CourseResponse courseResponse = courseController.addNewCourse(course, token);
 
-        post = testHelper.createTestNewPostRequest();
+        NewPostRequest post = testHelper.createTestNewPostRequest();
         postContentResponse = postController.addNewPost(courseResponse.getId(), post, token);
     }
 
@@ -66,31 +59,31 @@ public class ChoreControllerTest {
     public void setChoreState() {
         assertThrows(UnprocessableEntityException.class, () -> {
             choreController.setChoreState(postContentResponse.getChores().iterator().next().getId(),
-                    user.getId(),
+                    user,
                     new ValueWrapper<>(null),
                     token);
         });
 
         choreController.setChoreState(postContentResponse.getChores().iterator().next().getId(),
-                user.getId(),
-                new ValueWrapper<>(UserChoreProgress.Progress.FOCUSED),
+                user,
+                new ValueWrapper<>(Progress.FOCUSED),
                 token);
         postContentResponse = postController.getPostContent(postContentResponse.getId(), token);
-        assertEquals(postContentResponse.getChores().get(0).getProgress(), UserChoreProgress.Progress.FOCUSED);
+        assertEquals(postContentResponse.getChores().get(0).getProgress(), Progress.FOCUSED);
 
         choreController.setChoreState(postContentResponse.getChores().iterator().next().getId(),
-                user.getId(),
-                new ValueWrapper<>(UserChoreProgress.Progress.UNDONE),
+                user,
+                new ValueWrapper<>(Progress.UNDONE),
                 token);
         postContentResponse = postController.getPostContent(postContentResponse.getId(), token);
-        assertEquals(postContentResponse.getChores().get(0).getProgress(), UserChoreProgress.Progress.UNDONE);
+        assertEquals(postContentResponse.getChores().get(0).getProgress(), Progress.UNDONE);
 
         choreController.setChoreState(postContentResponse.getChores().iterator().next().getId(),
-                user.getId(),
+                user,
                 new ValueWrapper<>(UserChoreProgress.Progress.DONE),
                 token);
         postContentResponse = postController.getPostContent(postContentResponse.getId(), token);
-        assertEquals(postContentResponse.getChores().get(0).getProgress(), UserChoreProgress.Progress.DONE);
+        assertEquals(postContentResponse.getChores().get(0).getProgress(), Progress.DONE);
 
         testHelper.deleteTestUser(user);
     }
@@ -98,28 +91,28 @@ public class ChoreControllerTest {
     @Test
     public void getFocusedChores() {
         choreController.setChoreState(postContentResponse.getChores().get(0).getId(),
-                user.getId(),
-                new ValueWrapper<>(UserChoreProgress.Progress.UNDONE),
+                user,
+                new ValueWrapper<>(Progress.UNDONE),
                 token);
         choreController.setChoreState(postContentResponse.getChores().get(1).getId(),
-                user.getId(),
-                new ValueWrapper<>(UserChoreProgress.Progress.UNDONE),
+                user,
+                new ValueWrapper<>(Progress.UNDONE),
                 token);
-        List<ChoreFullResponse> response = choreController.getFocusedChores(user.getId(), token);
+        List<ChoreFullResponse> response = choreController.getFocusedChores(user, token);
         assertEquals(0, response.size());
 
         choreController.setChoreState(postContentResponse.getChores().get(0).getId(),
-                user.getId(),
-                new ValueWrapper<>(UserChoreProgress.Progress.FOCUSED),
+                user,
+                new ValueWrapper<>(Progress.FOCUSED),
                 token);
-        response = choreController.getFocusedChores(user.getId(), token);
+        response = choreController.getFocusedChores(user, token);
         assertEquals(1, response.size());
 
         choreController.setChoreState(postContentResponse.getChores().get(1).getId(),
-                user.getId(),
-                new ValueWrapper<>(UserChoreProgress.Progress.FOCUSED),
+                user,
+                new ValueWrapper<>(Progress.FOCUSED),
                 token);
-        response = choreController.getFocusedChores(user.getId(), token);
+        response = choreController.getFocusedChores(user, token);
         assertEquals(2, response.size());
     }
 

@@ -97,7 +97,8 @@ public class TestHelper {
      * @return the posts object
      */
     public Post createTestPostObject(Course course) {
-        Post post = new Post(makeRandomString(), makeRandomString(), course, new Date(), new Date());
+        Post post = new Post(makeRandomString(), makeRandomString(), course,
+                new Date(), new Date());
         return postRepository.save(post);
     }
 
@@ -130,8 +131,7 @@ public class TestHelper {
     }
 
     public NewChoreRequest createTestNewChoreRequest() {
-        NewChoreRequest choreRequest = new NewChoreRequest(null, 5000L, makeRandomString(),
+        return new NewChoreRequest(null, 5000L, makeRandomString(),
                 DateHelper.localDateOfDate(new Date()));
-        return choreRequest;
     }
 }

@@ -15,7 +15,8 @@ public class Requester {
             RestErrorObject obj = response.readEntity(RestErrorObject.class);
             return new ClientException(obj.getMessage());
         } catch (Exception e) {
-            return new ClientException("failed to decode error", response);
+            return new ClientException("failed to decode error", response.getStatus(),
+                    e.getMessage());
         }
     }
 

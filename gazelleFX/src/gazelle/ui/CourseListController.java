@@ -1,71 +1,60 @@
 package gazelle.ui;
 
 import gazelle.api.CourseResponse;
-import gazelle.api.UserResponse;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.VBox;
+import gazelle.api.NewCourseRequest;
+import gazelle.client.error.ClientException;
+import gazelle.ui.list.ListController;
+import javafx.scene.control.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class CourseListController extends BaseController {
+public class CourseListController extends ListController<CourseItemController, CourseResponse> {
 
-    @FXML
-    public Button newCourse;
-    @FXML
-    private Button deleteCourse;
-    @FXML
-    private VBox courseList;
-    private final ArrayList<CourseItemController> controllers = new ArrayList<>();
+    private final GazelleController app;
 
-    private GazelleController app;
+    private boolean ownerMode;
 
-    @FXML
-    private void initialize() throws IOException {}
+    private CourseListController(GazelleController app) {
+        this.app = app;
+    }
 
-    public void onShow() {
-        clearView();
+    public void onShow(boolean ownerMode) {
+        this.ownerMode = ownerMode;
+        super.onFirstShow();
+        super.setTitle(ownerMode ? "Mine løp" : "Fulgte løp");
+    }
+
+    protected String getNewButtonText() {
+        return "Nytt løp";
+    }
+
+    protected String getDeleteText(int count) {
+        return String.format("Slett %d løp", count);
+    }
+
+    protected CourseItemController makeNewItemController() {
+        return CourseItemController.load(this);
+    }
+
+    protected void requestListFill(boolean full) {
         app.sideRun(() -> {
             Long userId = app.getClient().loggedInUserId();
-            List<CourseResponse> courses = app.getClient().courses().getOwnedCourses(userId);
-            app.mainRun(() -> setCourses(courses));
+            List<CourseResponse> courses =
+                    ownerMode ? app.getClient().courses().getOwnedCourses(userId)
+                            : app.getClient().courses().getFollowedCourses(userId);
+            app.mainRun(() -> {
+                setOwnerMode(ownerMode);
+                setItems(courses);
+            });
         });
     }
 
-    public void clearView() {
-        courseList.setVisible(false); //TODO: Add spinner
+    protected void onItemSelected(CourseResponse course) {
+        app.showCourseScreen(course.getId());
     }
 
-    public void setCourses(List<CourseResponse> courses) {
-        // Make enough controllers
-        while (controllers.size() < courses.size())
-            controllers.add(CourseItemController.load(this));
-
-        // Remove extra controllers
-        controllers.subList(courses.size(), controllers.size()).clear();
-
-        // Assign a course per controller
-        for (int i = 0; i < courses.size(); i++)
-            controllers.get(i).setCourse(courses.get(i));
-
-        // Set list content to the controllers
-        courseList
-                .getChildren()
-                .setAll(controllers.stream()
-                        .map(BaseController::getNode)
-                        .collect(Collectors.toList()));
-
-        courseList.setVisible(true);
-        deleteCourse.setVisible(!courses.isEmpty());
-    }
-
-    @FXML
-    public void handleNewCourseClick() {
+    protected void onNewButtonPressed() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nytt løp");
         dialog.setContentText("Navn");
@@ -77,32 +66,35 @@ public class CourseListController extends BaseController {
         if (name.isBlank())
             return;
 
-        clearView();
-
+        setFreeze(true);
         app.sideRun(() -> {
-            /*try {
-                Course course = new Course(name);
-                course = app.getSession().postNewCourse(course);
-                User user = app.getSession().getLoggedInUser();
-                app.getSession()
-                        .setUserRoleForCourse(user, course, CourseRoleType.OWNER);
-            } catch (Exception e) {
-                //TODO: Tell user that something went wrong
-                throw e;
-            } finally {
-                app.mainRun(this::onShow);
-            }*/
+            try {
+                NewCourseRequest newCourseRequest = new NewCourseRequest(name);
+                app.getClient().courses().addNewCourse(newCourseRequest);
+                app.mainRun(this::refresh);
+            } catch (ClientException e) {
+                app.mainRun(() -> {
+                    FxUtils.showAndWaitError("Klarte ikke lage løp", e.getMessage());
+                    setFreeze(false);
+                });
+            }
         });
     }
 
-    @FXML
-    public void handleDeleteCourseClick() {
-
+    protected void doDeletes(List<CourseResponse> toDelete) {
+        app.sideRun(() -> {
+            try {
+                for (CourseResponse course : toDelete)
+                    app.getClient().courses().deleteCourse(course.getId());
+            } catch (ClientException e) {
+                FxUtils.showAndWaitError("Klarte ikke slette løp", e.getMessage());
+            } finally {
+                app.mainRun(this::refresh);
+            }
+        });
     }
 
     public static CourseListController load(GazelleController app) {
-        CourseListController controller = loadFromFXML("/scenes/courseList.fxml");
-        controller.app = app;
-        return controller;
+        return loadFromFXML("/scenes/list.fxml", new CourseListController(app));
     }
 }
