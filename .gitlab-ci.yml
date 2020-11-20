@@ -1,5 +1,5 @@
 variables:
-  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -DargLine=\"-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw\""
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
 
 default:
   image: maven:3.6-adoptopenjdk-14-openj9
@@ -19,14 +19,14 @@ workflow: #Only run for changes pushed to branches
 
 test:
   stage: test
-  script: xvfb-run mvn verify
+  script: xvfb-run mvn "-DargLine=-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw" verify
   rules:
     - if: '$CI_COMMIT_BRANCH != "master"'
 
 deploy:
   stage: deploy
   script:
-    - xvfb-run mvn install
+    - xvfb-run mvn "-DargLine=-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw" install
     - mvn frontend:yarn@"yarn build" -pl gazelle
   artifacts:
     paths:
