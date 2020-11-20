@@ -1,0 +1,115 @@
+.body {
+    background: white;
+    -fx-background-color: background;
+    -fx-pref-width: 900;
+    -fx-pref-height: 600;
+}
+
+.navbar {
+    -fx-background-color: #344966;
+    -fx-spacing: 20;
+    -fx-padding: 10;
+}
+
+.navBarSelected {
+    -fx-background-color: #FF8C42;
+}
+
+.navBarUnderLine {
+    -fx-min-height: 2;
+    -fx-max-height: 2;
+}
+
+.contentBox {
+    -fx-padding: 30 40 20 40;
+    -fx-background-color: background;
+}
+
+.contentBoxScroll {
+    -fx-background-color: background;
+}
+
+TextField, PasswordField {
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-radius: 2;
+}
+
+Button {
+    -fx-pref-width: 95;
+    -fx-pref-height: 20;
+    -fx-background-color: #8AC4FF;
+    -fx-border-radius: 2;
+    -fx-border-color: #477caf;
+}
+
+Button:hover {
+    -fx-background-color: #7DB6F0;
+}
+
+Button.deleteIcon {
+    -fx-pref-height: 20;
+    -fx-pref-width: 20;
+    -fx-background-color: #FE7A69;
+    -fx-border-color: #FE4A49;
+}
+
+.deleteMode Button.deleteIcon {
+    -fx-pref-width: 120;
+}
+
+Button.deleteIcon:hover {
+    -fx-background-color: #E66857;
+}
+
+.separator {
+    -fx-background-color: lightgray;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+}
+
+.progressBar {
+    -fx-min-height: 5;
+    -fx-max-height: 5;
+    -fx-background-color:  #11BA52;
+}
+
+.list {
+    -fx-max-width: 900;
+}
+
+.listItem {
+    -fx-border-radius: 3;
+    -fx-border-color: rgba(0,0,0,0);
+    -fx-padding: 2 5;
+    -fx-border-width: 3;
+}
+
+.deleteMode .listItem {
+    -fx-background-color: #EEEEEE;
+    -fx-border-color: #CCCCCC;
+}
+.deleteMode .listItem:hover {
+    -fx-background-color: #F3F3F3;
+    -fx-border-color: #DDDDDD;
+}
+
+.deleteMode .markedForDelete {
+    -fx-background-color: #FFAAAA;
+    -fx-border-color: #FF8888;
+}
+
+.deleteMode .markedForDelete:hover {
+    -fx-background-color: #FFAFAF;
+    -fx-border-color: #FF9494;
+}
+
+/* Specific to FXML files */
+.login, .signup {
+    -fx-max-width: 500;
+    -fx-margin: 70px 0 0 0;
+}
+
+.login, .signup, .spacing {
+    -fx-spacing: 20;
+}

@@ -2,7 +2,6 @@ package gazelle.model;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
@@ -12,9 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ModelTest {
     @Test
     public void chore() {
-        Date dueDate = null;
         Post post = new Post();
-        Chore chore = new Chore(1L, "Gjøre øving 1", dueDate, post);
+        Chore chore = new Chore(1L, "Gjøre øving 1", null, post);
 
         assertEquals(1L, chore.getKey());
         assertEquals("Gjøre øving 1", chore.getText());
@@ -22,7 +20,7 @@ public class ModelTest {
         assertEquals(post, chore.getPost());
 
         chore.setId(2L);
-        assertEquals(2l, chore.getId());
+        assertEquals(2L, chore.getId());
 
         chore.setKey(3L);
         assertNotEquals(2L, chore.getKey());
@@ -40,18 +38,18 @@ public class ModelTest {
         Post post2 = new Post();
         post2.setId(15L);
         chore.setPost(post2);
-        assertFalse(post.equals(chore.getPost()));
+        assertNotEquals(chore.getPost(), post);
         assertEquals(post2, chore.getPost());
 
-        assertTrue(chore.equals(chore));
+        assertEquals(chore, chore);
     }
 
     @Test
     public void course() {
         Course course = new Course("It");
-        assertThrows(ModelException.class, () -> course.validate());
+        assertThrows(ModelException.class, course::validate);
         Course course1 = new Course(" itprosjekt ");
-        assertThrows(ModelException.class, () -> course.validate());
+        assertThrows(ModelException.class, course1::validate);
 
         Course course2 = new Course();
         course2.setName("It-prosjekt");
@@ -59,9 +57,9 @@ public class ModelTest {
         course2.setId(1L);
         assertEquals(1L, course2.getId());
 
-        Set<User> followers = Collections.emptySet();
-        Set<User> owners = Collections.emptySet();
-        Set<Post> posts = Collections.emptySet();
+        final Set<User> followers = Collections.emptySet();
+        final Set<User> owners = Collections.emptySet();
+        final Set<Post> posts = Collections.emptySet();
 
         course2.setFollowers(followers);
         assertEquals(followers, course2.getFollowers());
@@ -70,8 +68,8 @@ public class ModelTest {
         course2.setPosts(posts);
         assertEquals(posts, course2.getPosts());
 
-        assertTrue(course2.equals(course2));
-        assertFalse(course1.equals(course2));
+        assertEquals(course2, course2);
+        assertNotEquals(course2, course1);
     }
 
     @Test

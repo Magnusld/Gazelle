@@ -5,6 +5,9 @@ node_modules/
 # Save files
 database.*.db
 
+# Log files
+*.log
+
 # Tmp files
 *~
 \#*

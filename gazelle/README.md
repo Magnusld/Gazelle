@@ -16,8 +16,17 @@ oversiktlig måte.
 
 Illustrerende skjermbilder ligger i brukerhistoriedokumentet, som er lenket til under.
 Skjermbildeskissene som ligger i brukerhistoriene er ikke endelige, og representerer dermed ikke
-hvordan det endelige produktet kommer til å se ut. De brukes hovedsaklig som et
- utgangspunkt for utviklingen av appens funksjonalitet.
+hvordan det endelige produktet kommer til å se ut. De brukes hovedsaklig som et 
+utgangspunkt for utviklingen av appens funksjonalitet.
+
+## Kjøring
+ 
+For å servere appen på localhost kan man bruke kommandoen
+```
+yarn serve
+```
+For at dette skal fungere må man også ha serveren kjørende. Hvordan man gjør 
+dette er forklart i toppnivå-README, som ligger lenket til under.
 
 ## Prosjektstruktur
 
