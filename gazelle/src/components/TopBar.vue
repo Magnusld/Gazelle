@@ -46,8 +46,10 @@
         md-dense
         @md-selected="goToCourse"
         @md-changed="loadCourses"
+        @md-opened="loadCourses"
       >
         <label>Søk...</label>
+
         <template slot="md-autocomplete-item" slot-scope="{ item, term }">
           <md-highlight-text :md-term="term">{{ item.name }}</md-highlight-text>
         </template>
@@ -113,9 +115,10 @@ export default class TopBar extends Vue {
     window.location.reload();
   }
 
-  async loadCourses() {
+  async loadCourses(searchTerm: string) {
     if (this.courses instanceof Promise) return;
-    this.courses = findAllCourses();
+    const term = searchTerm.toLowerCase();
+    this.courses = (await findAllCourses()).filter(({ name }) => name.toLowerCase().includes(term));
   }
 
   private goToCourse(course: CourseResponse) {
