@@ -1,15 +1,20 @@
 package gazelle.server;
 
+import gazelle.api.*;
+import gazelle.model.Chore;
 import gazelle.model.Course;
+import gazelle.model.Post;
 import gazelle.model.User;
 import gazelle.server.repository.CourseRepository;
+import gazelle.server.repository.PostRepository;
 import gazelle.server.repository.UserRepository;
 import gazelle.server.service.TokenAuthService;
+import gazelle.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TestHelper {
@@ -23,8 +28,15 @@ public class TestHelper {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     public static String makeRandomString() {
         return UUID.randomUUID().toString();
+    }
+
+    public static Long makeRandomLong() {
+        return new Random().nextLong();
     }
 
     public User createTestUserObject() {
@@ -77,5 +89,49 @@ public class TestHelper {
 
     public void deleteTestCourse(Course course) {
         deleteTestCourse(course.getId());
+    }
+
+    /**
+     * Creates a Post without anything
+     *
+     * @return the posts object
+     */
+    public Post createTestPostObject(Course course) {
+        Post post = new Post(makeRandomString(), makeRandomString(), course, new Date(), new Date());
+        return postRepository.save(post);
+    }
+
+    public Long createTestPost(Course course) {
+        return createTestPostObject(course).getId();
+    }
+
+    @Transactional
+    public void deleteTestPost(Long postId) {
+        postRepository.deleteById(postId);
+    }
+
+    public void deleteTestPost(Post post) {
+        deleteTestCourse(post.getId());
+    }
+
+    public NewPostRequest createTestNewPostRequest() {
+        List<NewChoreRequest> chores = new ArrayList<>();
+        chores.add(createTestNewChoreRequest());
+        chores.add(createTestNewChoreRequest());
+
+        NewPostRequest.Builder builder = new NewPostRequest.Builder();
+        builder.title(makeRandomString());
+        builder.description(makeRandomString());
+        builder.startDate(DateHelper.localDateOfDate(new Date()));
+        builder.endDate(DateHelper.localDateOfDate(new Date()));
+        builder.chores(chores);
+
+        return builder.build();
+    }
+
+    public NewChoreRequest createTestNewChoreRequest() {
+        NewChoreRequest choreRequest = new NewChoreRequest(null, 5000L, makeRandomString(),
+                DateHelper.localDateOfDate(new Date()));
+        return choreRequest;
     }
 }
