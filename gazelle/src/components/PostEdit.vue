@@ -71,7 +71,6 @@ export default class Post extends Vue {
   async mounted() {
     if (!this.new) {
       const post: PostContentResponse = await getPostContent(this.id);
-      console.log(post); //Hvorfor?
       this.title = post.title;
       this.description = post.description;
       this.chores.push(
