@@ -98,8 +98,10 @@ public class PostEditController extends BaseController {
                     setFreeze(false);
                 });
             } catch (ClientException e) {
-                FxUtils.showAndWaitError("Klarte ikke laste inn innlegg", e.getMessage());
-                app.mainRun(() -> app.showPostScreen(postId));
+                app.mainRun(() -> {
+                    FxUtils.showAndWaitError("Klarte ikke laste inn innlegg", e.getMessage());
+                    app.showPostScreen(postId);
+                });
             }
         });
     }

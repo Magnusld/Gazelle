@@ -3,6 +3,7 @@ package gazelle.ui;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
+import javafx.application.Platform;
 import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
@@ -76,18 +77,27 @@ public class LoginFXTest extends ApplicationTest {
                                 .withDelay(TimeUnit.MILLISECONDS, 50));
     }
 
+    private static final String CHORERESPONSE = "{\"id\": 1, \"key\": 1, \"text\": \"test\"," +
+            "\"dueDate\": \"2020-10-10\", \"progress\": null}";
+    private static final String POSTRESPONSE = "{\"id\": 1," +
+            "\"title\": \"dummy\", \"description\": \"test\"," +
+            "\"startDate\": \"2020-10-10\", \"endDate\": \"2020-10-10\", \"nextChoreDue\": \" " + CHORERESPONSE + "," +
+            "\"choresDone\": null, \"choresFocused\": null, \"choresCount\": 1}";
+    private static final String COURSERESPONSE = "{\"id\": 1, \"name\": \"dummy\", \"isOwner\": true," +
+                                        "\"isFollower\": true, \"currentPost\": " + POSTRESPONSE + "," +
+            "\"nextPost\": null, \"previousPost\": null, \"nextChoreDue\": " + CHORERESPONSE + "}";
     private void createCoursesForUser() {
         mockServer
                 .when(
                         request()
                                 .withMethod("GET")
-                                .withPath("/users/8/courses"))
+                                .withPath("/users/5/courses"))
                 .respond(
                         response()
                                 .withStatusCode(200)
                                 .withHeaders(
                                         new Header("Content-Type", "application/json"))
-                                .withBody("[]")
+                                .withBody("[" + COURSERESPONSE + "]")
                                 .withDelay(TimeUnit.MILLISECONDS, 50));
     }
 
@@ -113,6 +123,29 @@ public class LoginFXTest extends ApplicationTest {
         Thread.sleep(5000);
         UserResponse user = app.getClient().session().getLoggedInUser();
         assertTrue(user.getFirstName().equals("food"));
+    }
+
+    private UserResponse makeUserResponse() {
+        UserResponse.Builder builder = new UserResponse.Builder();
+        builder.firstName("Per").lastName("Johhny").id(5L);
+        return builder.build();
+    }
+
+    @Test
+    public void do404Tests() throws InterruptedException {
+        app.getClient().session().setLoggedIn("dommy-token", makeUserResponse());
+        Platform.runLater(app::showMyCourses);
+        Thread.sleep(3000);
+        Platform.runLater(app::showFollowedCourses);
+        Thread.sleep(3000);
+        Platform.runLater(app::showFocusList);
+        Thread.sleep(3000);
+        Platform.runLater(() -> app.showPostScreen(1L));
+        Thread.sleep(3000);
+        Platform.runLater(() -> app.showPostEditScreen(1L));
+        Thread.sleep(3000);
+        Platform.runLater(() -> app.showNewPostScreen(1L));
+        Thread.sleep(3000);
     }
 
     @Override
