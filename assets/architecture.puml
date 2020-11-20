@@ -1,7 +1,7 @@
 @startuml
 component common {
-	package gazelle.api.auth
 	package gazelle.model
+	package gazelle.api
 }
 
 component jakarta.persistence {
@@ -9,22 +9,56 @@ component jakarta.persistence {
 
 common ..> jakarta.persistence
 
+component jackson {
+}
+
+common ..> jackson
+
+component gazelleFX{
+    package gazelle.ui
+	package gazelle.client
+}
+
 component gazelle{
-
+    package components
+	package router
+	package store
+	package views
+	package client
 }
 
-component vue {
-
+component vue{
 }
 
-gazelle ..> vue
+component axios{
+}
 
+gazelle --> vue
+client --> axios
+
+server -[hidden]--- gazelle
+
+component jersey{
+}
+
+gazelle.ui ..> gazelle.api
+gazelle.client ..> gazelle.api
+gazelle.client ..> jersey
+
+component javafx {
+	component fxml {
+	}
+}
+
+gazelle.ui ..> javafx
 
 component server{
 	package gazelle.server.endpoint
 	package gazelle.server.error
 	package gazelle.server.repository
+	package gazelle.server.service
 }
+
 
 component spring {
         component spring.boot{
@@ -36,9 +70,9 @@ component h2database {
 
 spring ..> h2database
 
-server ..> gazelle.api.auth
+server ..> gazelle.api
 server ..> gazelle.model
 
-server ..> spring
+server ...> spring
 
 @enduml
