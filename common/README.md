@@ -3,7 +3,7 @@
 Denne pakken inneholder klassene som brukes av server og 
 GazelleFX.
 
-[Les mer her](../README.md)
+[Se toppnivå README](../README.md)
 
 ##Klassediagram
 
