@@ -1,5 +1,6 @@
 package gazelle.server.error;
 
+import gazelle.api.RestErrorObject;
 import org.springframework.http.HttpStatus;
 
 public class GazelleException extends RuntimeException {
