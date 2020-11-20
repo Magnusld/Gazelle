@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rediger innlegg">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <Pane styleClass="separator" stylesheets="@../stylesheets/main.css">
+         <VBox.margin>
+            <Insets bottom="5.0" top="5.0" />
+         </VBox.margin>
+      </Pane>
+      <VBox fx:id="list" spacing="10.0">
+         <children>
+            <TextField fx:id="title" promptText="Tittel" />
+            <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" promptText="Beskrivelse" />
+            <HBox>
+               <children>
+                  <DatePicker fx:id="startDate" minWidth="225.0" promptText="Startdato" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <DatePicker fx:id="endDate" minWidth="225.0" promptText="Sluttdato" />
+               </children>
+            </HBox>
+            <VBox fx:id="choresContainer" />
+            <HBox>
+               <children>
+                  <Button fx:id="addChore" minWidth="120.0" mnemonicParsing="false" stylesheets="@../stylesheets/main.css" text="Legg til gjøremål" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button fx:id="savePost" minWidth="120.0" mnemonicParsing="false" stylesheets="@../stylesheets/main.css" text="Lagre" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

@@ -5,7 +5,7 @@
         chore.courseName
       }}</router-link>
       >
-      <router-link :to="`/courses/${chore.postId}`">{{
+      <router-link :to="`/posts/${chore.postId}`">{{
         chore.postTitle
       }}</router-link>
     </div>
