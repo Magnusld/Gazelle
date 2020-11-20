@@ -118,7 +118,9 @@ export default class TopBar extends Vue {
   async loadCourses(searchTerm: string) {
     if (this.courses instanceof Promise) return;
     const term = searchTerm.toLowerCase();
-    this.courses = (await findAllCourses()).filter(({ name }) => name.toLowerCase().includes(term));
+    this.courses = (await findAllCourses()).filter(({ name }) =>
+      name.toLowerCase().includes(term)
+    );
   }
 
   private goToCourse(course: CourseResponse) {
